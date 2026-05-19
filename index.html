@@ -884,6 +884,7 @@
 
   function handleLogin() {
     showToast('Logged in successfully');
+    setTimeout(() => { window.location.href = 'home.html'; }, 1000);
   }
 
   function togglePassword(inputId, iconId) {
@@ -971,10 +972,7 @@
 
     showToast('Password reset successfully');
     setTimeout(() => {
-      goTo('screen-login');
-      document.getElementById('new-password').value = '';
-      document.getElementById('confirm-password').value = '';
-      updateStrength();
+      window.location.href = 'home.html';
     }, 1500);
   }
 </script>
