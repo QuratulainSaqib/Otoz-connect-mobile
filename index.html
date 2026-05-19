@@ -588,14 +588,12 @@
 
     <div class="dynamic-island"></div>
 
-    <!-- toast disabled
     <div class="toast" id="toast">
       <span class="check-circle">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg>
       </span>
       <span id="toast-text">Password reset successfully</span>
     </div>
-    -->
 
     <!-- ==================== SCREEN 1: LOGIN ==================== -->
     <div class="screen active" id="screen-login">
@@ -612,8 +610,8 @@
       <div class="back-row"></div>
 
       <div class="brand-header">
-        <div class="logo">
-          <span class="logo-otoz">otoz</span><span class="logo-flow">flow</span>
+        <div class="logo" style="font-size:0;">
+          <img src="otoz_connect_logo.png" alt="Otoz Connect" style="height:36px; display:block;">
         </div>
         <div class="tagline">
           Track every car,<br>
@@ -691,8 +689,8 @@
       </div>
 
       <div class="brand-header">
-        <div class="logo">
-          <span class="logo-otoz">otoz</span><span class="logo-flow">flow</span>
+        <div class="logo" style="font-size:0;">
+          <img src="otoz_connect_logo.png" alt="Otoz Connect" style="height:36px; display:block;">
         </div>
       </div>
 
@@ -740,8 +738,8 @@
       </div>
 
       <div class="brand-header">
-        <div class="logo">
-          <span class="logo-otoz">otoz</span><span class="logo-flow">flow</span>
+        <div class="logo" style="font-size:0;">
+          <img src="otoz_connect_logo.png" alt="Otoz Connect" style="height:36px; display:block;">
         </div>
       </div>
 
@@ -797,8 +795,8 @@
       </div>
 
       <div class="brand-header">
-        <div class="logo">
-          <span class="logo-otoz">otoz</span><span class="logo-flow">flow</span>
+        <div class="logo" style="font-size:0;">
+          <img src="otoz_connect_logo.png" alt="Otoz Connect" style="height:36px; display:block;">
         </div>
       </div>
 
@@ -885,8 +883,8 @@
   }
 
   function handleLogin() {
-    // showToast('Logged in successfully');
-    window.location.href = 'home.html';
+    showToast('Logged in successfully');
+    setTimeout(() => { window.location.href = 'home.html'; }, 1000);
   }
 
   function togglePassword(inputId, iconId) {
@@ -933,7 +931,7 @@
   document.addEventListener('click', (e) => {
     const link = e.target.closest('#resend-link');
     if (link && !link.classList.contains('disabled')) {
-      // showToast('Reset link sent again');
+      showToast('Reset link sent again');
       startResendTimer();
     }
   });
@@ -964,16 +962,18 @@
     const confirmPw = document.getElementById('confirm-password').value;
 
     if (!newPw || !confirmPw) {
-      // showToast('Please fill both password fields');
+      showToast('Please fill both password fields');
       return;
     }
     if (newPw !== confirmPw) {
-      // showToast('Passwords do not match');
+      showToast('Passwords do not match');
       return;
     }
 
-    // showToast('Password reset successfully');
-    window.location.href = 'home.html';
+    showToast('Password reset successfully');
+    setTimeout(() => {
+      window.location.href = 'home.html';
+    }, 1500);
   }
 </script>
 
