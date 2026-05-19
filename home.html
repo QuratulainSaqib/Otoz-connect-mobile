@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>otozflow · Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+  :root {
+    --c-primary: #173559;
+    --c-primary-hover: #122a47;
+    --c-accent: #0071e3;
+    --c-text: #1d1d1f;
+    --c-text-muted: #6e6e73;
+    --c-text-subtle: #86868b;
+    --c-text-tertiary: #a1a1a6;
+    --c-bg-app: #f5f5f7;
+    --c-bg-soft: #fafafb;
+    --c-divider: #e8e8ed;
+    --c-divider-soft: #f1f5f9;
+    --c-success: #30c46d;
+    --c-danger: #ff3b30;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: #e8e8ed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .device {
+    width: 380px;
+    height: 800px;
+    background: #1d1d1f;
+    border-radius: 54px;
+    padding: 11px;
+    position: relative;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.08);
+  }
+
+  .screen-wrapper {
+    width: 100%;
+    height: 100%;
+    background: var(--c-bg-app);
+    border-radius: 43px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .home-indicator {
+    position: absolute;
+    bottom: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 5px;
+    background: #1d1d1f;
+    border-radius: 3px;
+    opacity: 0.9;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .status-bar {
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 32px 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--c-text);
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+    background: var(--c-bg-app);
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; }
+
+  .toast {
+    position: absolute;
+    top: 75px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-120%);
+    background: var(--c-text);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    z-index: 1000;
+    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    white-space: nowrap;
+    max-width: 90%;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-success); flex-shrink: 0; }
+
+  /* ============ HEADER ============ */
+  .dash-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 90px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dash-header {
+    padding: 8px 20px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--c-bg-app);
+    flex-shrink: 0;
+    gap: 12px;
+  }
+  .dash-greeting-block { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .dash-greeting {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+  .dash-greeting .name { color: var(--c-primary); }
+  .dash-subtitle {
+    font-size: 13px;
+    color: var(--c-text-muted);
+    margin-top: 3px;
+  }
+
+
+
+  /* Stats grid — 2 compact horizontal cards (matches web style) */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 0 20px 16px;
+  }
+  .stat-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+    border: 1px solid var(--c-divider);
+    border-radius: 14px;
+    padding: 11px 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+  .stat-card:active { transform: scale(0.97); }
+  .sc-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .sc-icon i { font-size: 19px; color: #fff; }
+  .sc-icon.blue {
+    background: linear-gradient(135deg, #0071e3 0%, #00a3ff 100%);
+    box-shadow: 0 4px 12px rgba(0, 113, 227, 0.28);
+  }
+  .sc-icon.green {
+    background: linear-gradient(135deg, #059669 0%, #34d399 100%);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.28);
+  }
+  .sc-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .sc-label {
+    font-size: 10px;
+    color: var(--c-text-muted);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sc-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  /* ============ STAGE CHIPS ============ */
+  .stage-chips-wrap {
+    background: var(--c-bg-app);
+    padding: 2px 0 10px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  .stage-chips {
+    display: flex;
+    gap: 8px;
+    padding: 4px 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .stage-chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 13px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--c-text);
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+  .chip:hover { background: var(--c-bg-soft); }
+
+  .chip[data-stage="all"].active {
+    background: var(--c-primary);
+    color: #fff;
+    border-color: var(--c-primary);
+  }
+  .chip[data-stage="1"].active { background: #e8f1ff; color: #0058c7; border-color: rgba(0,88,199,0.25); }
+  .chip[data-stage="2"].active { background: #efeaff; color: #5b3fd1; border-color: rgba(91,63,209,0.25); }
+  .chip[data-stage="3"].active { background: #fff3e0; color: #b35900; border-color: rgba(179,89,0,0.25); }
+  .chip[data-stage="4"].active { background: #ffe9f1; color: #c2185b; border-color: rgba(194,24,91,0.25); }
+  .chip[data-stage="5"].active { background: #ffe6e0; color: #c33d1e; border-color: rgba(195,61,30,0.25); }
+  .chip[data-stage="6"].active { background: #fff8d6; color: #8a6500; border-color: rgba(138,101,0,0.3); }
+  .chip[data-stage="7"].active { background: #e0f0ff; color: #0a5cad; border-color: rgba(10,92,173,0.25); }
+  .chip[data-stage="8"].active { background: #e3f7ec; color: #0a7a3b; border-color: rgba(10,122,59,0.25); }
+
+  .chip-num {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10.5px;
+    font-weight: 700;
+  }
+  .chip[data-stage="1"] .chip-num { background: #0071e3; }
+  .chip[data-stage="2"] .chip-num { background: #6f54e0; }
+  .chip[data-stage="3"] .chip-num { background: #ff9500; }
+  .chip[data-stage="4"] .chip-num { background: #ec4899; }
+  .chip[data-stage="5"] .chip-num { background: #ff5e3a; }
+  .chip[data-stage="6"] .chip-num { background: #f5b400; }
+  .chip[data-stage="7"] .chip-num { background: #34aadc; }
+  .chip[data-stage="8"] .chip-num { background: #30c46d; }
+
+  /* ============ CONTROLS ============ */
+  .controls-row {
+    display: flex;
+    gap: 8px;
+    padding: 0 20px 12px;
+    background: var(--c-bg-app);
+  }
+
+  .search-wrap {
+    flex: 1;
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    min-width: 0;
+  }
+  .search-wrap:focus-within { border-color: var(--c-accent); }
+  .search-wrap i { font-size: 17px; color: var(--c-text-subtle); flex-shrink: 0; }
+  .search-wrap input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 13.5px;
+    color: var(--c-text);
+    font-family: inherit;
+    min-width: 0;
+  }
+  .search-wrap input::placeholder { color: var(--c-text-subtle); }
+
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .icon-btn:hover { background: var(--c-bg-soft); }
+  .icon-btn:active { transform: scale(0.95); }
+  .icon-btn i { font-size: 18px; color: var(--c-text); }
+  .icon-btn.has-active { border-color: var(--c-accent); }
+  .icon-btn.has-active i { color: var(--c-accent); }
+  .filter-badge {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 9px;
+    background: var(--c-accent);
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--c-bg-app);
+  }
+
+  /* Active filter pills */
+  .active-filters {
+    display: flex;
+    gap: 6px;
+    padding: 0 20px 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .active-filters::-webkit-scrollbar { display: none; }
+  .active-filters:empty { display: none; }
+  .active-pill {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 8px 5px 11px;
+    border-radius: 999px;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #3730a3;
+  }
+  .active-pill .remove {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(55,48,163,0.15);
+    color: #3730a3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+  }
+
+  .results-count {
+    padding: 0 20px 10px;
+    font-size: 12px;
+    color: var(--c-text-muted);
+    font-weight: 500;
+  }
+  .results-count strong { color: var(--c-text); font-weight: 700; }
+
+  /* ============ SALE CARDS ============ */
+  .sale-list {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .sale-card {
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    position: relative;
+  }
+  /* Left colored strip — indicates stage at a glance */
+  .sale-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--stage-color, var(--c-accent));
+    z-index: 1;
+  }
+  .sale-card:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+    transform: translateY(-1px);
+  }
+  .sale-card:active { transform: scale(0.99); }
+
+  /* Per-stage left strip colors (matches stage pill num bg) */
+  .sale-card.stage-s1::before { background: #0071e3; }
+  .sale-card.stage-s2::before { background: #6f54e0; }
+  .sale-card.stage-s3::before { background: #ff9500; }
+  .sale-card.stage-s4::before { background: #ec4899; }
+  .sale-card.stage-s5::before { background: #ff5e3a; }
+  .sale-card.stage-s6::before { background: #f5b400; }
+  .sale-card.stage-s7::before { background: #34aadc; }
+  .sale-card.stage-s8::before { background: #30c46d; }
+
+  /* Header: Stage pill (left) + Actions (right) */
+  .card-header {
+    padding: 13px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-bottom: 1px solid var(--c-divider-soft);
+  }
+  .card-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+  }
+  .stage-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px 5px 5px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    border: 1px solid transparent;
+  }
+  .stage-pill .num {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .stage-pill.s1 { background: #e8f1ff; color: #0058c7; border-color: rgba(0, 88, 199, 0.12); }
+  .stage-pill.s1 .num { background: #0071e3; }
+  .stage-pill.s2 { background: #efeaff; color: #5b3fd1; border-color: rgba(91, 63, 209, 0.12); }
+  .stage-pill.s2 .num { background: #6f54e0; }
+  .stage-pill.s3 { background: #fff3e0; color: #b35900; border-color: rgba(179, 89, 0, 0.14); }
+  .stage-pill.s3 .num { background: #ff9500; }
+  .stage-pill.s4 { background: #ffe9f1; color: #c2185b; border-color: rgba(194, 24, 91, 0.14); }
+  .stage-pill.s4 .num { background: #ec4899; }
+  .stage-pill.s5 { background: #ffe6e0; color: #c33d1e; border-color: rgba(195, 61, 30, 0.14); }
+  .stage-pill.s5 .num { background: #ff5e3a; }
+  .stage-pill.s6 { background: #fff8d6; color: #8a6500; border-color: rgba(138, 101, 0, 0.16); }
+  .stage-pill.s6 .num { background: #f5b400; }
+  .stage-pill.s7 { background: #e0f0ff; color: #0a5cad; border-color: rgba(10, 92, 173, 0.14); }
+  .stage-pill.s7 .num { background: #34aadc; }
+  .stage-pill.s8 { background: #e3f7ec; color: #0a7a3b; border-color: rgba(10, 122, 59, 0.14); }
+  .stage-pill.s8 .num { background: #30c46d; }
+
+  .updated-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #f5b400;
+    box-shadow: 0 0 0 3px rgba(245,180,0,0.18);
+    animation: dotPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes dotPulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(245,180,0,0.18); }
+    50% { box-shadow: 0 0 0 5px rgba(245,180,0,0.10); }
+  }
+
+  /* Action icons in top right */
+  .card-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .action-icon-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: none;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .action-icon-btn:hover { background: var(--c-bg-soft); }
+  .action-icon-btn i { font-size: 17px; }
+  .action-icon-btn.invoice i { color: var(--c-success); }
+  .action-icon-btn.info i { color: var(--c-text-muted); }
+
+  /* Card body — image + info */
+  .card-body {
+    padding: 12px 14px 14px;
+    display: flex;
+    gap: 14px;
+  }
+  .car-image {
+    width: 88px;
+    height: 68px;
+    border-radius: 12px;
+    background: #f1f5f9;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .car-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .car-image i { font-size: 32px; color: #94a3b8; }
+
+  .sale-info { flex: 1; min-width: 0; }
+  .sale-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+  }
+  .sale-title .year {
+    color: var(--c-text-muted);
+    font-weight: 500;
+    margin-left: 4px;
+  }
+  .sale-meta-row {
+    font-size: 12px;
+    color: var(--c-text-muted);
+    margin-top: 2px;
+    font-weight: 500;
+  }
+  .sale-chassis {
+    font-size: 11.5px;
+    color: var(--c-text-tertiary);
+    margin-top: 3px;
+    font-family: 'SF Mono', Menlo, monospace;
+    letter-spacing: -0.01em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sale-destination {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12.5px;
+    color: var(--c-text);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .sale-destination i { font-size: 14px; color: var(--c-text-subtle); }
+
+  /* ============ PURCHASE — single compact row ============ */
+  .purchase-section {
+    margin: 0;
+    background: transparent;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-top: 1px solid var(--c-divider-soft);
+    border-bottom: 1px solid var(--c-divider-soft);
+  }
+  .purch-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--c-text-muted);
+    letter-spacing: 0em;
+    flex-shrink: 0;
+  }
+  .purch-divider {
+    width: 1px;
+    height: 14px;
+    background: var(--c-divider);
+    flex-shrink: 0;
+  }
+  .purch-date {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--c-text-muted);
+    flex-shrink: 0;
+  }
+  .purch-amount {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .purch-curr-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6e6e73;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .purch-price {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  /* ============ SALE + BCN section ============ */
+  .sale-section {
+    padding: 11px 14px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .sale-left { display: flex; flex-direction: column; min-width: 0; flex: 1; gap: 6px; }
+  .sale-label {
+    font-size: 10px;
+    color: var(--c-text-muted);
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .sale-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .sale-curr-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6e6e73;
+    line-height: 1;
+  }
+  /* B/C/N — web-matching styles (active=blue, muted=grey, danger=red+pulse) */
+  .bcn {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .bcn span {
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 700;
+    transition: all 0.15s ease;
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--c-text-tertiary);
+    cursor: default;
+  }
+  /* Active = letter present in bcn → BLUE, clickable */
+  .bcn span.active {
+    background: rgba(0, 113, 227, 0.1);
+    color: var(--c-accent);
+    cursor: pointer;
+  }
+  .bcn span.active:hover {
+    background: rgba(0, 113, 227, 0.18);
+    transform: translateY(-1px);
+  }
+  /* Muted = letter NOT present → GREY, not clickable */
+  .bcn span.muted {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--c-text-tertiary);
+    cursor: default;
+  }
+  /* Danger = change-requested state → RED with pulsing dot, clickable */
+  .bcn span.danger {
+    background: rgba(255, 59, 48, 0.12);
+    color: var(--c-danger);
+    position: relative;
+    cursor: pointer;
+  }
+  .bcn span.danger::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--c-danger);
+    border: 1.5px solid #fff;
+    animation: dangerPulse 1.6s ease-in-out infinite;
+  }
+  .bcn span.danger:hover {
+    background: rgba(255, 59, 48, 0.2);
+    transform: translateY(-1px);
+  }
+  @keyframes dangerPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.6; }
+  }
+
+  /* ============ ADD SALE / ADD CONSIGNEE — matches web's .add-btn ============ */
+  .add-actions {
+    padding: 11px 14px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .add-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 5px 11px;
+    background: var(--c-danger);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    box-shadow: 0 2px 6px rgba(255, 59, 48, 0.22);
+    font-family: inherit;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    line-height: 1.2;
+  }
+  .add-action-btn i { font-size: 10px; }
+  .add-action-btn:hover {
+    background: #ff5246;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(255, 59, 48, 0.32);
+  }
+  .add-action-btn:active { transform: scale(0.97); }
+  /* Both .sale and .consignee use the same red style (matches web) */
+  .add-action-btn.sale,
+  .add-action-btn.consignee {
+    background: var(--c-danger);
+    color: #fff;
+    border: none;
+  }
+  .add-action-btn.sale:hover,
+  .add-action-btn.consignee:hover { background: #ff5246; }
+
+
+
+  /* ============ BOTTOM NAV ============ */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 78px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding: 10px 8px 24px;
+    z-index: 40;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    padding: 4px 0;
+    color: var(--c-text-subtle);
+    transition: color 0.18s ease;
+    background: none;
+    border: none;
+    font-family: inherit;
+  }
+  .nav-item i { font-size: 22px; }
+  .nav-item span {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+  .nav-item.active { color: var(--c-primary); }
+  .nav-item.active span { font-weight: 600; }
+
+  /* ============ BOTTOM SHEET ============ */
+  .sheet-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 200;
+  }
+  .sheet-backdrop.show { opacity: 1; visibility: visible; }
+  .bottom-sheet {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    max-height: 80%;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    display: flex;
+    flex-direction: column;
+    z-index: 250;
+  }
+  .bottom-sheet.show { transform: translateY(0); }
+  .sheet-handle {
+    width: 36px;
+    height: 4px;
+    background: #d1d5db;
+    border-radius: 4px;
+    margin: 10px auto;
+    flex-shrink: 0;
+  }
+  .sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 20px 12px;
+    flex-shrink: 0;
+  }
+  .sheet-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.015em;
+  }
+  .sheet-reset {
+    background: none;
+    border: none;
+    color: var(--c-accent);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+  }
+  .sheet-body { flex: 1; overflow-y: auto; padding: 4px 20px 12px; }
+  /* Sort sheet: light grey background to make white grouped cards pop */
+  #sort-sheet .sheet-body { background: var(--c-bg-app); padding: 8px 16px 16px; }
+  #sort-sheet { background: var(--c-bg-app); }
+  #sort-sheet .sheet-footer { background: #fff; }
+  .sheet-section { margin-bottom: 18px; }
+  .sheet-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--c-text);
+    margin-bottom: 8px;
+  }
+  .sheet-select {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--c-bg-app);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    font-size: 14px;
+    color: var(--c-text);
+    font-family: inherit;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2386868b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    padding-right: 38px;
+  }
+  .sheet-select:focus { border-color: var(--c-accent); background-color: #fff; }
+  /* Apple-style grouped sort — clean, minimal, refined */
+  .sort-options { display: flex; flex-direction: column; }
+  .sort-group { padding: 0; }
+  .sort-group + .sort-group {
+    margin-top: 22px;
+  }
+  .sort-group-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 8px 4px;
+  }
+  .sort-group-body {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .sort-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    color: var(--c-text);
+    transition: background 0.15s ease;
+    font-family: inherit;
+    width: 100%;
+    text-align: left;
+    letter-spacing: -0.01em;
+  }
+  .sort-option + .sort-option {
+    border-top: 0.5px solid var(--c-divider);
+  }
+  .sort-option:hover { background: rgba(0,0,0,0.02); }
+  .sort-option:active { background: rgba(0,0,0,0.04); }
+  .sort-option.selected { color: var(--c-text); font-weight: 500; }
+  .sort-option .radio {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid #c7c7cc;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    transition: all 0.18s ease;
+  }
+  .sort-option.selected .radio {
+    border-color: var(--c-primary);
+    background: var(--c-primary);
+  }
+  .sort-option.selected .radio::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+  }
+
+  /* Footer: Clear + Apply (Apple-style, equal width with icons) */
+  .sort-footer-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .secondary-btn {
+    background: var(--c-bg-app);
+    color: var(--c-text);
+    border: none;
+    border-radius: 14px;
+    padding: 15px;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+  }
+  .secondary-btn i { font-size: 17px; }
+  .secondary-btn:hover { background: #ececef; }
+  .secondary-btn:active { transform: scale(0.98); }
+
+  /* Apple-style close button in sheet header */
+  .sheet-close {
+    background: rgba(0,0,0,0.06);
+    border: none;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--c-text-muted);
+    padding: 0;
+    border-radius: 50%;
+    transition: all 0.15s ease;
+  }
+  .sheet-close:hover { background: rgba(0,0,0,0.1); color: var(--c-text); }
+  .sheet-close i { font-size: 16px; font-weight: 700; }
+  .sheet-footer {
+    padding: 14px 20px 24px;
+    border-top: 1px solid var(--c-divider-soft);
+    flex-shrink: 0;
+  }
+  .primary-btn {
+    background: var(--c-primary);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 15px;
+    width: 100%;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+  }
+  .primary-btn:hover { background: var(--c-primary-hover); }
+  .primary-btn:active { transform: scale(0.98); }
+  .primary-btn svg { width: 18px; height: 18px; }
+  .primary-btn i { font-size: 17px; }
+
+  .empty-state {
+    padding: 48px 20px;
+    text-align: center;
+    color: var(--c-text-muted);
+  }
+  .empty-state i { font-size: 48px; color: #d1d5db; margin-bottom: 8px; display: block; }
+  .empty-state .title { font-size: 15px; font-weight: 600; color: var(--c-text); margin-bottom: 4px; }
+  .empty-state .desc { font-size: 13px; }
+
+  @media (max-width: 420px) {
+    body { padding: 0; background: #fff; }
+    .device {
+      width: 100%;
+      height: 100vh;
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
+    }
+    .screen-wrapper { border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="device">
+  <div class="screen-wrapper">
+
+    <div class="toast" id="toast">
+      <span class="dot"></span>
+      <span id="toast-text"></span>
+    </div>
+
+    <div class="status-bar">
+      <span>9:41</span>
+      <span class="status-icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686 -4.687 12.284 -4.687 16.97 0"/></svg>
+        <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+      </span>
+    </div>
+
+    <div class="dash-scroll">
+
+      <div class="dash-header">
+        <div class="dash-greeting-block">
+          <div class="dash-greeting">Welcome back, <span class="name">Fahad</span></div>
+          <div class="dash-subtitle">Track your vehicles and shipments</div>
+        </div>
+
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card" onclick="showToast('View all vehicles')">
+          <div class="sc-icon blue"><i class="ti ti-car"></i></div>
+          <div class="sc-text">
+            <div class="sc-label">Total Cars</div>
+            <div class="sc-value">350</div>
+          </div>
+        </div>
+        <div class="stat-card" onclick="showToast('View delivered vehicles')">
+          <div class="sc-icon green"><i class="ti ti-circle-check"></i></div>
+          <div class="sc-text">
+            <div class="sc-label">Total Delivered</div>
+            <div class="sc-value">128</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage-chips-wrap">
+        <div class="stage-chips" id="stage-chips">
+          <button class="chip active" data-stage="all" onclick="selectStage(this, 'all')">All Stages</button>
+          <button class="chip" data-stage="1" onclick="selectStage(this, '1')"><span class="chip-num">1</span> Purchase Info</button>
+          <button class="chip" data-stage="2" onclick="selectStage(this, '2')"><span class="chip-num">2</span> Yard Images</button>
+          <button class="chip" data-stage="3" onclick="selectStage(this, '3')"><span class="chip-num">3</span> Export Certificate</button>
+          <button class="chip" data-stage="4" onclick="selectStage(this, '4')"><span class="chip-num">4</span> Inspection</button>
+          <button class="chip" data-stage="5" onclick="selectStage(this, '5')"><span class="chip-num">5</span> Shipment</button>
+          <button class="chip" data-stage="6" onclick="selectStage(this, '6')"><span class="chip-num">6</span> Bill of Lading</button>
+          <button class="chip" data-stage="7" onclick="selectStage(this, '7')"><span class="chip-num">7</span> Finance Status</button>
+          <button class="chip" data-stage="8" onclick="selectStage(this, '8')"><span class="chip-num">8</span> Unit Received</button>
+        </div>
+      </div>
+
+      <div class="controls-row">
+        <div class="search-wrap">
+          <i class="ti ti-search"></i>
+          <input type="text" id="dash-search" placeholder="Search by chassis no..." oninput="applySearch()">
+        </div>
+        <button class="icon-btn" id="filter-icon-btn" onclick="openFilterSheet()" aria-label="Filters">
+          <i class="ti ti-adjustments-horizontal"></i>
+          <span class="filter-badge" id="filter-badge" style="display:none;">0</span>
+        </button>
+        <button class="icon-btn" onclick="openSortSheet()" aria-label="Sort">
+          <i class="ti ti-arrows-sort"></i>
+        </button>
+      </div>
+
+      <div class="active-filters" id="active-filters"></div>
+      <div class="results-count">Showing <strong id="result-count">0</strong> of <strong id="total-count">0</strong> vehicles</div>
+
+      <div class="sale-list" id="sale-list"></div>
+
+    </div>
+
+
+
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="navTo('dashboard', this)"><i class="ti ti-home"></i><span>Home</span></button>
+      <button class="nav-item" onclick="navTo('payment', this)"><i class="ti ti-credit-card"></i><span>Payment</span></button>
+      <button class="nav-item" onclick="navTo('allocation', this)"><i class="ti ti-layout-grid"></i><span>Allocation</span></button>
+      <button class="nav-item" onclick="navTo('notifications', this)"><i class="ti ti-bell"></i><span>Notifications</span></button>
+      <button class="nav-item" onclick="navTo('more', this)"><i class="ti ti-dots"></i><span>More</span></button>
+    </nav>
+
+    <!-- Filter sheet -->
+    <div class="sheet-backdrop" id="filter-backdrop" onclick="closeFilterSheet()"></div>
+    <div class="bottom-sheet" id="filter-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div class="sheet-title">Filters</div>
+        <button class="sheet-reset" onclick="resetFilters()">Reset</button>
+      </div>
+      <div class="sheet-body">
+        <div class="sheet-section">
+          <div class="sheet-label">Make</div>
+          <select class="sheet-select" id="filter-make">
+            <option value="">All Makes</option>
+            <option>Toyota</option><option>Honda</option><option>Nissan</option>
+            <option>Mazda</option><option>Mitsubishi</option><option>Suzuki</option>
+          </select>
+        </div>
+        <div class="sheet-section">
+          <div class="sheet-label">Model</div>
+          <select class="sheet-select" id="filter-model">
+            <option value="">All Models</option>
+            <option>Raize</option><option>Vezel</option><option>X-Trail</option>
+            <option>Camry</option><option>Civic</option><option>Aqua</option><option>Vitz</option>
+          </select>
+        </div>
+        <div class="sheet-section">
+          <div class="sheet-label">Destination Port</div>
+          <select class="sheet-select" id="filter-port">
+            <option value="">All Destination Ports</option>
+            <option>Mombasa Port</option><option>Zimbabwe</option><option>Lagos</option>
+            <option>Durban</option><option>Dar es Salaam</option>
+          </select>
+        </div>
+      </div>
+      <div class="sheet-footer">
+        <button class="primary-btn" onclick="applyFilters()">
+          Apply Filters
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Sort sheet — grouped design -->
+    <div class="sheet-backdrop" id="sort-backdrop" onclick="closeSortSheet()"></div>
+    <div class="bottom-sheet" id="sort-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div class="sheet-title">Sort By</div>
+        <button class="sheet-close" onclick="closeSortSheet()" aria-label="Close">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+      <div class="sheet-body">
+        <div class="sort-options" id="sort-options">
+
+          <div class="sort-group">
+            <div class="sort-group-title">Stage</div>
+            <div class="sort-group-body">
+              <button class="sort-option selected" data-sort="stage_order" onclick="selectSort(this)"><span>Stage order (1 → 8)</span><span class="radio"></span></button>
+              <button class="sort-option" data-sort="stage_order_desc" onclick="selectSort(this)"><span>Stage order (8 → 1)</span><span class="radio"></span></button>
+            </div>
+          </div>
+
+          <div class="sort-group">
+            <div class="sort-group-title">Purchase Price</div>
+            <div class="sort-group-body">
+              <button class="sort-option" data-sort="lowest_price" onclick="selectSort(this)"><span>Low to High</span><span class="radio"></span></button>
+              <button class="sort-option" data-sort="highest_price" onclick="selectSort(this)"><span>High to Low</span><span class="radio"></span></button>
+            </div>
+          </div>
+
+          <div class="sort-group">
+            <div class="sort-group-title">Model Year</div>
+            <div class="sort-group-body">
+              <button class="sort-option" data-sort="lowest_year" onclick="selectSort(this)"><span>Oldest first</span><span class="radio"></span></button>
+              <button class="sort-option" data-sort="highest_year" onclick="selectSort(this)"><span>Newest first</span><span class="radio"></span></button>
+            </div>
+          </div>
+
+          <div class="sort-group">
+            <div class="sort-group-title">Purchase Date</div>
+            <div class="sort-group-body">
+              <button class="sort-option" data-sort="newest" onclick="selectSort(this)"><span>Recent first</span><span class="radio"></span></button>
+              <button class="sort-option" data-sort="oldest" onclick="selectSort(this)"><span>Oldest first</span><span class="radio"></span></button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="sheet-footer">
+        <div class="sort-footer-row">
+          <button class="secondary-btn" onclick="clearSort()">
+            <i class="ti ti-refresh"></i>
+            Clear
+          </button>
+          <button class="primary-btn" onclick="applySort()">
+            <i class="ti ti-check"></i>
+            Apply Filter
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-indicator"></div>
+
+  </div>
+</div>
+
+<script>
+  const stagesMeta = [null,
+    { num: 1, name: 'Purchase Info', class: 's1' },
+    { num: 2, name: 'Yard Images', class: 's2' },
+    { num: 3, name: 'Export Certificate', class: 's3' },
+    { num: 4, name: 'Inspection', class: 's4' },
+    { num: 5, name: 'Shipment', class: 's5' },
+    { num: 6, name: 'Bill of Lading', class: 's6' },
+    { num: 7, name: 'Finance Status', class: 's7' },
+    { num: 8, name: 'Unit Received', class: 's8' }
+  ];
+
+  const vehicles = [
+    { id: 1, stage: 1, make: 'Toyota',     model: 'Raize',     code: '5BA-A200A', year: 2022, chassis: 'WDC2539052F422655', port: 'Mombasa Port',  purchaseDate: '02/08/2026', purchCurr: 'JPY', purchPrice: 2420500, saleCurr: 'USD', salePrice: 27500,   bcn: 'C',                              updated: false },
+    { id: 2, stage: 2, make: 'Honda',      model: 'Vezel',     code: 'DAA-RU3',   year: 2023, chassis: 'JHMGE8H56DC123456', port: 'Lagos',         purchaseDate: '01/15/2026', purchCurr: 'USD', purchPrice: 28000,   saleCurr: null,  salePrice: null,    bcn: null,                             updated: false },
+    { id: 3, stage: 3, make: 'Nissan',     model: 'X-Trail',   code: 'DBA-T32',   year: 2021, chassis: 'NSXT2021A0001234',  port: 'Durban',        purchaseDate: '01/20/2026', purchCurr: 'USD', purchPrice: 25000,   saleCurr: 'USD', salePrice: 29500,   bcn: 'BCN', state: 'change-requested', updated: false },
+    { id: 4, stage: 4, make: 'Mazda',      model: 'CX-5',      code: 'KF2W',      year: 2022, chassis: 'MZCX52021KF00567',  port: 'Dar es Salaam', purchaseDate: '02/01/2026', purchCurr: 'USD', purchPrice: 18500,   saleCurr: null,  salePrice: null,    bcn: 'BC',                             updated: false },
+    { id: 5, stage: 5, make: 'Toyota',     model: 'Aqua',      code: 'NHP10',     year: 2022, chassis: 'AQUA2022NHP10567',  port: 'Zimbabwe',      purchaseDate: '01/26/2026', purchCurr: 'USD', purchPrice: 20000,   saleCurr: 'USD', salePrice: 23500,   bcn: null,                             updated: false },
+    { id: 6, stage: 6, make: 'Toyota',     model: 'Raize',     code: '5BA-A200A', year: 2022, chassis: 'JHMGE8H56DC123987', port: 'Mombasa Port',  purchaseDate: '02/08/2026', purchCurr: 'USD', purchPrice: 24205,   saleCurr: 'EUR', salePrice: 25300,   bcn: 'BC',                             updated: false },
+    { id: 7, stage: 7, make: 'Honda',      model: 'Civic',     code: 'FK7',       year: 2022, chassis: 'CIVIC2022FK700890', port: 'Durban',        purchaseDate: '01/14/2026', purchCurr: 'USD', purchPrice: 25500,   saleCurr: 'USD', salePrice: 28500,   bcn: 'C',                              updated: false },
+    { id: 8, stage: 8, make: 'Toyota',     model: 'Raize',     code: '5BA-A200A', year: 2022, chassis: '5YJSA1E26HF200012', port: 'Zimbabwe',      purchaseDate: '02/08/2026', purchCurr: 'USD', purchPrice: 24205,   saleCurr: 'JPY', salePrice: 4150000, bcn: 'BCN',                            updated: false },
+  ];
+
+  let state = { stage: 'all', search: '', filters: { make: '', model: '', port: '' }, sort: 'stage_order' };
+
+  function currencySymbol(curr) {
+    const map = { USD: '$', JPY: '¥', EUR: '€', GBP: '£' };
+    return map[curr] || curr + ' ';
+  }
+
+  // Web-style BCN logic:
+  //  - If state === 'change-requested': B grey, C RED+pulse, N grey
+  //  - Else: each letter is 'active' (blue) if present in bcn string, else 'muted' (grey)
+  function renderBCN(v) {
+    const b = v.bcn || '';
+    if (v.state === 'change-requested') {
+      return `<span class="bcn">
+        <span class="muted" onclick="event.stopPropagation(); showToast('View change request')">B</span>
+        <span class="danger" onclick="event.stopPropagation(); showToast('Pending change request')">C</span>
+        <span class="muted" onclick="event.stopPropagation(); showToast('View change request')">N</span>
+      </span>`;
+    }
+    const cell = (letter, label) => {
+      if (b.includes(letter)) {
+        return `<span class="active" onclick="event.stopPropagation(); showToast('View ${label}')">${letter}</span>`;
+      }
+      return `<span class="muted">${letter}</span>`;
+    };
+    return `<span class="bcn">
+      ${cell('B', 'buyer')}
+      ${cell('C', 'consignee')}
+      ${cell('N', 'notify')}
+    </span>`;
+  }
+
+  function renderCard(v) {
+    const stage = stagesMeta[v.stage];
+    const hasSale = v.salePrice !== null;
+    // Web logic: consignee section visible whenever bcn is present (any letters or change-requested)
+    const hasConsignee = v.bcn !== null && v.bcn !== undefined;
+
+    // Determine bottom section: full state or empty state CTAs
+    let bottomSection = '';
+
+    if (hasSale && hasConsignee) {
+      // Normal state: Sale price + BCN
+      bottomSection = `
+        <div class="sale-section">
+          <div class="sale-left">
+            <div class="sale-label">Sale Price</div>
+            <div class="sale-value"><span class="sale-curr-pill">${v.saleCurr}</span>${v.salePrice.toLocaleString()}</div>
+          </div>
+          ${renderBCN(v)}
+        </div>
+      `;
+    } else if (!hasSale && !hasConsignee) {
+      // Both missing: Two pills side by side
+      bottomSection = `
+        <div class="add-actions">
+          <button class="add-action-btn sale" onclick="event.stopPropagation(); showToast('Add Sale flow')">
+            <i class="ti ti-plus"></i> Add Sale
+          </button>
+          <button class="add-action-btn consignee" onclick="event.stopPropagation(); showToast('Add Consignee flow')">
+            <i class="ti ti-plus"></i> Add Consignee
+          </button>
+        </div>
+      `;
+    } else if (hasSale && !hasConsignee) {
+      // Has sale, needs consignee: Sale price + Add Consignee inline
+      bottomSection = `
+        <div class="sale-section">
+          <div class="sale-left">
+            <div class="sale-label">Sale Price</div>
+            <div class="sale-value"><span class="sale-curr-pill">${v.saleCurr}</span>${v.salePrice.toLocaleString()}</div>
+          </div>
+          <button class="add-action-btn consignee" onclick="event.stopPropagation(); showToast('Add Consignee flow')">
+            <i class="ti ti-plus"></i> Add Consignee
+          </button>
+        </div>
+      `;
+    } else {
+      // No sale, has consignee: Add Sale button + BCN
+      bottomSection = `
+        <div class="sale-section">
+          <button class="add-action-btn sale" onclick="event.stopPropagation(); showToast('Add Sale flow')">
+            <i class="ti ti-plus"></i> Add Sale
+          </button>
+          ${renderBCN(v)}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="sale-card stage-${stage.class}" onclick="openVehicleStage(${v.id})">
+
+        <div class="card-header">
+          <div class="card-header-left">
+            <span class="stage-pill ${stage.class}"><span class="num">${stage.num}</span> ${stage.name}</span>
+            ${v.updated ? '<span class="updated-dot" title="Recently updated"></span>' : ''}
+          </div>
+          <div class="card-actions">
+            <button class="action-icon-btn invoice" onclick="event.stopPropagation(); showToast('View invoice')" title="Invoice">
+              <i class="ti ti-file-text"></i>
+            </button>
+            <button class="action-icon-btn info" onclick="event.stopPropagation(); showToast('Vehicle info')" title="Info">
+              <i class="ti ti-info-circle"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="car-image"><img src="data:image/jpeg;base64,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" alt="vehicle"></div>
+          <div class="sale-info">
+            <div class="sale-title">${v.make} ${v.model} <span class="year">${v.year}</span></div>
+            <div class="sale-meta-row">${v.code}</div>
+            <div class="sale-chassis">${v.chassis}</div>
+            <div class="sale-destination"><i class="ti ti-map-pin"></i> ${v.port}</div>
+          </div>
+        </div>
+
+        <div class="purchase-section">
+          <span class="purch-label">Purchase</span>
+          <span class="purch-divider"></span>
+          <span class="purch-date">${v.purchaseDate}</span>
+          <div class="purch-amount">
+            <span class="purch-curr-pill">${v.purchCurr}</span>
+            <span class="purch-price">${v.purchPrice.toLocaleString()}</span>
+          </div>
+        </div>
+
+        ${bottomSection}
+      </div>
+    `;
+  }
+
+  function filterAndSort() {
+    let list = vehicles.slice();
+    if (state.stage !== 'all') list = list.filter(v => v.stage === parseInt(state.stage));
+    if (state.search) {
+      const q = state.search.toLowerCase();
+      list = list.filter(v => v.chassis.toLowerCase().includes(q));
+    }
+    if (state.filters.make) list = list.filter(v => v.make === state.filters.make);
+    if (state.filters.model) list = list.filter(v => v.model === state.filters.model);
+    if (state.filters.port) list = list.filter(v => v.port === state.filters.port);
+
+    switch (state.sort) {
+      case 'stage_order': list.sort((a,b) => a.stage - b.stage); break;
+      case 'stage_order_desc': list.sort((a,b) => b.stage - a.stage); break;
+      case 'newest': list.sort((a,b) => new Date(b.purchaseDate) - new Date(a.purchaseDate)); break;
+      case 'oldest': list.sort((a,b) => new Date(a.purchaseDate) - new Date(b.purchaseDate)); break;
+      case 'lowest_price': list.sort((a,b) => (a.salePrice||a.purchPrice) - (b.salePrice||b.purchPrice)); break;
+      case 'highest_price': list.sort((a,b) => (b.salePrice||b.purchPrice) - (a.salePrice||a.purchPrice)); break;
+      case 'lowest_year': list.sort((a,b) => a.year - b.year); break;
+      case 'highest_year': list.sort((a,b) => b.year - a.year); break;
+    }
+    return list;
+  }
+
+  function render() {
+    const list = filterAndSort();
+    const listEl = document.getElementById('sale-list');
+    if (list.length === 0) {
+      listEl.innerHTML = `<div class="empty-state"><i class="ti ti-car-off"></i><div class="title">No vehicles found</div><div class="desc">Try adjusting your filters or search</div></div>`;
+    } else {
+      listEl.innerHTML = list.map(renderCard).join('');
+    }
+    document.getElementById('result-count').textContent = list.length;
+    document.getElementById('total-count').textContent = vehicles.length;
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-text').textContent = message;
+    toast.classList.add('show');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+
+  function selectStage(btn, stage) {
+    document.querySelectorAll('#stage-chips .chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    state.stage = stage;
+    render();
+  }
+
+  function applySearch() { state.search = document.getElementById('dash-search').value; render(); }
+  function openFilterSheet() { document.getElementById('filter-backdrop').classList.add('show'); document.getElementById('filter-sheet').classList.add('show'); }
+  function closeFilterSheet() { document.getElementById('filter-backdrop').classList.remove('show'); document.getElementById('filter-sheet').classList.remove('show'); }
+  function openSortSheet() { document.getElementById('sort-backdrop').classList.add('show'); document.getElementById('sort-sheet').classList.add('show'); }
+  function closeSortSheet() { document.getElementById('sort-backdrop').classList.remove('show'); document.getElementById('sort-sheet').classList.remove('show'); }
+
+  function selectSort(btn) {
+    document.querySelectorAll('#sort-options .sort-option').forEach(o => o.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+
+  function clearSort() {
+    // Reset to default: Stage order (1 → 8)
+    document.querySelectorAll('#sort-options .sort-option').forEach(o => o.classList.remove('selected'));
+    const defaultBtn = document.querySelector('#sort-options .sort-option[data-sort="stage_order"]');
+    if (defaultBtn) defaultBtn.classList.add('selected');
+    state.sort = 'stage_order';
+    render();
+    showToast('Sort cleared');
+  }
+
+  function applySort() {
+    const selected = document.querySelector('#sort-options .sort-option.selected');
+    if (selected) {
+      state.sort = selected.dataset.sort;
+      render();
+    }
+    closeSortSheet();
+    showToast('Sort applied');
+  }
+
+  function resetFilters() {
+    document.getElementById('filter-make').value = '';
+    document.getElementById('filter-model').value = '';
+    document.getElementById('filter-port').value = '';
+    state.filters = { make: '', model: '', port: '' };
+    renderActiveFilters(); updateFilterBadge(); render();
+  }
+
+  function applyFilters() {
+    state.filters.make = document.getElementById('filter-make').value;
+    state.filters.model = document.getElementById('filter-model').value;
+    state.filters.port = document.getElementById('filter-port').value;
+    renderActiveFilters(); updateFilterBadge(); closeFilterSheet(); render();
+    showToast('Filters applied');
+  }
+
+  function renderActiveFilters() {
+    const container = document.getElementById('active-filters');
+    container.innerHTML = '';
+    const pills = [];
+    if (state.filters.make) pills.push({ label: state.filters.make, key: 'make' });
+    if (state.filters.model) pills.push({ label: state.filters.model, key: 'model' });
+    if (state.filters.port) pills.push({ label: state.filters.port, key: 'port' });
+    pills.forEach(p => {
+      const pill = document.createElement('span');
+      pill.className = 'active-pill';
+      pill.innerHTML = `${p.label} <span class="remove" onclick="removeFilter('${p.key}')"><i class="ti ti-x"></i></span>`;
+      container.appendChild(pill);
+    });
+  }
+
+  function removeFilter(key) {
+    state.filters[key] = '';
+    document.getElementById('filter-' + key).value = '';
+    renderActiveFilters(); updateFilterBadge(); render();
+  }
+
+  function updateFilterBadge() {
+    const badge = document.getElementById('filter-badge');
+    const btn = document.getElementById('filter-icon-btn');
+    let count = 0;
+    if (state.filters.make) count++;
+    if (state.filters.model) count++;
+    if (state.filters.port) count++;
+    if (count > 0) {
+      badge.textContent = count;
+      badge.style.display = 'flex';
+      btn.classList.add('has-active');
+    } else {
+      badge.style.display = 'none';
+      btn.classList.remove('has-active');
+    }
+  }
+
+  function openVehicleStage(id) {
+    const v = vehicles.find(x => x.id === id);
+    if (v) showToast(`Opening ${v.make} ${v.model} · Stage ${v.stage}`);
+  }
+
+  function navTo(tab, btn) {
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
+    btn.classList.add('active');
+    if (tab !== 'dashboard') showToast(`${tab.charAt(0).toUpperCase() + tab.slice(1)} coming soon`);
+  }
+
+  render();
+</script>
+
+</body>
+</html>
