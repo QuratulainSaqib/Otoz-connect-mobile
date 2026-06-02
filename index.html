@@ -447,29 +447,26 @@
   .need-help a:hover { text-decoration: underline; }
 
   /* ============ RESET LINK SENT ============ */
-  /* Centered confirmation body — Apple/Stripe pattern for status screens */
   .sent-centered-body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 0 var(--space-screen-x);
-    padding-bottom: 40px; /* slight offset so it doesn't sit on home indicator */
+    padding: 16px var(--space-screen-x) 32px;
   }
 
   .sent-centered-body .email-pill-wrap {
-    margin-top: 28px;
+    margin-top: 20px;
     padding: 0;
   }
 
   .sent-actions {
-    margin-top: 36px;
+    margin-top: 24px;
   }
 
   .email-pill-wrap {
     display: flex;
     justify-content: center;
-    margin-top: 28px;
+    margin-top: 20px;
     padding: 0 var(--space-screen-x);
   }
 
@@ -745,7 +742,7 @@
 
       <!-- Centered content block (status / confirmation pattern) -->
       <div class="sent-centered-body">
-        <div class="heading-section" style="margin-top: 0;">
+        <div class="heading-section" style="margin-top: 16px;">
           <div class="heading-title">Reset link sent</div>
           <div class="heading-subtitle" style="max-width: 220px; margin-left: auto; margin-right: auto;">
             A secure password reset link has been sent to your email. It may take a few minutes.
