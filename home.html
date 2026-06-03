@@ -897,34 +897,229 @@
     flex-shrink: 0;
   }
   .sheet-header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 44px 1fr 44px;
     align-items: center;
-    padding: 4px 20px 12px;
+    padding: 4px 16px 12px;
     flex-shrink: 0;
   }
   .sheet-title {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 700;
     color: var(--c-text);
     letter-spacing: -0.015em;
+    text-align: center;
   }
-  .sheet-reset {
+  /* Left slot — back button */
+  .sheet-back-btn {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: var(--c-bg-app);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    justify-self: start;
+  }
+  .sheet-back-btn svg { width: 18px; height: 18px; color: var(--c-text); }
+  /* Placeholder for left slot when no back button */
+  .sheet-slot-empty { width: 32px; }
+  /* Right slot — text action (Reset / Clear / Done) */
+  .sheet-action-btn {
     background: none;
     border: none;
     color: var(--c-accent);
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     font-family: inherit;
-    padding: 0;
+    padding: 4px 0;
+    justify-self: end;
+    white-space: nowrap;
   }
+  .sheet-action-btn:active { opacity: 0.6; }
   .sheet-body { flex: 1; overflow-y: auto; padding: 4px 20px 12px; }
   /* Sort sheet: light grey background to make white grouped cards pop */
   #sort-sheet .sheet-body { background: var(--c-bg-app); padding: 8px 16px 16px; }
   #sort-sheet { background: var(--c-bg-app); }
   #sort-sheet .sheet-footer { background: #fff; }
   .sheet-section { margin-bottom: 18px; }
+  /* Stage filter row — tappable row like iOS settings */
+  .filter-row-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: var(--c-bg-app);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .filter-row-btn:active { background: var(--c-divider); }
+  .filter-row-btn svg { width: 16px; height: 16px; color: var(--c-text-subtle); flex-shrink: 0; }
+  .filter-row-value {
+    font-size: 14px;
+    color: var(--c-text);
+    text-align: left;
+    flex: 1;
+  }
+  .filter-row-value.placeholder { color: var(--c-text-subtle); }
+
+  /* Stage picker sheet */
+  #stage-sheet    { z-index: 310; }
+  #stage-backdrop { z-index: 300; }
+  /* Make sheet sits ABOVE stage sheet */
+  #make-sheet     { z-index: 420; }
+  #make-backdrop  { z-index: 410; }
+  /* Model sheet same level as make sheet */
+  #model-sheet    { z-index: 420; }
+  #model-backdrop { z-index: 410; }
+
+  /* Make sheet body — list + index side by side */
+  .make-sheet-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+  }
+  .make-list-wrap {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 32px 20px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .make-list-wrap::-webkit-scrollbar { display: none; }
+
+  /* Section header — iOS Contacts style: plain text, no bg */
+  .make-alpha-header {
+    padding: 18px 20px 4px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--c-text);
+    background: transparent;
+    letter-spacing: -0.01em;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #fff;
+  }
+
+  /* Right-side alphabetical index bar */
+  .alpha-index {
+    position: absolute;
+    right: 4px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    padding: 8px 0;
+    z-index: 10;
+    user-select: none;
+    isolation: isolate;
+  }
+  .alpha-index-letter {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--c-accent);
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.1s;
+    line-height: 1;
+  }
+  .alpha-index-letter:active,
+  .alpha-index-letter.flash {
+    background: var(--c-accent);
+    color: #fff;
+  }
+
+  /* "All Makes" special row at top */
+  .make-all-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 20px;
+    border-bottom: 1px solid var(--c-divider-soft);
+    cursor: pointer;
+    background: none;
+    border-left: none; border-right: none; border-top: none;
+    font-family: inherit;
+    width: 100%;
+  }
+  .make-all-row:active { background: var(--c-bg-app); }
+  .make-all-label { font-size: 15px; font-weight: 500; color: var(--c-text); }
+
+  .make-logo-dot {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: var(--c-bg-app);
+    border: 1px solid var(--c-divider);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700;
+    color: var(--c-text-muted);
+    flex-shrink: 0;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  /* sheet-close no longer used — removed for consistency */
+
+  .stage-list { display: flex; flex-direction: column; }
+  .stage-list-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 20px;
+    border: none;
+    background: none;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.12s ease;
+    position: relative;
+    width: 100%;
+  }
+  /* Full-width divider starting after the icon — iOS contacts style */
+  .stage-list-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    right: 0;
+    height: 0.5px;
+    background: var(--c-divider);
+  }
+  .stage-list-item:last-child::after { display: none; }
+  .stage-list-item:active { background: var(--c-bg-app); }
+  .stage-num-dot {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
+  .stage-list-label {
+    flex: 1;
+    font-size: 15px;
+    color: var(--c-text);
+    font-weight: 500;
+  }
+  .stage-check {
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--c-accent);
+  }
+  .stage-check svg { width: 18px; height: 18px; }
   .sheet-label {
     font-size: 13px;
     font-weight: 600;
@@ -1017,18 +1212,25 @@
     background: #fff;
   }
 
-  /* Footer: Clear + Apply (Apple-style, equal width with icons) */
-  .sort-footer-row {
+  /* ── Unified Sheet Footer ── */
+  .sheet-footer {
+    padding: 12px 20px 24px;
+    border-top: 1px solid var(--c-divider-soft);
+    flex-shrink: 0;
+    background: #fff;
+  }
+  .footer-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
-  .secondary-btn {
+  /* Secondary — outline style, left button */
+  .btn-secondary {
     background: var(--c-bg-app);
     color: var(--c-text);
-    border: none;
+    border: 1.5px solid var(--c-divider);
     border-radius: 14px;
-    padding: 15px;
+    padding: 15px 10px;
     font-size: 15px;
     font-weight: 500;
     letter-spacing: -0.01em;
@@ -1038,41 +1240,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
+    gap: 6px;
   }
-  .secondary-btn i { font-size: 17px; }
-  .secondary-btn:hover { background: #ececef; }
-  .secondary-btn:active { transform: scale(0.98); }
-
-  /* Apple-style close button in sheet header */
-  .sheet-close {
-    background: rgba(0,0,0,0.06);
-    border: none;
-    width: 30px;
-    height: 30px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--c-text-muted);
-    padding: 0;
-    border-radius: 50%;
-    transition: all 0.15s ease;
-  }
-  .sheet-close:hover { background: rgba(0,0,0,0.1); color: var(--c-text); }
-  .sheet-close i { font-size: 16px; font-weight: 700; }
-  .sheet-footer {
-    padding: 14px 20px 24px;
-    border-top: 1px solid var(--c-divider-soft);
-    flex-shrink: 0;
-  }
-  .primary-btn {
+  .btn-secondary:active { background: #e8e8ed; transform: scale(0.98); }
+  /* Primary — filled, right button */
+  .btn-primary {
     background: var(--c-primary);
     color: #fff;
     border: none;
     border-radius: 14px;
     padding: 15px;
-    width: 100%;
     font-size: 15px;
     font-weight: 600;
     letter-spacing: -0.01em;
@@ -1082,12 +1259,10 @@
     gap: 8px;
     cursor: pointer;
     font-family: inherit;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
   }
-  .primary-btn:hover { background: var(--c-primary-hover); }
-  .primary-btn:active { transform: scale(0.98); }
-  .primary-btn svg { width: 18px; height: 18px; }
-  .primary-btn i { font-size: 17px; }
+  .btn-primary:active { background: var(--c-primary-hover); transform: scale(0.98); }
+  .btn-primary svg, .btn-secondary svg { width: 17px; height: 17px; }
 
   .empty-state {
     padding: 48px 20px;
@@ -1243,25 +1418,34 @@
     <div class="bottom-sheet" id="filter-sheet">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
+        <span class="sheet-slot-empty"></span>
         <div class="sheet-title">Filters</div>
-        <button class="sheet-reset" onclick="resetFilters()">Reset</button>
+        <span class="sheet-slot-empty"></span>
       </div>
       <div class="sheet-body">
         <div class="sheet-section">
+          <div class="sheet-label">Stage</div>
+          <button class="filter-row-btn" id="stage-filter-btn" onclick="openStageSheet()">
+            <span class="filter-row-value" id="stage-filter-label">All Stages</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <div class="sheet-section">
           <div class="sheet-label">Make</div>
-          <select class="sheet-select" id="filter-make">
-            <option value="">All Makes</option>
-            <option>Toyota</option><option>Honda</option><option>Nissan</option>
-            <option>Mazda</option><option>Mitsubishi</option><option>Suzuki</option>
-          </select>
+          <button class="filter-row-btn" id="make-filter-btn" onclick="openMakeSheet()">
+            <span class="filter-row-value placeholder" id="make-filter-label">All Makes</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+          <!-- hidden input to keep existing applyFilters logic -->
+          <input type="hidden" id="filter-make" value="">
         </div>
         <div class="sheet-section">
           <div class="sheet-label">Model</div>
-          <select class="sheet-select" id="filter-model">
-            <option value="">All Models</option>
-            <option>Raize</option><option>Vezel</option><option>X-Trail</option>
-            <option>Camry</option><option>Civic</option><option>Aqua</option><option>Vitz</option>
-          </select>
+          <button class="filter-row-btn" id="model-filter-btn" onclick="openModelSheet()">
+            <span class="filter-row-value placeholder" id="model-filter-label">All Models</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+          <input type="hidden" id="filter-model" value="">
         </div>
         <div class="sheet-section">
           <div class="sheet-label">Destination Port</div>
@@ -1273,10 +1457,16 @@
         </div>
       </div>
       <div class="sheet-footer">
-        <button class="primary-btn" onclick="applyFilters()">
-          Apply Filters
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg>
-        </button>
+        <div class="footer-row">
+          <button class="btn-secondary" onclick="resetFilters()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Reset
+          </button>
+          <button class="btn-primary" onclick="applyFilters()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>
+            Apply Filters
+          </button>
+        </div>
       </div>
     </div>
 
@@ -1285,10 +1475,9 @@
     <div class="bottom-sheet" id="sort-sheet">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
+        <span class="sheet-slot-empty"></span>
         <div class="sheet-title">Sort By</div>
-        <button class="sheet-close" onclick="closeSortSheet()" aria-label="Close">
-          <i class="ti ti-x"></i>
-        </button>
+        <span class="sheet-slot-empty"></span>
       </div>
       <div class="sheet-body">
         <div class="sort-options" id="sort-options">
@@ -1328,15 +1517,117 @@
         </div>
       </div>
       <div class="sheet-footer">
-        <div class="sort-footer-row">
-          <button class="secondary-btn" onclick="clearSort()">
-            <i class="ti ti-refresh"></i>
-            Clear
+        <div class="footer-row">
+          <button class="btn-secondary" onclick="clearSort()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Reset
           </button>
-          <button class="primary-btn" onclick="applySort()">
-            <i class="ti ti-check"></i>
-            Apply Filter
+          <button class="btn-primary" onclick="applySort()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>
+            Apply Sort
           </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage picker sheet (nested over filter sheet) -->
+    <div class="sheet-backdrop" id="stage-backdrop" onclick="closeStageSheet()"></div>
+    <div class="bottom-sheet" id="stage-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <button class="sheet-back-btn" onclick="closeStageSheet()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+        <div class="sheet-title">Select Stage</div>
+        <button class="sheet-action-btn" onclick="clearStageFilter()">Clear</button>
+      </div>
+      <div class="sheet-body" style="padding-top:0;">
+        <div class="stage-list">
+          <button class="stage-list-item" data-stage="" onclick="selectStageFilter(this)">
+            <span class="stage-list-label">All Stages</span>
+            <span class="stage-check" id="stage-check-all">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>
+            </span>
+          </button>
+          <button class="stage-list-item" data-stage="1" onclick="selectStageFilter(this)">
+            <span class="stage-num-dot" style="background:#0071e3">1</span>
+            <span class="stage-list-label">Purchase Info</span>
+            <span class="stage-check" id="stage-check-1"></span>
+          </button>
+          <button class="stage-list-item" data-stage="2" onclick="selectStageFilter(this)">
+            <span class="stage-num-dot" style="background:#6f54e0">2</span>
+            <span class="stage-list-label">Yard Images</span>
+            <span class="stage-check" id="stage-check-2"></span>
+          </button>
+          <button class="stage-list-item" data-stage="3" onclick="selectStageFilter(this)">
+            <span class="stage-num-dot" style="background:#ff9500">3</span>
+            <span class="stage-list-label">Export Certificate</span>
+            <span class="stage-check" id="stage-check-3"></span>
+          </button>
+          <button class="stage-list-item" data-stage="4" onclick="selectStageFilter(this)">
+            <span class="stage-num-dot" style="background:#ec4899">4</span>
+            <span class="stage-list-label">Inspection</span>
+            <span class="stage-check" id="stage-check-4"></span>
+          </button>
+          <button class="stage-list-item" data-stage="5" onclick="selectStageFilter(this)">
+            <span class="stage-num-dot" style="background:#ff5e3a">5</span>
+            <span class="stage-list-label">Shipment</span>
+            <span class="stage-check" id="stage-check-5"></span>
+          </button>
+          <button class="stage-list-item" data-stage="6" onclick="selectStageFilter(this)">
+            <span class="stage-num-dot" style="background:#f5b400">6</span>
+            <span class="stage-list-label">Bill of Lading</span>
+            <span class="stage-check" id="stage-check-6"></span>
+          </button>
+          <button class="stage-list-item" data-stage="7" onclick="selectStageFilter(this)">
+            <span class="stage-num-dot" style="background:#34aadc">7</span>
+            <span class="stage-list-label">Finance Status</span>
+            <span class="stage-check" id="stage-check-7"></span>
+          </button>
+          <button class="stage-list-item" data-stage="8" onclick="selectStageFilter(this)">
+            <span class="stage-num-dot" style="background:#30c46d">8</span>
+            <span class="stage-list-label">Unit Received</span>
+            <span class="stage-check" id="stage-check-8"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Make picker sheet - iOS contacts style -->
+    <div class="sheet-backdrop" id="make-backdrop" onclick="closeMakeSheet()"></div>
+    <div class="bottom-sheet" id="make-sheet" style="max-height:88%;">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <button class="sheet-back-btn" onclick="closeMakeSheet()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+        <div class="sheet-title">Select Make</div>
+        <button class="sheet-action-btn" onclick="clearMakeFilter()">Clear</button>
+      </div>
+      <div class="make-sheet-body">
+        <div class="make-list-wrap" id="make-list-wrap">
+          <!-- rendered by JS -->
+        </div>
+        <div class="alpha-index" id="alpha-index">
+          <!-- rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Model picker sheet -->
+    <div class="sheet-backdrop" id="model-backdrop" onclick="closeModelSheet()"></div>
+    <div class="bottom-sheet" id="model-sheet" style="max-height:88%;">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <button class="sheet-back-btn" onclick="closeModelSheet()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+        <div class="sheet-title">Select Model</div>
+        <button class="sheet-action-btn" onclick="clearModelFilter()">Clear</button>
+      </div>
+      <div class="sheet-body" style="padding-top:0;">
+        <div class="stage-list" id="model-list">
+          <!-- rendered by JS -->
         </div>
       </div>
     </div>
@@ -1369,7 +1660,7 @@
     { id: 8, stage: 8, make: 'Toyota',     model: 'Raize',     code: '5BA-A200A', year: 2022, chassis: '5YJSA1E26HF200012', port: 'Zimbabwe',      purchaseDate: '02/08/2026', purchCurr: 'USD', purchPrice: 24205,   saleCurr: 'JPY', salePrice: 4150000, bcn: 'BCN',                            updated: false },
   ];
 
-  let state = { stage: 'all', search: '', filters: { make: '', model: '', port: '' }, sort: 'stage_order' };
+  let state = { stage: 'all', search: '', filters: { stage: '', make: '', model: '', port: '' }, sort: 'stage_order' };
 
   function currencySymbol(curr) {
     const map = { USD: '$', JPY: '¥', EUR: '€', GBP: '£' };
@@ -1504,6 +1795,7 @@
   function filterAndSort() {
     let list = vehicles.slice();
     if (state.stage !== 'all') list = list.filter(v => v.stage === parseInt(state.stage));
+    if (state.filters.stage) list = list.filter(v => v.stage === parseInt(state.filters.stage));
     if (state.search) {
       const q = state.search.toLowerCase();
       list = list.filter(v => v.chassis.toLowerCase().includes(q));
@@ -1588,7 +1880,10 @@
     document.getElementById('filter-make').value = '';
     document.getElementById('filter-model').value = '';
     document.getElementById('filter-port').value = '';
-    state.filters = { make: '', model: '', port: '' };
+    state.filters = { make: '', model: '', port: '', stage: '' };
+    updateStageFilterLabel('');
+    updateMakeFilterLabel('');
+    updateModelFilterLabel('');
     renderActiveFilters(); updateFilterBadge(); render();
   }
 
@@ -1596,14 +1891,284 @@
     state.filters.make = document.getElementById('filter-make').value;
     state.filters.model = document.getElementById('filter-model').value;
     state.filters.port = document.getElementById('filter-port').value;
+    // stage already applied instantly on selection
     renderActiveFilters(); updateFilterBadge(); closeFilterSheet(); render();
     showToast('Filters applied');
+  }
+
+  // ---- Make sheet ----
+  const MAKES_LIST = [
+    'Abarth','Acura','Alfa Romeo','Alpine','Aston Martin','Audi',
+    'Bentley','BMW','Bugatti','Buick','BYD',
+    'Cadillac','Changan','Chery','Chevrolet','Chrysler','Citroën','Cupra',
+    'Dacia','Daihatsu','Dodge','DS Automobiles',
+    'Ferrari','Fiat','Fisker','Ford',
+    'Genesis','GMC','Great Wall Motors',
+    'Haval','Holden','Honda','Hummer','Hyundai',
+    'Infiniti','Isuzu',
+    'JAC','Jaguar','Jeep','Jetour',
+    'Kia','Koenigsegg',
+    'Lamborghini','Lancia','Land Rover','Lexus','Lincoln','Lotus','Lucid',
+    'Mahindra','Maserati','Maybach','Mazda','McLaren','Mercedes-Benz','MG','Mini','Mitsubishi','Mitsubishi Fuso',
+    'NIO','Nissan',
+    'Opel',
+    'Pagani','Peugeot','Polestar','Porsche','Proton',
+    'RAM','Renault','Rivian','Rolls-Royce',
+    'Saab','Seat','Škoda','Smart','SsangYong','Subaru','Suzuki',
+    'Tata','Tesla','Toyota',
+    'VinFast','Volkswagen','Volvo',
+    'Wuling',
+    'XPeng',
+    'Zeekr'
+  ].sort((a, b) => a.localeCompare(b));
+
+  function renderMakeList() {
+    const wrap = document.getElementById('make-list-wrap');
+    const indexBar = document.getElementById('alpha-index');
+    if (!wrap || !indexBar) return;
+
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    const cur = state.filters.make;
+
+    // Group by first letter
+    const grouped = {};
+    MAKES_LIST.forEach(m => {
+      const letter = m[0].toUpperCase();
+      if (!grouped[letter]) grouped[letter] = [];
+      grouped[letter].push(m);
+    });
+    const letters = Object.keys(grouped).sort();
+
+    let html = '';
+    // All Makes row at top
+    html += `<button class="stage-list-item" onclick="selectMakeFilter(this)" data-make="">
+      <span class="make-all-label">All Makes</span>
+      <span class="stage-check" id="make-check-all">${cur === '' ? checkSVG : ''}</span>
+    </button>`;
+
+    letters.forEach(letter => {
+      html += `<div class="make-alpha-header" id="make-section-${letter}">${letter}</div>`;
+      grouped[letter].forEach(m => {
+        const initials = m.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+        const checked = cur === m ? checkSVG : '';
+        html += `<button class="stage-list-item" data-make="${m}" onclick="selectMakeFilter(this)">
+          <span class="make-logo-dot">${initials}</span>
+          <span class="stage-list-label">${m}</span>
+          <span class="stage-check" id="make-check-${m.replace(/\s+/g,'-')}">${checked}</span>
+        </button>`;
+      });
+    });
+
+    wrap.innerHTML = html;
+
+    // Render index bar
+    indexBar.innerHTML = letters.map(l =>
+      `<div class="alpha-index-letter" onclick="scrollToMakeLetter('${l}', event)">${l}</div>`
+    ).join('');
+  }
+
+  function scrollToMakeLetter(letter, e) {
+    if (e) e.stopPropagation();
+    const el = document.getElementById('make-section-' + letter);
+    if (el) {
+      const wrap = document.getElementById('make-list-wrap');
+      wrap.scrollTop = el.offsetTop - wrap.offsetTop;
+    }
+    // Flash the tapped letter
+    document.querySelectorAll('.alpha-index-letter').forEach(l => {
+      if (l.textContent === letter) {
+        l.classList.add('flash');
+        setTimeout(() => l.classList.remove('flash'), 300);
+      }
+    });
+  }
+
+  function openMakeSheet() {
+    document.getElementById('make-backdrop').classList.add('show');
+    document.getElementById('make-sheet').classList.add('show');
+    renderMakeList();
+  }
+  function closeMakeSheet() {
+    document.getElementById('make-backdrop').classList.remove('show');
+    document.getElementById('make-sheet').classList.remove('show');
+  }
+  function selectMakeFilter(btn) {
+    const make = btn.dataset.make;
+    state.filters.make = make;
+    document.getElementById('filter-make').value = make;
+    updateMakeFilterLabel(make);
+    setTimeout(() => closeMakeSheet(), 180);
+  }
+  function clearMakeFilter() {
+    state.filters.make = '';
+    document.getElementById('filter-make').value = '';
+    updateMakeFilterLabel('');
+    renderMakeList();
+  }
+  function updateMakeFilterLabel(make) {
+    const label = document.getElementById('make-filter-label');
+    if (!label) return;
+    if (!make) {
+      label.textContent = 'All Makes';
+      label.classList.add('placeholder');
+    } else {
+      label.textContent = make;
+      label.classList.remove('placeholder');
+    }
+    // Reset model when make changes
+    state.filters.model = '';
+    document.getElementById('filter-model').value = '';
+    updateModelFilterLabel('');
+  }
+  function syncMakeChecks() { renderMakeList(); }
+
+  // ---- Model sheet ----
+  const MAKE_MODELS = {
+    'Toyota':    ['Aqua','Camry','Corolla','Crown','Fortuner','GR86','Harrier','Hiace','Hilux','Land Cruiser','Noah','Prado','Prius','Rav4','Raize','Rush','Vitz','Voxy','Yaris'],
+    'Honda':     ['Accord','BR-V','City','Civic','CR-V','Fit','Freed','HR-V','Insight','Jazz','N-Box','Odyssey','Shuttle','Stepwgn','Vezel','WR-V'],
+    'Nissan':    ['Dayz','Elgrand','Kicks','Leaf','March','Murano','Note','Patrol','Qashqai','Serena','Terra','Tiida','X-Trail'],
+    'Mazda':     ['CX-3','CX-30','CX-5','CX-8','Demio','Mazda2','Mazda3','Mazda6','MX-30','MX-5'],
+    'Mitsubishi':['ASX','Eclipse Cross','L200','Mirage','Outlander','Pajero','Pajero Sport','Xpander'],
+    'Suzuki':    ['Alto','Baleno','Carry','Ciaz','Ertiga','Fronx','Grand Vitara','Jimny','S-Presso','Swift','Vitara','WagonR','XL7'],
+    'Subaru':    ['BRZ','Crosstrek','Forester','Impreza','Legacy','Levorg','Outback','WRX','XV'],
+    'Daihatsu':  ['Atrai','Boon','Cast','Hijet','Move','Move Canbus','Rocky','Tanto','Thor','Taft','Wake'],
+    'Lexus':     ['ES','GS','GX','IS','LC','LS','LX','NX','RX','UX'],
+    'Isuzu':     ['D-Max','Elf','Forward','MU-X','N-Series','TF'],
+    'Hino':      ['300 Series','500 Series','700 Series','Dutro','Ranger'],
+    'Mitsubishi Fuso': ['Canter','Fighter','Rosa','Super Great'],
+    'BMW':       ['1 Series','2 Series','3 Series','4 Series','5 Series','7 Series','8 Series','iX','M3','M5','X1','X3','X5','X7'],
+    'Mercedes-Benz': ['A-Class','C-Class','CLA','E-Class','G-Class','GLA','GLC','GLE','GLS','S-Class','V-Class'],
+    'Audi':      ['A1','A3','A4','A5','A6','A8','e-tron','Q2','Q3','Q5','Q7','Q8','RS6','TT'],
+    'Volkswagen':['Golf','ID.3','ID.4','Passat','Polo','T-Cross','T-Roc','Tiguan','Touareg','Transporter'],
+    'Hyundai':   ['Accent','Creta','Elantra','IONIQ 5','Kona','Palisade','Santa Fe','Sonata','Staria','Tucson','Venue'],
+    'Kia':       ['Carnival','EV6','Niro','Picanto','Rio','Seltos','Sorento','Soul','Sportage','Stinger','Telluride'],
+    'Ford':      ['Bronco','Edge','Escape','Everest','Explorer','F-150','Maverick','Mustang','Puma','Ranger','Territory'],
+    'Chevrolet': ['Blazer','Captiva','Colorado','Equinox','Malibu','Silverado','Spark','Tahoe','Trailblazer','Traverse'],
+    'Lexus':     ['ES','GS','GX','IS','LC','LS','LX','NX','RX','UX'],
+    'Porsche':   ['718','911','Cayenne','Macan','Panamera','Taycan'],
+    'Land Rover':['Defender','Discovery','Discovery Sport','Freelander','Range Rover','Range Rover Evoque','Range Rover Sport','Range Rover Velar'],
+    'Jaguar':    ['E-Pace','F-Pace','F-Type','I-Pace','XE','XF'],
+    'Tesla':     ['Cybertruck','Model 3','Model S','Model X','Model Y'],
+    'Volvo':     ['C40','S60','S90','V60','V90','XC40','XC60','XC90'],
+    'Renault':   ['Arkana','Captur','Clio','Duster','Kadjar','Koleos','Logan','Megane','Sandero','Zoe'],
+    'Peugeot':   ['208','2008','308','3008','408','4008','508','5008'],
+    'MG':        ['3','5','6','GS','HS','RX5','RX8','ZS','ZST'],
+    'BYD':       ['Atto 3','Dolphin','Han','Song','Tang'],
+  };
+
+  function getModelsForMake(make) {
+    if (!make) {
+      // All unique models across all makes, sorted
+      const all = new Set();
+      Object.values(MAKE_MODELS).forEach(arr => arr.forEach(m => all.add(m)));
+      return ['All Models', ...Array.from(all).sort()];
+    }
+    return ['All Models', ...(MAKE_MODELS[make] || [])];
+  }
+
+  function renderModelList() {
+    const list = document.getElementById('model-list');
+    if (!list) return;
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    const cur = state.filters.model;
+    const models = getModelsForMake(state.filters.make);
+    const selectedMake = state.filters.make;
+
+    list.innerHTML = models.map(m => {
+      const val = m === 'All Models' ? '' : m;
+      const checked = cur === val ? checkSVG : '';
+      return `<button class="stage-list-item" data-model="${val}" onclick="selectModelFilter(this)">
+        <span class="stage-list-label">${m}</span>
+        <span class="stage-check" id="model-check-${val.replace(/\s+/g,'-')}">${checked}</span>
+      </button>`;
+    }).join('');
+
+    // Update sheet title to show which make is selected
+    const title = document.querySelector('#model-sheet .sheet-title');
+    if (title) title.textContent = selectedMake ? `${selectedMake} Models` : 'Select Model';
+  }
+
+  function openModelSheet() {
+    document.getElementById('model-backdrop').classList.add('show');
+    document.getElementById('model-sheet').classList.add('show');
+    renderModelList();
+  }
+  function closeModelSheet() {
+    document.getElementById('model-backdrop').classList.remove('show');
+    document.getElementById('model-sheet').classList.remove('show');
+  }
+  function selectModelFilter(btn) {
+    const model = btn.dataset.model;
+    state.filters.model = model;
+    document.getElementById('filter-model').value = model;
+    updateModelFilterLabel(model);
+    setTimeout(() => closeModelSheet(), 180);
+  }
+  function clearModelFilter() {
+    state.filters.model = '';
+    document.getElementById('filter-model').value = '';
+    updateModelFilterLabel('');
+    renderModelList();
+  }
+  function updateModelFilterLabel(model) {
+    const label = document.getElementById('model-filter-label');
+    if (!label) return;
+    if (!model) {
+      label.textContent = state.filters.make ? 'All Models' : 'All Models';
+      label.classList.add('placeholder');
+    } else {
+      label.textContent = model;
+      label.classList.remove('placeholder');
+    }
+  }
+  const STAGE_NAMES = { '': 'All Stages', '1': 'Purchase Info', '2': 'Yard Images', '3': 'Export Certificate', '4': 'Inspection', '5': 'Shipment', '6': 'Bill of Lading', '7': 'Finance Status', '8': 'Unit Received' };
+
+  function openStageSheet() {
+    document.getElementById('stage-backdrop').classList.add('show');
+    document.getElementById('stage-sheet').classList.add('show');
+    syncStageChecks();
+  }
+  function closeStageSheet() {
+    document.getElementById('stage-backdrop').classList.remove('show');
+    document.getElementById('stage-sheet').classList.remove('show');
+  }
+  function syncStageChecks() {
+    const checkmark = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    Object.keys(STAGE_NAMES).forEach(k => {
+      const id = k === '' ? 'stage-check-all' : `stage-check-${k}`;
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = (state.filters.stage === k) ? checkmark : '';
+    });
+  }
+  function selectStageFilter(btn) {
+    const stage = btn.dataset.stage;
+    state.filters.stage = stage;
+    updateStageFilterLabel(stage);
+    syncStageChecks();
+    setTimeout(() => closeStageSheet(), 200);
+  }
+  function clearStageFilter() {
+    state.filters.stage = '';
+    updateStageFilterLabel('');
+    syncStageChecks();
+  }
+  function updateStageFilterLabel(stage) {
+    const label = document.getElementById('stage-filter-label');
+    if (!label) return;
+    if (stage === '') {
+      label.textContent = 'All Stages';
+      label.classList.add('placeholder');
+    } else {
+      label.textContent = `Stage ${stage} — ${STAGE_NAMES[stage]}`;
+      label.classList.remove('placeholder');
+    }
   }
 
   function renderActiveFilters() {
     const container = document.getElementById('active-filters');
     container.innerHTML = '';
     const pills = [];
+    if (state.filters.stage) pills.push({ label: `Stage ${state.filters.stage}`, key: 'stage' });
     if (state.filters.make) pills.push({ label: state.filters.make, key: 'make' });
     if (state.filters.model) pills.push({ label: state.filters.model, key: 'model' });
     if (state.filters.port) pills.push({ label: state.filters.port, key: 'port' });
@@ -1617,7 +2182,17 @@
 
   function removeFilter(key) {
     state.filters[key] = '';
-    document.getElementById('filter-' + key).value = '';
+    if (key === 'stage') {
+      updateStageFilterLabel('');
+    } else if (key === 'make') {
+      document.getElementById('filter-make').value = '';
+      updateMakeFilterLabel('');
+    } else if (key === 'model') {
+      document.getElementById('filter-model').value = '';
+      updateModelFilterLabel('');
+    } else {
+      document.getElementById('filter-' + key).value = '';
+    }
     renderActiveFilters(); updateFilterBadge(); render();
   }
 
@@ -1625,6 +2200,7 @@
     const badge = document.getElementById('filter-badge');
     const btn = document.getElementById('filter-icon-btn');
     let count = 0;
+    if (state.filters.stage) count++;
     if (state.filters.make) count++;
     if (state.filters.model) count++;
     if (state.filters.port) count++;
