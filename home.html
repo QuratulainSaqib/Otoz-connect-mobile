@@ -665,22 +665,46 @@
     line-height: 1;
     white-space: nowrap;
   }
+  .sale-value-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .sale-updated-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 7px;
+    background: #fefce8;
+    border: 1px solid #fde68a;
+    border-radius: 5px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #92400e;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+  .sale-updated-tag i { font-size: 9px; }
   .sale-value {
     font-size: 14px;
     font-weight: 700;
-    color: var(--c-text);
+    color: #2BA6FF;
     letter-spacing: -0.02em;
     line-height: 1;
     margin-top: 0;
     display: flex;
     align-items: center;
     gap: 5px;
+    cursor: pointer;
   }
   .sale-curr-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.04);
+    background: rgba(0,0,0,0.04);
     border-radius: 5px;
     padding: 3px 8px;
     font-size: 11px;
@@ -1105,7 +1129,7 @@
     align-items: flex-start;
     gap: 14px;
     margin-bottom: 20px;
-    background: linear-gradient(135deg, #0d1e3a 0%, #1a3461 100%);
+    background: linear-gradient(135deg, #173559 0%, #122a47 100%);
   }
   .vc-car-img {
     width: 72px; height: 56px;
@@ -1126,7 +1150,7 @@
   }
   .vc-year {
     font-size: 12px; font-weight: 400;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.65);
     margin-top: 2px;
   }
   /* Vertical divider */
@@ -1145,7 +1169,8 @@
   .vc-card-chassis-no {
     font-size: 12px; font-weight: 700; color: #fff;
     letter-spacing: 0.04em; line-height: 1.3;
-    word-break: break-all; max-width: 120px; text-align: left;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    text-align: left;
   }
   #add-sale-sheet, #view-sale-sheet, #update-sale-sheet { z-index: 320; }
   #add-sale-backdrop, #view-sale-backdrop, #update-sale-backdrop { z-index: 310; }
@@ -1154,6 +1179,31 @@
   #curr-backdrop, #sale-country-backdrop, #sale-port-backdrop { z-index: 420; }
 
   /* Close X button top-right */
+  /* ── Price Adjustments Timeline ── */
+  .adj-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .adj-title { font-size:11px; font-weight:700; color:var(--c-text-muted); letter-spacing:0.06em; }
+  .adj-count { font-size:11px; font-weight:600; color:var(--c-accent); background:#e8f5ff; border:1px solid rgba(43,166,255,0.25); border-radius:999px; padding:2px 10px; }
+  .adj-timeline { display:flex; flex-direction:column; }
+  .adj-item { display:flex; gap:12px; margin-bottom:10px; }
+  .adj-dot-wrap { display:flex; flex-direction:column; align-items:center; flex-shrink:0; padding-top:2px; }
+  .adj-dot { width:18px; height:18px; border-radius:50%; border:2px solid var(--c-accent); background:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .adj-dot-inner { width:7px; height:7px; border-radius:50%; background:var(--c-accent); }
+  .adj-line { width:1.5px; flex:1; background:rgba(43,166,255,0.2); margin-top:3px; min-height:16px; }
+  .adj-item:last-child .adj-line { display:none; }
+  .adj-card { flex:1; background:#fff; border:1px solid var(--c-divider); border-radius:12px; padding:11px 13px; margin-bottom:2px; }
+  .adj-card-header { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:4px; }
+  .adj-card-title { font-size:13px; font-weight:600; color:var(--c-text); }
+  .adj-card-amount { font-size:13px; font-weight:700; color:var(--c-accent); white-space:nowrap; }
+  .adj-card-date { font-size:11px; color:var(--c-text-muted); display:flex; align-items:center; gap:4px; margin-bottom:5px; }
+  .adj-card-note { font-size:11.5px; color:var(--c-text-muted); line-height:1.5; }
+  .adj-total { background:linear-gradient(135deg,#eef6ff 0%,#e8f2ff 100%); border:1px solid rgba(43,166,255,0.2); border-radius:14px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; margin-top:4px; }
+  .adj-total-left {}
+  .adj-total-label { font-size:11px; font-weight:700; color:var(--c-accent); letter-spacing:0.04em; }
+  .adj-total-sub { font-size:11px; color:var(--c-text-muted); margin-top:2px; }
+  .adj-total-right { display:flex; align-items:center; gap:8px; }
+  .adj-total-curr { background:rgba(43,166,255,0.12); border-radius:6px; padding:3px 8px; font-size:11px; font-weight:700; color:var(--c-accent); }
+  .adj-total-amount { font-size:22px; font-weight:700; color:var(--c-text); letter-spacing:-0.02em; }
+
   .sale-close-btn {
     width: 32px; height: 32px;
     border-radius: 50%;
@@ -1383,11 +1433,22 @@
   .sale-notes-input::placeholder { color: #c5c5c7; }
 
   /* View sale info card */
-  .sale-view-card { background: var(--c-bg-app); border-radius: 16px; overflow: hidden; }
+  .sale-view-card {
+    background: linear-gradient(180deg, #fafbfd 0%, #f5f6f9 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .sale-view-section-title {
+    font-size: 14px; font-weight: 600; color: var(--c-text);
+    padding: 14px 16px 12px;
+    border-bottom: 0.5px solid var(--c-divider);
+  }
   .sale-view-row {
     display: flex; align-items: flex-start;
     justify-content: space-between;
     padding: 14px 16px; gap: 12px;
+    background: #fff;
   }
   .sale-view-divider { height: 0.5px; background: var(--c-divider); margin: 0 16px; }
   .sale-view-label { font-size: 14px; color: var(--c-text-muted); font-weight: 400; flex-shrink: 0; }
@@ -2096,48 +2157,48 @@
 
     <!-- ===== VIEW SALE SHEET ===== -->
     <div class="sheet-backdrop" id="view-sale-backdrop" onclick="closeViewSaleSheet()"></div>
-    <div class="bottom-sheet" id="view-sale-sheet">
+    <div class="bottom-sheet" id="view-sale-sheet" style="max-height:88%;">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
         <span class="sheet-slot-empty"></span>
-        <div class="sheet-title">Sale Details</div>
-        <button class="sheet-action-btn" onclick="openUpdateSaleSheet()">Edit</button>
+        <div class="sheet-title">Sale Price Details</div>
+        <button class="sale-close-btn" onclick="closeViewSaleSheet()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
       </div>
-      <div class="sheet-body">
+      <div class="sheet-body" style="overflow-y:auto;">
         <div class="vc-card" id="view-sale-vehicle"></div>
-        <!-- Sale info rows -->
         <div class="sale-view-card">
-          <div class="sale-view-row">
-            <span class="sale-view-label">Sale Price</span>
-            <span class="sale-view-value" id="view-sale-price">—</span>
-          </div>
-          <div class="sale-view-divider"></div>
+          <div class="sale-view-section-title">Sale Price Details</div>
           <div class="sale-view-row">
             <span class="sale-view-label">Currency</span>
             <span class="sale-view-value" id="view-sale-curr">—</span>
           </div>
           <div class="sale-view-divider"></div>
           <div class="sale-view-row">
-            <span class="sale-view-label">Added On</span>
-            <span class="sale-view-value" id="view-sale-date">—</span>
+            <span class="sale-view-label">Sale Price</span>
+            <span class="sale-view-value" id="view-sale-price">—</span>
           </div>
-          <div class="sale-view-divider" id="view-notes-divider"></div>
-          <div class="sale-view-row" id="view-notes-row" style="display:none;">
-            <span class="sale-view-label">Notes</span>
-            <span class="sale-view-value sale-view-notes" id="view-sale-notes">—</span>
+          <div class="sale-view-divider"></div>
+          <div class="sale-view-row">
+            <span class="sale-view-label">Destination Country</span>
+            <span class="sale-view-value" id="view-sale-country">—</span>
+          </div>
+          <div class="sale-view-divider"></div>
+          <div class="sale-view-row">
+            <span class="sale-view-label">Destination Port</span>
+            <span class="sale-view-value" id="view-sale-port">—</span>
           </div>
         </div>
-      </div>
-      <div class="sheet-footer">
-        <div class="footer-row">
-          <button class="btn-secondary btn-danger" onclick="confirmDeleteSale()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-            Delete
-          </button>
-          <button class="btn-primary" onclick="openUpdateSaleSheet()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
-            Edit Sale
-          </button>
+        <!-- Price Adjustments — only shown if updated -->
+        <div id="view-adjustments-section" style="display:none; margin-top:20px;">
+          <div class="adj-header">
+            <span class="adj-title">PRICE ADJUSTMENTS</span>
+            <span class="adj-count" id="adj-count">0 updates</span>
+          </div>
+          <div class="adj-timeline" id="adj-timeline"></div>
+          <!-- Updated total -->
+          <div class="adj-total" id="adj-total"></div>
         </div>
       </div>
     </div>
@@ -2266,10 +2327,23 @@
     { id: 1, stage: 1, make: 'Toyota',     model: 'Raize',     code: '5BA-A200A', year: 2022, chassis: 'WDC2539052F422655', port: 'Mombasa Port',  purchaseDate: '02/08/2026', purchCurr: 'JPY', purchPrice: 2420500, saleCurr: 'USD', salePrice: 27500,   bcn: 'C',                              updated: false },
     { id: 2, stage: 2, make: 'Honda',      model: 'Vezel',     code: 'DAA-RU3',   year: 2023, chassis: 'JHMGE8H56DC123456', port: 'Lagos',         purchaseDate: '01/15/2026', purchCurr: 'USD', purchPrice: 28000,   saleCurr: null,  salePrice: null,    bcn: null,                             updated: false },
     { id: 3, stage: 3, make: 'Nissan',     model: 'X-Trail',   code: 'DBA-T32',   year: 2021, chassis: 'NSXT2021A0001234',  port: 'Durban',        purchaseDate: '01/20/2026', purchCurr: 'USD', purchPrice: 25000,   saleCurr: 'USD', salePrice: 29500,   bcn: 'BCN', state: 'change-requested', updated: false },
-    { id: 4, stage: 4, make: 'Mazda',      model: 'CX-5',      code: 'KF2W',      year: 2022, chassis: 'MZCX52021KF00567',  port: 'Dar es Salaam', purchaseDate: '02/01/2026', purchCurr: 'USD', purchPrice: 18500,   saleCurr: null,  salePrice: null,    bcn: 'BC',                             updated: false },
+    { id: 4, stage: 4, make: 'Mazda',      model: 'CX-5',      code: 'KF2W',      year: 2022, chassis: 'MZCX52021KF00567',  port: 'Dar es Salaam', purchaseDate: '02/01/2026', purchCurr: 'USD', purchPrice: 18500,   saleCurr: 'USD', salePrice: 21500,   bcn: 'BC',  updated: true,
+      saleUpdatedTotal: 24120,
+      saleUpdates: [
+        { title: 'Inspection Fee Addition', amount: 1500, date: '05/04/2026', note: 'Additional inspection charges applied after stage 4 inspection was conducted.' },
+        { title: 'Documentation Update',    amount: 1120, date: '18/04/2026', note: 'Updated documentation fees due to destination port change request.' },
+      ]
+    },
     { id: 5, stage: 5, make: 'Toyota',     model: 'Aqua',      code: 'NHP10',     year: 2022, chassis: 'AQUA2022NHP10567',  port: 'Zimbabwe',      purchaseDate: '01/26/2026', purchCurr: 'USD', purchPrice: 20000,   saleCurr: 'USD', salePrice: 23500,   bcn: null,                             updated: false },
     { id: 6, stage: 6, make: 'Toyota',     model: 'Raize',     code: '5BA-A200A', year: 2022, chassis: 'JHMGE8H56DC123987', port: 'Mombasa Port',  purchaseDate: '02/08/2026', purchCurr: 'USD', purchPrice: 24205,   saleCurr: 'EUR', salePrice: 25300,   bcn: 'BC',                             updated: false },
-    { id: 7, stage: 7, make: 'Honda',      model: 'Civic',     code: 'FK7',       year: 2022, chassis: 'CIVIC2022FK700890', port: 'Durban',        purchaseDate: '01/14/2026', purchCurr: 'USD', purchPrice: 25500,   saleCurr: 'USD', salePrice: 28500,   bcn: 'C',                              updated: false },
+    { id: 7, stage: 7, make: 'Honda',      model: 'Civic',     code: 'FK7',       year: 2022, chassis: 'CIVIC2022FK700890', port: 'Durban',        purchaseDate: '01/14/2026', purchCurr: 'USD', purchPrice: 25500,   saleCurr: 'USD', salePrice: 28500,   bcn: 'C',                              updated: true,
+      saleUpdatedTotal: 36870,
+      saleUpdates: [
+        { title: 'Repair Cost Recovery',     amount: 1700,  date: '15/04/2026', note: 'Additional charges applied to recover repair expenses incurred during the failed inspection.' },
+        { title: 'Consignee Update Fee',     amount: 3120,  date: '23/05/2026', note: '10% surcharge applied due to consignee details change requested after booking confirmation.' },
+        { title: 'Port Handling Revision',   amount: 850,   date: '10/06/2026', note: 'Revised port handling and documentation fees at Durban destination port.' },
+      ]
+    },
     { id: 8, stage: 8, make: 'Toyota',     model: 'Raize',     code: '5BA-A200A', year: 2022, chassis: '5YJSA1E26HF200012', port: 'Zimbabwe',      purchaseDate: '02/08/2026', purchCurr: 'USD', purchPrice: 24205,   saleCurr: 'JPY', salePrice: 4150000, bcn: 'BCN',                            updated: false },
   ];
 
@@ -2308,10 +2382,10 @@
   function renderCard(v) {
     const stage = stagesMeta[v.stage];
     const hasSale = v.salePrice !== null;
-    // Web logic: consignee section visible whenever bcn is present (any letters or change-requested)
     const hasConsignee = v.bcn !== null && v.bcn !== undefined;
+    const displayPrice = v.updated && v.saleUpdatedTotal ? v.saleUpdatedTotal : v.salePrice;
+    const updatedTag = v.updated ? `<span class="sale-updated-tag"><i class="ti ti-refresh"></i>UPDATED</span>` : '';
 
-    // Determine bottom section: full state or empty state CTAs
     let bottomSection = '';
 
     if (hasSale && hasConsignee) {
@@ -2319,7 +2393,7 @@
         <div class="sale-section">
           <div class="sale-left" onclick="event.stopPropagation(); openViewSaleSheet(${v.id})" style="cursor:pointer;">
             <div class="sale-label">Sale Price</div>
-            <div class="sale-value"><span class="sale-curr-pill">${v.saleCurr}</span>${v.salePrice.toLocaleString()}</div>
+            <div class="sale-value"><span class="sale-curr-pill">${v.saleCurr}</span>${displayPrice.toLocaleString()}${updatedTag}</div>
           </div>
           ${renderBCN(v)}
         </div>
@@ -2340,7 +2414,7 @@
         <div class="sale-section">
           <div class="sale-left" onclick="event.stopPropagation(); openViewSaleSheet(${v.id})" style="cursor:pointer;">
             <div class="sale-label">Sale Price</div>
-            <div class="sale-value"><span class="sale-curr-pill">${v.saleCurr}</span>${v.salePrice.toLocaleString()}</div>
+            <div class="sale-value"><span class="sale-curr-pill">${v.saleCurr}</span>${displayPrice.toLocaleString()}${updatedTag}</div>
           </div>
           <button class="add-action-btn consignee" onclick="event.stopPropagation(); showToast('Add Consignee flow')">
             <i class="ti ti-plus"></i> Add Consignee
@@ -2364,7 +2438,7 @@
         <div class="card-header">
           <div class="card-header-left">
             <span class="stage-pill ${stage.class}"><span class="num">${stage.num}</span> ${stage.name}</span>
-            ${v.updated ? '<span class="updated-dot" title="Recently updated"></span>' : ''}
+            ${v.updated ? '' : v.updated ? '<span class="updated-dot" title="Recently updated"></span>' : ''}
           </div>
           <div class="card-actions">
             <button class="action-icon-btn invoice" onclick="event.stopPropagation(); showToast('View invoice')" title="Invoice">
@@ -2443,14 +2517,13 @@
       <div style="display:flex;flex-direction:column;gap:10px;width:100%;">
         <div style="display:flex;align-items:center;gap:12px;">
           <div class="vc-car-img"><img src="data:image/jpeg;base64,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" alt="vehicle"></div>
-          <div class="vc-card-info">
-            <div class="vc-card-name">${v.make} ${v.model}</div>
-            <div class="vc-year">${v.year}</div>
+          <div class="vc-card-info" style="flex:1;min-width:0;">
+            <div class="vc-card-name">${v.make} ${v.model} <span class="vc-year">· ${v.year}</span></div>
           </div>
         </div>
-        <div style="border-top:0.5px solid rgba(255,255,255,0.1);padding-top:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <div style="border-top:0.5px solid rgba(255,255,255,0.15);padding-top:8px;display:flex;align-items:center;justify-content:space-between;gap:8px;">
           <div class="vc-card-chassis-label">Chassis No.</div>
-          <div class="vc-card-chassis-no" style="max-width:100%;text-align:right;">${v.chassis}</div>
+          <div class="vc-card-chassis-no" style="text-align:right;">${v.chassis}</div>
         </div>
       </div>`;
   }
@@ -2479,7 +2552,10 @@
     if (!amount || amount <= 0) { showToast('Please enter a valid amount'); return; }
     const v = vehicles.find(x => x.id === activeSaleVehicleId);
     if (v) {
-      v.salePrice = amount; v.saleCurr = saleCurrSelected;
+      v.salePrice = amount;
+      v.saleCurr = saleCurrSelected;
+      v.saleCountry = saleCountrySelected;
+      v.salePort = salePortSelected;
       v.saleDate = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
     }
     closeAddSaleSheet(); render(); showToast('Sale price added');
@@ -2724,17 +2800,45 @@
     activeSaleVehicleId = id;
     const v = vehicles.find(x => x.id === id);
     document.getElementById('view-sale-vehicle').innerHTML = buildVcCard(v);
-    document.getElementById('view-sale-price').textContent = v.salePrice ? v.salePrice.toLocaleString() : '—';
     document.getElementById('view-sale-curr').textContent = v.saleCurr || '—';
-    document.getElementById('view-sale-date').textContent = v.saleDate || v.purchaseDate || '—';
-    const notesRow = document.getElementById('view-notes-row');
-    const notesDivider = document.getElementById('view-notes-divider');
-    if (v.saleNotes) {
-      document.getElementById('view-sale-notes').textContent = v.saleNotes;
-      notesRow.style.display = 'flex'; notesDivider.style.display = 'block';
+    document.getElementById('view-sale-price').textContent = v.salePrice ? v.salePrice.toLocaleString() : '—';
+    document.getElementById('view-sale-country').textContent = v.saleCountry || '—';
+    document.getElementById('view-sale-port').textContent = v.salePort || v.port || '—';
+
+    // Price Adjustments
+    const adjSection = document.getElementById('view-adjustments-section');
+    if (v.updated && v.saleUpdates && v.saleUpdates.length) {
+      adjSection.style.display = 'block';
+      document.getElementById('adj-count').textContent = `${v.saleUpdates.length} update${v.saleUpdates.length > 1 ? 's' : ''}`;
+      document.getElementById('adj-timeline').innerHTML = v.saleUpdates.map(u => `
+        <div class="adj-item">
+          <div class="adj-dot-wrap">
+            <div class="adj-dot"><div class="adj-dot-inner"></div></div>
+            <div class="adj-line"></div>
+          </div>
+          <div class="adj-card">
+            <div class="adj-card-header">
+              <span class="adj-card-title">${u.title}</span>
+              <span class="adj-card-amount">+ ${v.saleCurr} ${u.amount.toLocaleString()}</span>
+            </div>
+            <div class="adj-card-date"><i class="ti ti-calendar"></i> Updated on ${u.date}</div>
+            <div class="adj-card-note">${u.note}</div>
+          </div>
+        </div>`).join('');
+      const total = v.saleUpdatedTotal || v.salePrice;
+      document.getElementById('adj-total').innerHTML = `
+        <div class="adj-total-left">
+          <div class="adj-total-label">UPDATED TOTAL SALE PRICE</div>
+          <div class="adj-total-sub">Includes all adjustments above</div>
+        </div>
+        <div class="adj-total-right">
+          <span class="adj-total-curr">${v.saleCurr}</span>
+          <span class="adj-total-amount">${total.toLocaleString()}</span>
+        </div>`;
     } else {
-      notesRow.style.display = 'none'; notesDivider.style.display = 'none';
+      adjSection.style.display = 'none';
     }
+
     document.getElementById('view-sale-backdrop').classList.add('show');
     document.getElementById('view-sale-sheet').classList.add('show');
   }
