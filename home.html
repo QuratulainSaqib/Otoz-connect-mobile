@@ -12,7 +12,7 @@
   :root {
     --c-primary: #173559;
     --c-primary-hover: #122a47;
-    --c-accent: #0071e3;
+    --c-accent: #2BA6FF;
     --c-text: #1d1d1f;
     --c-text-muted: #6e6e73;
     --c-text-subtle: #86868b;
@@ -330,8 +330,8 @@
   .icon-btn:hover { background: var(--c-bg-soft); }
   .icon-btn:active { transform: scale(0.95); }
   .icon-btn i { font-size: 18px; color: var(--c-text); }
-  .icon-btn.has-active { border-color: var(--c-accent); }
-  .icon-btn.has-active i { color: var(--c-accent); }
+  .icon-btn.has-active { border-color: #2BA6FF; }
+  .icon-btn.has-active i { color: #2BA6FF; }
   .filter-badge {
     position: absolute;
     top: -3px;
@@ -367,18 +367,18 @@
     gap: 6px;
     padding: 5px 8px 5px 11px;
     border-radius: 999px;
-    background: #eef2ff;
-    border: 1px solid #c7d2fe;
+    background: #e8f5ff;
+    border: 1px solid rgba(43,166,255,0.35);
     font-size: 11.5px;
     font-weight: 600;
-    color: #3730a3;
+    color: #0070c0;
   }
   .active-pill .remove {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: rgba(55,48,163,0.15);
-    color: #3730a3;
+    background: rgba(43,166,255,0.18);
+    color: #2BA6FF;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -547,7 +547,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center center;
     display: block;
   }
   .car-image i { font-size: 32px; color: #94a3b8; }
@@ -976,9 +976,33 @@
   /* Model sheet same level as make sheet */
   #model-sheet    { z-index: 420; }
   #model-backdrop { z-index: 410; }
+  /* Port sheet */
+  #port-sheet     { z-index: 420; }
+  #port-backdrop  { z-index: 410; }
 
-  /* Make sheet body — list + index side by side */
-  .make-sheet-body {
+  /* Make + Model sheets — fixed height, never resize */
+  #make-sheet, #model-sheet {
+    height: 88%;
+    max-height: 88%;
+  }
+  #make-sheet .make-sheet-body,
+  #model-sheet .sheet-body {
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+  }
+  #model-sheet .sheet-body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0 !important;
+  }
+  #model-list {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #model-list::-webkit-scrollbar { display: none; }
     flex: 1;
     display: flex;
     overflow: hidden;
@@ -1071,7 +1095,361 @@
     text-transform: uppercase;
   }
 
-  /* sheet-close no longer used — removed for consistency */
+  /* ══════════════════════════════════════
+     VEHICLE CARD  — reusable across app
+     ══════════════════════════════════════ */
+  .vc-card {
+    border-radius: 16px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #0d1e3a 0%, #1a3461 100%);
+  }
+  .vc-car-img {
+    width: 72px; height: 56px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; overflow: hidden;
+  }
+  .vc-car-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; border-radius: 10px; }
+  .vc-car-img i { font-size: 24px; color: rgba(255,255,255,0.4); }
+  /* Make · Model · Year — one line */
+  .vc-card-info { flex: 1; min-width: 0; }
+  .vc-card-name {
+    font-size: 14px; font-weight: 700; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    letter-spacing: -0.01em;
+  }
+  .vc-year {
+    font-size: 12px; font-weight: 400;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+  }
+  /* Vertical divider */
+  .vc-card-divider {
+    width: 1px; height: 36px;
+    background: rgba(255,255,255,0.15);
+    flex-shrink: 0;
+  }
+  /* Chassis — right aligned */
+  .vc-card-chassis { text-align: right; flex-shrink: 0; }
+  .vc-card-chassis-label {
+    font-size: 10px; color: rgba(255,255,255,0.4);
+    font-weight: 500; letter-spacing: 0.02em;
+    margin-bottom: 4px; text-align: left;
+  }
+  .vc-card-chassis-no {
+    font-size: 12px; font-weight: 700; color: #fff;
+    letter-spacing: 0.04em; line-height: 1.3;
+    word-break: break-all; max-width: 120px; text-align: left;
+  }
+  #add-sale-sheet, #view-sale-sheet, #update-sale-sheet { z-index: 320; }
+  #add-sale-backdrop, #view-sale-backdrop, #update-sale-backdrop { z-index: 310; }
+  /* Nested sale picker sheets — above add-sale */
+  #curr-sheet, #sale-country-sheet, #sale-port-sheet { z-index: 430; }
+  #curr-backdrop, #sale-country-backdrop, #sale-port-backdrop { z-index: 420; }
+
+  /* Close X button top-right */
+  .sale-close-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--c-bg-app);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    justify-self: end;
+  }
+  .sale-close-btn svg { width: 16px; height: 16px; color: var(--c-text-muted); }
+
+  /* Dark vehicle banner — like reference */
+  .sale-vehicle-banner {
+    background: linear-gradient(135deg, #1a2e4a 0%, #0f1f35 100%);
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    min-height: 80px;
+  }
+  .sale-vehicle-banner .svb-img {
+    width: 64px; height: 48px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: rgba(255,255,255,0.1);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 22px;
+  }
+  .sale-vehicle-banner .svb-info { flex: 1; min-width: 0; }
+  .sale-vehicle-banner .svb-name {
+    font-size: 16px; font-weight: 700; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .sale-vehicle-banner .svb-year {
+    font-size: 13px; color: rgba(255,255,255,0.55); font-weight: 400; margin-top: 2px;
+  }
+  .sale-vehicle-banner .svb-divider {
+    width: 1px; height: 40px;
+    background: rgba(255,255,255,0.2); flex-shrink: 0;
+  }
+  .sale-vehicle-banner .svb-chassis-wrap { text-align: right; flex-shrink: 0; }
+  .sale-vehicle-banner .svb-chassis-label {
+    font-size: 10px; color: rgba(255,255,255,0.45); font-weight: 500;
+    letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sale-vehicle-banner .svb-chassis-no {
+    font-size: 12px; font-weight: 700; color: #fff; letter-spacing: 0.02em;
+  }
+
+  /* 2-column form grid */
+  .sale-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 14px;
+  }
+  .sale-form-field { display: flex; flex-direction: column; gap: 8px; position: relative; }
+  .sale-form-label {
+    font-size: 12.5px; font-weight: 500; color: var(--c-text-muted);
+  }
+  .sale-required { color: #ff3b30; }
+
+  /* Dropdown button */
+  .sale-dropdown-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 14px;
+    background: #fff;
+    border: 1.5px solid var(--c-divider);
+    border-radius: 12px;
+    font-size: 14px; font-weight: 500;
+    color: var(--c-text);
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .sale-dropdown-btn svg { width: 16px; height: 16px; color: var(--c-text-muted); flex-shrink: 0; }
+  .sale-dropdown-btn.open { border-color: #2BA6FF; }
+
+  /* Inline dropdown list */
+  .sale-dropdown-list {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0; right: 0;
+    background: #fff;
+    border: 1.5px solid var(--c-divider);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px -4px rgba(0,0,0,0.12);
+    z-index: 10;
+    overflow: hidden;
+    display: none;
+  }
+  .sale-dropdown-list.open { display: block; }
+  .sale-dropdown-item {
+    padding: 12px 14px;
+    font-size: 14px; color: var(--c-text);
+    cursor: pointer;
+    border-bottom: 0.5px solid var(--c-divider-soft);
+    transition: background 0.1s;
+  }
+  .sale-dropdown-item:last-child { border-bottom: none; }
+  .sale-dropdown-item:active, .sale-dropdown-item:hover { background: var(--c-bg-app); }
+  .sale-dropdown-item.active { color: #2BA6FF; font-weight: 600; }
+
+  /* Plain text input in form grid */
+  .sale-form-input {
+    padding: 13px 14px;
+    background: #fff;
+    border: 1.5px solid var(--c-divider);
+    border-radius: 12px;
+    font-size: 14px; font-weight: 500;
+    color: var(--c-text);
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%; box-sizing: border-box;
+  }
+  .sale-form-input:focus { border-color: #2BA6FF; }
+  .sale-form-input::placeholder { color: #c5c5c7; font-weight: 400; }
+
+  /* Vehicle pill at top of sheet (view/update) */
+  .sale-sheet-vehicle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--c-bg-app);
+    border-radius: 14px;
+    margin-bottom: 20px;
+  }
+  .sale-sheet-vehicle .sv-stage-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .sale-sheet-vehicle .sv-title {
+    font-size: 14px; font-weight: 600; color: var(--c-text); flex: 1;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .sale-sheet-vehicle .sv-chassis {
+    font-size: 11px; color: var(--c-text-muted); font-weight: 500;
+  }
+
+  /* Suggested port indicator dot */
+  .port-suggested-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #2BA6FF;
+    flex-shrink: 0;
+  }
+  .sale-curr-code {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.04);
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6e6e73;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  /* Field group - full width */
+  .sale-form-field {
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .sale-dropdown-btn span.placeholder { color: #a0a0ab; }
+  .sale-dropdown-btn span:not(.placeholder) { color: var(--c-text); }
+  .sale-field-label {
+    font-size: 13px; font-weight: 600; color: var(--c-text);
+    margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+  }
+  .sale-field-optional { font-size: 11px; font-weight: 400; color: var(--c-text-muted); }
+
+  /* Currency selector pills (update sheet) */
+  .sale-curr-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .curr-btn {
+    padding: 7px 14px; border-radius: 999px;
+    border: 1.5px solid var(--c-divider);
+    background: var(--c-bg-app);
+    font-size: 13px; font-weight: 600;
+    color: var(--c-text-muted);
+    cursor: pointer; font-family: inherit;
+    transition: all 0.15s ease;
+  }
+  .curr-btn.active { border-color: #2BA6FF; background: #e8f5ff; color: #0070c0; }
+  .curr-btn:active { transform: scale(0.96); }
+
+  /* Amount input (update sheet) */
+  .sale-amount-input-wrap {
+    display: flex; align-items: center;
+    background: var(--c-bg-app);
+    border: 1.5px solid var(--c-divider);
+    border-radius: 14px; overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .sale-amount-input-wrap:focus-within { border-color: #2BA6FF; background: #fff; }
+  .sale-amount-curr-tag {
+    padding: 13px 12px 13px 16px;
+    font-size: 14px; font-weight: 700; color: #2BA6FF;
+    background: transparent;
+    border-right: 1.5px solid var(--c-divider);
+    flex-shrink: 0; min-width: 52px; text-align: center;
+  }
+  .sale-amount-input {
+    flex: 1; border: none; background: transparent;
+    padding: 13px 16px;
+    font-size: 18px; font-weight: 600;
+    color: var(--c-text); font-family: inherit; outline: none;
+  }
+  .sale-amount-input::placeholder { color: #c5c5c7; font-weight: 400; font-size: 16px; }
+
+  /* Notes textarea */
+  .sale-notes-input {
+    width: 100%; padding: 12px 14px;
+    background: var(--c-bg-app);
+    border: 1.5px solid var(--c-divider);
+    border-radius: 14px;
+    font-size: 14px; color: var(--c-text);
+    font-family: inherit; resize: none; outline: none;
+    transition: border-color 0.15s;
+    box-sizing: border-box; line-height: 1.5;
+  }
+  .sale-notes-input:focus { border-color: #2BA6FF; background: #fff; }
+  .sale-notes-input::placeholder { color: #c5c5c7; }
+
+  /* View sale info card */
+  .sale-view-card { background: var(--c-bg-app); border-radius: 16px; overflow: hidden; }
+  .sale-view-row {
+    display: flex; align-items: flex-start;
+    justify-content: space-between;
+    padding: 14px 16px; gap: 12px;
+  }
+  .sale-view-divider { height: 0.5px; background: var(--c-divider); margin: 0 16px; }
+  .sale-view-label { font-size: 14px; color: var(--c-text-muted); font-weight: 400; flex-shrink: 0; }
+  .sale-view-value { font-size: 14px; color: var(--c-text); font-weight: 600; text-align: right; }
+  .sale-view-notes { font-weight: 400; color: var(--c-text-muted); text-align: right; }
+
+  /* Delete button */
+  .btn-danger { color: #ff3b30 !important; border-color: rgba(255,59,48,0.25) !important; }
+  .btn-danger svg { color: #ff3b30; }
+  .picker-search-wrap {
+    padding: 0 16px 10px;
+    flex-shrink: 0;
+  }
+  .picker-search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--c-bg-app);
+    border-radius: 12px;
+    padding: 10px 12px;
+    border: 1.5px solid transparent;
+    transition: border-color 0.15s;
+  }
+  .picker-search-box:focus-within {
+    border-color: var(--c-accent);
+    background: #fff;
+  }
+  .picker-search-box > svg {
+    width: 16px; height: 16px;
+    color: var(--c-text-subtle);
+    flex-shrink: 0;
+  }
+  .picker-search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    color: var(--c-text);
+    font-family: inherit;
+    outline: none;
+    min-width: 0;
+  }
+  .picker-search-input::placeholder { color: var(--c-text-subtle); }
+  .picker-search-clear {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: var(--c-text-subtle);
+    flex-shrink: 0;
+  }
+  .picker-search-clear svg { width: 16px; height: 16px; }
+
+  /* No results message */
+  .picker-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--c-text-muted);
+    font-size: 14px;
+  }
 
   .stage-list { display: flex; flex-direction: column; }
   .stage-list-item {
@@ -1094,12 +1472,10 @@
     position: absolute;
     bottom: 0;
     left: 20px;
-    right: 0;
+    right: 20px;
     height: 0.5px;
     background: var(--c-divider);
   }
-  .stage-list-item:last-child::after { display: none; }
-  .stage-list-item:active { background: var(--c-bg-app); }
   .stage-num-dot {
     width: 24px; height: 24px;
     border-radius: 50%;
@@ -1449,11 +1825,11 @@
         </div>
         <div class="sheet-section">
           <div class="sheet-label">Destination Port</div>
-          <select class="sheet-select" id="filter-port">
-            <option value="">All Destination Ports</option>
-            <option>Mombasa Port</option><option>Zimbabwe</option><option>Lagos</option>
-            <option>Durban</option><option>Dar es Salaam</option>
-          </select>
+          <button class="filter-row-btn" id="port-filter-btn" onclick="openPortSheet()">
+            <span class="filter-row-value placeholder" id="port-filter-label">All Destinations</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+          <input type="hidden" id="filter-port" value="">
         </div>
       </div>
       <div class="sheet-footer">
@@ -1604,13 +1980,19 @@
         <div class="sheet-title">Select Make</div>
         <button class="sheet-action-btn" onclick="clearMakeFilter()">Clear</button>
       </div>
+      <!-- Search bar -->
+      <div class="picker-search-wrap">
+        <div class="picker-search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="make-search-input" class="picker-search-input" placeholder="Search makes…" oninput="filterMakeList(this.value)" autocomplete="off" spellcheck="false">
+          <button class="picker-search-clear" id="make-search-clear" onclick="clearMakeSearch()" style="display:none">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
+          </button>
+        </div>
+      </div>
       <div class="make-sheet-body">
-        <div class="make-list-wrap" id="make-list-wrap">
-          <!-- rendered by JS -->
-        </div>
-        <div class="alpha-index" id="alpha-index">
-          <!-- rendered by JS -->
-        </div>
+        <div class="make-list-wrap" id="make-list-wrap"></div>
+        <div class="alpha-index" id="alpha-index"></div>
       </div>
     </div>
 
@@ -1625,10 +2007,241 @@
         <div class="sheet-title">Select Model</div>
         <button class="sheet-action-btn" onclick="clearModelFilter()">Clear</button>
       </div>
-      <div class="sheet-body" style="padding-top:0;">
-        <div class="stage-list" id="model-list">
-          <!-- rendered by JS -->
+      <!-- Search bar -->
+      <div class="picker-search-wrap">
+        <div class="picker-search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="model-search-input" class="picker-search-input" placeholder="Search models…" oninput="filterModelList(this.value)" autocomplete="off" spellcheck="false">
+          <button class="picker-search-clear" id="model-search-clear" onclick="clearModelSearch()" style="display:none">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
+          </button>
         </div>
+      </div>
+      <div class="sheet-body" style="padding-top:0; overflow-y:auto;">
+        <div class="stage-list" id="model-list"></div>
+      </div>
+    </div>
+
+    <!-- Destination picker sheet -->
+    <div class="sheet-backdrop" id="port-backdrop" onclick="closePortSheet()"></div>
+    <div class="bottom-sheet" id="port-sheet" style="height:88%;max-height:88%;">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <button class="sheet-back-btn" onclick="closePortSheet()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+        <div class="sheet-title">Destination Port</div>
+        <button class="sheet-action-btn" onclick="clearPortFilter()">Clear</button>
+      </div>
+      <div class="picker-search-wrap">
+        <div class="picker-search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="port-search-input" class="picker-search-input" placeholder="Search destinations…" oninput="filterPortList(this.value)" autocomplete="off" spellcheck="false">
+          <button class="picker-search-clear" id="port-search-clear" onclick="clearPortSearch()" style="display:none">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
+          </button>
+        </div>
+      </div>
+      <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+        <div class="stage-list" id="port-list"></div>
+      </div>
+    </div>
+
+    <!-- ===== ADD SALE SHEET ===== -->
+    <div class="sheet-backdrop" id="add-sale-backdrop" onclick="closeAddSaleSheet()"></div>
+    <div class="bottom-sheet" id="add-sale-sheet" style="max-height:92%;">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <span class="sheet-slot-empty"></span>
+        <div class="sheet-title">Add Sale Price</div>
+        <span class="sheet-slot-empty"></span>
+      </div>
+      <div class="sheet-body">
+        <!-- Vehicle info card -->
+        <div class="vc-card" id="add-sale-vehicle"></div>
+        <!-- Full-width fields opening nested sheets -->
+        <div class="sale-form-field">
+          <div class="sale-form-label">Currency <span class="sale-required">*</span></div>
+          <button class="filter-row-btn" onclick="openCurrSheet()">
+            <span id="add-curr-label" class="filter-row-value">USD</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <div class="sale-form-field">
+          <div class="sale-form-label">Sale Price <span class="sale-required">*</span></div>
+          <input type="number" class="sale-form-input" id="add-sale-amount" placeholder="Enter sale price" min="0">
+        </div>
+        <div class="sale-form-field">
+          <div class="sale-form-label">Destination Country <span class="sale-required">*</span></div>
+          <button class="filter-row-btn" onclick="openSaleCountrySheet()">
+            <span id="add-country-label" class="filter-row-value placeholder">Select Country</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <div class="sale-form-field">
+          <div class="sale-form-label">Destination Port <span class="sale-required">*</span></div>
+          <button class="filter-row-btn" onclick="openSalePortSheet()">
+            <span id="add-port-label" class="filter-row-value placeholder">Select Port</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="sheet-footer">
+        <button class="btn-primary" style="width:100%;justify-content:center;font-size:15px;gap:8px;" onclick="submitAddSale()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Sale Price
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== VIEW SALE SHEET ===== -->
+    <div class="sheet-backdrop" id="view-sale-backdrop" onclick="closeViewSaleSheet()"></div>
+    <div class="bottom-sheet" id="view-sale-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <span class="sheet-slot-empty"></span>
+        <div class="sheet-title">Sale Details</div>
+        <button class="sheet-action-btn" onclick="openUpdateSaleSheet()">Edit</button>
+      </div>
+      <div class="sheet-body">
+        <div class="vc-card" id="view-sale-vehicle"></div>
+        <!-- Sale info rows -->
+        <div class="sale-view-card">
+          <div class="sale-view-row">
+            <span class="sale-view-label">Sale Price</span>
+            <span class="sale-view-value" id="view-sale-price">—</span>
+          </div>
+          <div class="sale-view-divider"></div>
+          <div class="sale-view-row">
+            <span class="sale-view-label">Currency</span>
+            <span class="sale-view-value" id="view-sale-curr">—</span>
+          </div>
+          <div class="sale-view-divider"></div>
+          <div class="sale-view-row">
+            <span class="sale-view-label">Added On</span>
+            <span class="sale-view-value" id="view-sale-date">—</span>
+          </div>
+          <div class="sale-view-divider" id="view-notes-divider"></div>
+          <div class="sale-view-row" id="view-notes-row" style="display:none;">
+            <span class="sale-view-label">Notes</span>
+            <span class="sale-view-value sale-view-notes" id="view-sale-notes">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="sheet-footer">
+        <div class="footer-row">
+          <button class="btn-secondary btn-danger" onclick="confirmDeleteSale()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            Delete
+          </button>
+          <button class="btn-primary" onclick="openUpdateSaleSheet()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
+            Edit Sale
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== UPDATE SALE SHEET ===== -->
+    <div class="sheet-backdrop" id="update-sale-backdrop" onclick="closeUpdateSaleSheet()"></div>
+    <div class="bottom-sheet" id="update-sale-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <button class="sheet-back-btn" onclick="backToViewSale()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+        <div class="sheet-title">Update Sale</div>
+        <span class="sheet-slot-empty"></span>
+      </div>
+      <div class="sheet-body">
+        <div class="vc-card" id="update-sale-vehicle"></div>
+        <div class="sale-field-group">
+          <div class="sale-field-label">Currency</div>
+          <div class="sale-curr-row" id="update-sale-curr-row">
+            <button class="curr-btn active" data-curr="USD" onclick="selectCurr('update', this)">USD</button>
+            <button class="curr-btn" data-curr="JPY" onclick="selectCurr('update', this)">JPY</button>
+            <button class="curr-btn" data-curr="EUR" onclick="selectCurr('update', this)">EUR</button>
+            <button class="curr-btn" data-curr="GBP" onclick="selectCurr('update', this)">GBP</button>
+            <button class="curr-btn" data-curr="AED" onclick="selectCurr('update', this)">AED</button>
+          </div>
+        </div>
+        <div class="sale-field-group">
+          <div class="sale-field-label">Sale Amount</div>
+          <div class="sale-amount-input-wrap">
+            <span class="sale-amount-curr-tag" id="update-sale-curr-tag">USD</span>
+            <input type="number" class="sale-amount-input" id="update-sale-amount" placeholder="0" min="0">
+          </div>
+        </div>
+        <div class="sale-field-group">
+          <div class="sale-field-label">Notes <span class="sale-field-optional">Optional</span></div>
+          <textarea class="sale-notes-input" id="update-sale-notes" placeholder="Add any notes about this sale…" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="sheet-footer">
+        <div class="footer-row">
+          <button class="btn-secondary" onclick="backToViewSale()">Cancel</button>
+          <button class="btn-primary" onclick="submitUpdateSale()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>
+            Update Sale
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CURRENCY SHEET ===== -->
+    <div class="sheet-backdrop" id="curr-backdrop" onclick="closeCurrSheet()"></div>
+    <div class="bottom-sheet" id="curr-sheet" style="max-height:70%;">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <button class="sheet-back-btn" onclick="closeCurrSheet()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+        <div class="sheet-title">Select Currency</div>
+        <button class="sheet-action-btn" onclick="clearCurrSelection()">Clear</button>
+      </div>
+      <div class="sheet-body" style="padding:0;">
+        <div class="stage-list" id="curr-list"></div>
+      </div>
+    </div>
+
+    <!-- ===== COUNTRY SHEET ===== -->
+    <div class="sheet-backdrop" id="sale-country-backdrop" onclick="closeSaleCountrySheet()"></div>
+    <div class="bottom-sheet" id="sale-country-sheet" style="max-height:88%;">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <button class="sheet-back-btn" onclick="closeSaleCountrySheet()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+        <div class="sheet-title">Destination Country</div>
+        <button class="sheet-action-btn" onclick="clearSaleCountry()">Clear</button>
+      </div>
+      <div class="picker-search-wrap">
+        <div class="picker-search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="sale-country-search" class="picker-search-input" placeholder="Search countries…" oninput="filterSaleCountryList(this.value)" autocomplete="off" spellcheck="false">
+          <button class="picker-search-clear" id="sale-country-search-clear" onclick="clearSaleCountrySearch()" style="display:none">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="sheet-body" style="padding:0; overflow-y:auto;">
+        <div class="stage-list" id="sale-country-list"></div>
+      </div>
+    </div>
+
+    <!-- ===== PORT SHEET ===== -->
+    <div class="sheet-backdrop" id="sale-port-backdrop" onclick="closeSalePortSheet()"></div>
+    <div class="bottom-sheet" id="sale-port-sheet" style="max-height:88%;">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <button class="sheet-back-btn" onclick="closeSalePortSheet()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+        <div class="sheet-title">Destination Port</div>
+        <button class="sheet-action-btn" onclick="clearSalePort()">Clear</button>
+      </div>
+      <div class="sheet-body" style="padding:0; overflow-y:auto;">
+        <div class="stage-list" id="sale-port-list"></div>
       </div>
     </div>
 
@@ -1702,10 +2315,9 @@
     let bottomSection = '';
 
     if (hasSale && hasConsignee) {
-      // Normal state: Sale price + BCN
       bottomSection = `
         <div class="sale-section">
-          <div class="sale-left">
+          <div class="sale-left" onclick="event.stopPropagation(); openViewSaleSheet(${v.id})" style="cursor:pointer;">
             <div class="sale-label">Sale Price</div>
             <div class="sale-value"><span class="sale-curr-pill">${v.saleCurr}</span>${v.salePrice.toLocaleString()}</div>
           </div>
@@ -1713,10 +2325,9 @@
         </div>
       `;
     } else if (!hasSale && !hasConsignee) {
-      // Both missing: Two pills side by side
       bottomSection = `
         <div class="add-actions">
-          <button class="add-action-btn sale" onclick="event.stopPropagation(); showToast('Add Sale flow')">
+          <button class="add-action-btn sale" onclick="event.stopPropagation(); openAddSaleSheet(${v.id})">
             <i class="ti ti-plus"></i> Add Sale
           </button>
           <button class="add-action-btn consignee" onclick="event.stopPropagation(); showToast('Add Consignee flow')">
@@ -1725,10 +2336,9 @@
         </div>
       `;
     } else if (hasSale && !hasConsignee) {
-      // Has sale, needs consignee: Sale price + Add Consignee inline
       bottomSection = `
         <div class="sale-section">
-          <div class="sale-left">
+          <div class="sale-left" onclick="event.stopPropagation(); openViewSaleSheet(${v.id})" style="cursor:pointer;">
             <div class="sale-label">Sale Price</div>
             <div class="sale-value"><span class="sale-curr-pill">${v.saleCurr}</span>${v.salePrice.toLocaleString()}</div>
           </div>
@@ -1738,10 +2348,9 @@
         </div>
       `;
     } else {
-      // No sale, has consignee: Add Sale button + BCN
       bottomSection = `
         <div class="sale-section">
-          <button class="add-action-btn sale" onclick="event.stopPropagation(); showToast('Add Sale flow')">
+          <button class="add-action-btn sale" onclick="event.stopPropagation(); openAddSaleSheet(${v.id})">
             <i class="ti ti-plus"></i> Add Sale
           </button>
           ${renderBCN(v)}
@@ -1817,6 +2426,441 @@
     return list;
   }
 
+  // ─── SALE SHEETS ───
+  let activeSaleVehicleId = null;
+
+  const STAGE_COLORS = { 1:'#0071e3',2:'#6f54e0',3:'#ff9500',4:'#ec4899',5:'#ff5e3a',6:'#f5b400',7:'#34aadc',8:'#30c46d' };
+
+  function saleVehiclePill(v) {
+    const color = STAGE_COLORS[v.stage] || '#aaa';
+    return `<span class="sv-stage-dot" style="background:${color}"></span>
+      <span class="sv-title">${v.year} ${v.make} ${v.model}</span>
+      <span class="sv-chassis">${v.chassis.slice(-6)}</span>`;
+  }
+
+  function buildVcCard(v) {
+    return `
+      <div style="display:flex;flex-direction:column;gap:10px;width:100%;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="vc-car-img"><img src="data:image/jpeg;base64,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" alt="vehicle"></div>
+          <div class="vc-card-info">
+            <div class="vc-card-name">${v.make} ${v.model}</div>
+            <div class="vc-year">${v.year}</div>
+          </div>
+        </div>
+        <div style="border-top:0.5px solid rgba(255,255,255,0.1);padding-top:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;">
+          <div class="vc-card-chassis-label">Chassis No.</div>
+          <div class="vc-card-chassis-no" style="max-width:100%;text-align:right;">${v.chassis}</div>
+        </div>
+      </div>`;
+  }
+
+  // ── ADD SALE ──
+  function openAddSaleSheet(id) {
+    activeSaleVehicleId = id;
+    const v = vehicles.find(x => x.id === id);
+    document.getElementById('add-sale-vehicle').innerHTML = buildVcCard(v);
+    document.getElementById('add-sale-amount').value = '';
+    // Reset selections
+    saleCurrSelected = 'USD';
+    saleCountrySelected = ''; salePortSelected = '';
+    const currLabel = document.getElementById('add-curr-label');
+    if (currLabel) { currLabel.textContent = 'USD'; currLabel.classList.remove('placeholder'); }
+    updateSaleCountryLabel(''); updateSalePortLabel('');
+    document.getElementById('add-sale-backdrop').classList.add('show');
+    document.getElementById('add-sale-sheet').classList.add('show');
+  }
+  function closeAddSaleSheet() {
+    document.getElementById('add-sale-backdrop').classList.remove('show');
+    document.getElementById('add-sale-sheet').classList.remove('show');
+  }
+  function submitAddSale() {
+    const amount = parseFloat(document.getElementById('add-sale-amount').value);
+    if (!amount || amount <= 0) { showToast('Please enter a valid amount'); return; }
+    const v = vehicles.find(x => x.id === activeSaleVehicleId);
+    if (v) {
+      v.salePrice = amount; v.saleCurr = saleCurrSelected;
+      v.saleDate = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    }
+    closeAddSaleSheet(); render(); showToast('Sale price added');
+  }
+
+  // ── CURRENCY SHEET ──
+  const CURRENCIES = [
+    { code: 'USD', name: 'US Dollar' },
+    { code: 'JPY', name: 'Japanese Yen' },
+    { code: 'EUR', name: 'Euro' },
+    { code: 'GBP', name: 'British Pound' },
+    { code: 'AED', name: 'UAE Dirham' },
+  ];
+  let saleCurrSelected = 'USD';
+
+  function openCurrSheet() {
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    document.getElementById('curr-list').innerHTML = CURRENCIES.map(c => `
+      <button class="stage-list-item" onclick="selectCurr2('${c.code}')">
+        <span class="sale-curr-code">${c.code}</span>
+        <span class="stage-list-label">${c.name}</span>
+        <span class="stage-check">${saleCurrSelected === c.code ? checkSVG : ''}</span>
+      </button>`).join('');
+    document.getElementById('curr-backdrop').classList.add('show');
+    document.getElementById('curr-sheet').classList.add('show');
+  }
+  function closeCurrSheet() {
+    document.getElementById('curr-backdrop').classList.remove('show');
+    document.getElementById('curr-sheet').classList.remove('show');
+  }
+  function clearCurrSelection() {
+    saleCurrSelected = 'USD';
+    const label = document.getElementById('add-curr-label');
+    if (label) { label.textContent = 'USD'; label.classList.remove('placeholder'); }
+    openCurrSheet(); // re-render with reset checkmark
+  }
+  function selectCurr2(code) {
+    saleCurrSelected = code;
+    const label = document.getElementById('add-curr-label');
+    if (label) { label.textContent = code; label.classList.remove('placeholder'); }
+    setTimeout(() => closeCurrSheet(), 180);
+  }
+
+  // ── COUNTRY → PORT MAP ──
+  const SALE_COUNTRY_PORTS = {
+    'Angola':                ['Luanda Port', 'Lobito Port'],
+    'Australia':             ['Melbourne', 'Sydney', 'Brisbane', 'Fremantle'],
+    'Bahamas':               ['Nassau Port'],
+    'Bahrain':               ['Khalifa Bin Salman Port'],
+    'Bangladesh':            ['Chittagong Port', 'Mongla Port'],
+    'Barbados':              ['Bridgetown Port'],
+    'Belgium':               ['Antwerp Port', 'Zeebrugge'],
+    'Benin':                 ['Cotonou Port'],
+    'Cameroon':              ['Douala Port'],
+    'Cote D Ivoire':         ['Abidjan Port', 'San Pedro'],
+    'Djibouti':              ['Djibouti Port', 'Doraleh Container Terminal'],
+    'Finland':               ['Helsinki Port', 'Kotka Port'],
+    'France':                ['Marseille', 'Le Havre', 'Dunkirk'],
+    'Gabon':                 ['Libreville Port', 'Port-Gentil'],
+    'Ghana':                 ['Tema Port', 'Takoradi Port'],
+    'Greece':                ['Piraeus Port', 'Thessaloniki Port'],
+    'Guinea':                ['Conakry Port'],
+    'Guyana':                ['Georgetown Port'],
+    'Ireland':               ['Dublin Port', 'Cork Port'],
+    'Jamaica':               ['Kingston Port', 'Montego Bay'],
+    'Japan':                 ['Tokyo', 'Osaka', 'Nagoya', 'Yokohama'],
+    'Kenya':                 ['Mombasa Port', 'Nairobi ICD'],
+    'Korea':                 ['Busan Port', 'Incheon Port'],
+    'Kuwait':                ['Shuwaikh Port', 'Shuaiba Port'],
+    'Madagascar':            ['Toamasina Port', 'Mahajanga Port'],
+    'Malawi':                ['Lilongwe ICD', 'Blantyre ICD'],
+    'Malta':                 ['Marsaxlokk Port', 'Valletta Port'],
+    'Mauritania':            ['Nouakchott Port'],
+    'Mauritius':             ['Port Louis'],
+    'Mozambique':            ['Maputo Port', 'Beira Port', 'Nacala Port'],
+    'Myanmar':               ['Yangon Port', 'Thilawa Port'],
+    'Netherlands':           ['Rotterdam Port', 'Amsterdam Port'],
+    'Netherlands Antilles':  ['Willemstad Port'],
+    'New Zealand':           ['Auckland Port', 'Wellington Port', 'Lyttelton Port'],
+    'Nigeria':               ['Lagos (Apapa)', 'Tin Can Island', 'Port Harcourt', 'Onne Port'],
+    'Norway':                ['Oslo Port', 'Bergen Port'],
+    'Oman':                  ['Sohar Port', 'Salalah Port', 'Muscat Port'],
+    'Pakistan':              ['Karachi Port', 'Port Qasim'],
+    'Papua New Guinea':      ['Port Moresby', 'Lae Port'],
+    'Philippines':           ['Manila Port', 'Cebu Port', 'Davao Port'],
+    'Qatar':                 ['Hamad Port', 'Doha Port'],
+    'Russian Federation':    ['Vladivostok Port', 'St. Petersburg Port'],
+    'Saint Kitts & Nevis':   ['Basseterre Port'],
+    'Saudi Arabia':          ['Jeddah Islamic Port', 'Dammam Port', 'Jubail Port'],
+    'Senegal':               ['Dakar Port'],
+    'South Africa':          ['Durban Port', 'Cape Town Port', 'Port Elizabeth', 'Ngqura Port'],
+    'Spain':                 ['Barcelona Port', 'Valencia Port', 'Algeciras Port'],
+    'Sri Lanka':             ['Colombo Port', 'Hambantota Port'],
+    'Sweden':                ['Gothenburg Port', 'Stockholm Port'],
+    'Switzerland':           ['Basel Port', 'Geneva (Road Freight)'],
+    'Tanzania':              ['Dar es Salaam Port', 'Tanga Port', 'Mtwara Port'],
+    'Thailand':              ['Bangkok Port', 'Laem Chabang Port'],
+    'Togo':                  ['Lomé Port'],
+    'Trinidad':              ['Port of Spain', 'Point Lisas Port'],
+    'UAE':                   ['Jebel Ali Port', 'Abu Dhabi Port', 'Sharjah Port'],
+    'Uganda':                ['Kampala ICD', 'Malaba ICD'],
+    'United Kingdom':        ['Felixstowe', 'Southampton Port', 'Liverpool Port', 'London Gateway'],
+    'Zambia':                ['Lusaka ICD', 'Ndola ICD', 'Livingstone ICD'],
+    'Zimbabwe':              ['Harare Inland', 'Beit Bridge', 'Bulawayo ICD'],
+  };
+  let saleCountrySelected = '';
+  let salePortSelected = '';
+
+  function renderSaleCountryList(query = '') {
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    const q = query.trim().toLowerCase();
+    const countries = Object.keys(SALE_COUNTRY_PORTS);
+    const filtered = q ? countries.filter(c => c.toLowerCase().includes(q)) : countries;
+    if (filtered.length === 0) {
+      document.getElementById('sale-country-list').innerHTML = `<div class="picker-empty">No countries found for "${query}"</div>`;
+      return;
+    }
+    document.getElementById('sale-country-list').innerHTML = filtered.map(c => `
+      <button class="stage-list-item" onclick="selectSaleCountry('${c}')">
+        <span class="stage-list-label">${c}</span>
+        <span class="stage-check">${saleCountrySelected === c ? checkSVG : ''}</span>
+      </button>`).join('');
+  }
+
+  function openSaleCountrySheet() {
+    const input = document.getElementById('sale-country-search');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('sale-country-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    renderSaleCountryList('');
+    document.getElementById('sale-country-backdrop').classList.add('show');
+    document.getElementById('sale-country-sheet').classList.add('show');
+  }
+
+  function filterSaleCountryList(val) {
+    const clearBtn = document.getElementById('sale-country-search-clear');
+    if (clearBtn) clearBtn.style.display = val ? 'flex' : 'none';
+    renderSaleCountryList(val);
+  }
+
+  function clearSaleCountrySearch() {
+    const input = document.getElementById('sale-country-search');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('sale-country-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    renderSaleCountryList('');
+  }
+  function closeSaleCountrySheet() {
+    document.getElementById('sale-country-backdrop').classList.remove('show');
+    document.getElementById('sale-country-sheet').classList.remove('show');
+  }
+  function clearSaleCountry() {
+    saleCountrySelected = ''; salePortSelected = '';
+    updateSaleCountryLabel(''); updateSalePortLabel('');
+    closeSaleCountrySheet();
+  }
+  function selectSaleCountry(country) {
+    if (saleCountrySelected !== country) { salePortSelected = ''; updateSalePortLabel(''); }
+    saleCountrySelected = country;
+    updateSaleCountryLabel(country);
+    setTimeout(() => closeSaleCountrySheet(), 180);
+  }
+  function updateSaleCountryLabel(val) {
+    const el = document.getElementById('add-country-label');
+    if (!el) return;
+    if (val) { el.textContent = val; el.classList.remove('placeholder'); }
+    else { el.textContent = 'Select Country'; el.classList.add('placeholder'); }
+  }
+
+  // ── FULL PORTS LIST ──
+  const ALL_PORTS = ['Abidjan','Adelaide','Arua','Auckland','Bangkok','Basel','Basseterre','Beira','Bridgetown','Brisbane','Buka','Bukoba','Busan','Chalmers','Chinae','Chingola','Chittagong','Colombo','Conakry','Cotonou','Dakar','Dar es Salam','Darwin','Djibouti','Doha Port','Douala','Dublin','Dunedin','Durban','Entebbe','Freeport Container','Fremantle','Fujairah','Galle','Georgetown','Hamad Port','Jaffna','Jebel Ali','Jeddah Islamic Port','Jinja','Kabwe','Kalabo','Kankesanturai','Karachi','Kawasaki','Khalid','Khalifa','Khalifa Bin Salman Port','Khor Al Fakkan','Kilwa Masoko','King Abdulaziz Port (Dammam)','King Fahd Industrial Port','Kingston','Kitwe','Kobe','Laem Chabang','Lagos','Lat Krabang','Libreville','Lindi','Lira','Luanda','Lusaka','Lyttelton','Manila','Mansa','Maputo','Marsden','Masindi','Mbale','Mbarara','Melbourne','Mesaieed Port','Mina Al Ahmadi Port','Mina Al Hamriyah','Mina Rashid','Mina Salman Port','Mina Zayed','Mombasa','Mongla','Montego Bay','Mtwara','Mufulira','Musaffah','Nacala','Nagoya','Napier','Nassau','Ndola','Nelson','New Plymouth','Ngoma','Nouakchott','Osaka','Otago','Point Lisas','Port Kembla','Port Khalid','Port Khalifa','Port Louis','Port of Duqm','Port of Irene','Port of Jebel Ali','Port of Salalah'].sort((a,b) => a.localeCompare(b));
+
+  function openSalePortSheet() {
+    if (!saleCountrySelected) { showToast('Please select a country first'); return; }
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    const title = document.querySelector('#sale-port-sheet .sheet-title');
+    if (title) title.textContent = `Ports — ${saleCountrySelected}`;
+    // Get country-specific ports if available, else show all
+    // Show only country-specific ports (no blue dot, no all-ports)
+    const ports = SALE_COUNTRY_PORTS[saleCountrySelected] || ALL_PORTS;
+    document.getElementById('sale-port-list').innerHTML = ports.map(p => `
+      <button class="stage-list-item" onclick="selectSalePort('${p.replace(/'/g,"\\'")}')">
+        <span class="stage-list-label">${p}</span>
+        <span class="stage-check">${salePortSelected === p ? checkSVG : ''}</span>
+      </button>`).join('');
+    document.getElementById('sale-port-backdrop').classList.add('show');
+    document.getElementById('sale-port-sheet').classList.add('show');
+  }
+  function closeSalePortSheet() {
+    document.getElementById('sale-port-backdrop').classList.remove('show');
+    document.getElementById('sale-port-sheet').classList.remove('show');
+  }
+  function clearSalePort() {
+    salePortSelected = ''; updateSalePortLabel(''); closeSalePortSheet();
+  }
+  function selectSalePort(port) {
+    salePortSelected = port; updateSalePortLabel(port);
+    setTimeout(() => closeSalePortSheet(), 180);
+  }
+  function updateSalePortLabel(val) {
+    const el = document.getElementById('add-port-label');
+    if (!el) return;
+    if (val) { el.textContent = val; el.classList.remove('placeholder'); }
+    else { el.textContent = 'Select Port'; el.classList.add('placeholder'); }
+  }
+  function toggleDropdown(btnId, listId) {
+    closeAllDropdowns();
+    const list = document.getElementById(listId);
+    const btn  = document.getElementById(btnId);
+    if (list && btn) { list.classList.toggle('open'); btn.classList.toggle('open'); }
+  }
+  function toggleCurrDropdown(prefix) { toggleDropdown(`${prefix}-curr-display`, `${prefix}-curr-dropdown`); }
+  function toggleCountryDropdown(prefix) { toggleDropdown(`${prefix}-country-display`, `${prefix}-country-dropdown`); }
+  function togglePortDropdown(prefix) { toggleDropdown(`${prefix}-port-display`, `${prefix}-port-dropdown`); }
+
+  function pickCurr(prefix, val) {
+    const span = document.getElementById(`${prefix}-curr-value`);
+    if (span) { span.textContent = val; span.style.color = ''; }
+    document.querySelectorAll(`#${prefix}-curr-dropdown .sale-dropdown-item`).forEach(i => {
+      i.classList.toggle('active', i.textContent === val);
+    });
+    closeAllDropdowns();
+  }
+  function pickCountry(prefix, val) {
+    const span = document.getElementById(`${prefix}-country-value`);
+    if (span) { span.textContent = val; span.style.color = ''; }
+    closeAllDropdowns();
+  }
+  function pickPort(prefix, val) {
+    const span = document.getElementById(`${prefix}-port-value`);
+    if (span) { span.textContent = val; span.style.color = ''; }
+    closeAllDropdowns();
+  }
+  function resetDropdown(id) {
+    const span = document.getElementById(`${id}-value`);
+    if (span) { span.style.color = '#a0a0ab'; span.textContent = id.includes('country') ? 'Select Country' : 'Select Port'; }
+  }
+
+  // ── VIEW SALE ──
+
+  function openViewSaleSheet(id) {
+    activeSaleVehicleId = id;
+    const v = vehicles.find(x => x.id === id);
+    document.getElementById('view-sale-vehicle').innerHTML = buildVcCard(v);
+    document.getElementById('view-sale-price').textContent = v.salePrice ? v.salePrice.toLocaleString() : '—';
+    document.getElementById('view-sale-curr').textContent = v.saleCurr || '—';
+    document.getElementById('view-sale-date').textContent = v.saleDate || v.purchaseDate || '—';
+    const notesRow = document.getElementById('view-notes-row');
+    const notesDivider = document.getElementById('view-notes-divider');
+    if (v.saleNotes) {
+      document.getElementById('view-sale-notes').textContent = v.saleNotes;
+      notesRow.style.display = 'flex'; notesDivider.style.display = 'block';
+    } else {
+      notesRow.style.display = 'none'; notesDivider.style.display = 'none';
+    }
+    document.getElementById('view-sale-backdrop').classList.add('show');
+    document.getElementById('view-sale-sheet').classList.add('show');
+  }
+
+  function openViewSaleSheet_OLD(id) {
+    activeSaleVehicleId = id;
+    const v = vehicles.find(x => x.id === id);
+    const color = STAGE_COLORS[v.stage] || '#2BA6FF';
+    const stageName = stagesMeta[v.stage]?.name || '';
+    const vcHtml = `
+      <div class="vc-card-bar" style="--vc-color:${color}"></div>
+      <div class="vc-card-icon"><i class="ti ti-car"></i></div>
+      <div class="vc-card-info">
+        <div class="vc-card-name">${v.make} ${v.model}</div>
+        <div class="vc-card-year">${v.year} &nbsp;·&nbsp; ${v.code}</div>
+        <div class="vc-card-stage-badge">
+          <span class="vc-card-stage-dot" style="background:${color}"></span>
+          Stage ${v.stage} — ${stageName}
+        </div>
+      </div>
+      <div class="vc-card-divider"></div>
+      <div class="vc-card-chassis">
+        <div class="vc-card-chassis-label">Chassis No.</div>
+        <div class="vc-card-chassis-no">${v.chassis}</div>
+      </div>`;
+    document.getElementById('view-sale-vehicle').innerHTML = vcHtml;
+    document.getElementById('view-sale-price').textContent = v.salePrice ? v.salePrice.toLocaleString() : '—';
+    document.getElementById('view-sale-curr').textContent = v.saleCurr || '—';
+    document.getElementById('view-sale-date').textContent = v.saleDate || v.purchaseDate || '—';
+    const notesRow = document.getElementById('view-notes-row');
+    const notesDivider = document.getElementById('view-notes-divider');
+    if (v.saleNotes) {
+      document.getElementById('view-sale-notes').textContent = v.saleNotes;
+      notesRow.style.display = 'flex'; notesDivider.style.display = 'block';
+    } else {
+      notesRow.style.display = 'none'; notesDivider.style.display = 'none';
+    }
+    document.getElementById('view-sale-backdrop').classList.add('show');
+    document.getElementById('view-sale-sheet').classList.add('show');
+  }
+  function closeViewSaleSheet() {
+    document.getElementById('view-sale-backdrop').classList.remove('show');
+    document.getElementById('view-sale-sheet').classList.remove('show');
+  }
+  function confirmDeleteSale() {
+    const v = vehicles.find(x => x.id === activeSaleVehicleId);
+    if (v) { v.salePrice = null; v.saleCurr = null; v.saleNotes = null; v.saleDate = null; }
+    closeViewSaleSheet();
+    render();
+    showToast('Sale price removed');
+  }
+
+  // ── UPDATE SALE ──
+  function openUpdateSaleSheet() {
+    const v = vehicles.find(x => x.id === activeSaleVehicleId);
+    document.getElementById('update-sale-vehicle').innerHTML = buildVcCard(v);
+    document.getElementById('update-sale-amount').value = v.salePrice || '';
+    document.getElementById('update-sale-notes').value = v.saleNotes || '';
+    selectCurrReset('update', v.saleCurr || 'USD');
+    closeViewSaleSheet();
+    document.getElementById('update-sale-backdrop').classList.add('show');
+    document.getElementById('update-sale-sheet').classList.add('show');
+  }
+  function openUpdateSaleSheet_OLD() {
+    const v = vehicles.find(x => x.id === activeSaleVehicleId);
+    const color = STAGE_COLORS[v.stage] || '#2BA6FF';
+    const stageName = stagesMeta[v.stage]?.name || '';
+    document.getElementById('update-sale-vehicle').innerHTML = `
+      <div class="vc-card-bar" style="--vc-color:${color}"></div>
+      <div class="vc-card-icon"><i class="ti ti-car"></i></div>
+      <div class="vc-card-info">
+        <div class="vc-card-name">${v.make} ${v.model}</div>
+        <div class="vc-card-year">${v.year} &nbsp;·&nbsp; ${v.code}</div>
+        <div class="vc-card-stage-badge">
+          <span class="vc-card-stage-dot" style="background:${color}"></span>
+          Stage ${v.stage} — ${stageName}
+        </div>
+      </div>
+      <div class="vc-card-divider"></div>
+      <div class="vc-card-chassis">
+        <div class="vc-card-chassis-label">Chassis No.</div>
+        <div class="vc-card-chassis-no">${v.chassis}</div>
+      </div>`;
+    document.getElementById('update-sale-amount').value = v.salePrice || '';
+    document.getElementById('update-sale-notes').value = v.saleNotes || '';
+    selectCurrReset('update', v.saleCurr || 'USD');
+    closeViewSaleSheet();
+    document.getElementById('update-sale-backdrop').classList.add('show');
+    document.getElementById('update-sale-sheet').classList.add('show');
+  }
+  function closeUpdateSaleSheet() {
+    document.getElementById('update-sale-backdrop').classList.remove('show');
+    document.getElementById('update-sale-sheet').classList.remove('show');
+  }
+  function backToViewSale() {
+    closeUpdateSaleSheet();
+    openViewSaleSheet(activeSaleVehicleId);
+  }
+  function submitUpdateSale() {
+    const amount = parseFloat(document.getElementById('update-sale-amount').value);
+    if (!amount || amount <= 0) { showToast('Please enter a valid amount'); return; }
+    const curr = document.querySelector('#update-sale-curr-row .curr-btn.active')?.dataset.curr || 'USD';
+    const notes = document.getElementById('update-sale-notes').value.trim();
+    const v = vehicles.find(x => x.id === activeSaleVehicleId);
+    if (v) { v.salePrice = amount; v.saleCurr = curr; v.saleNotes = notes; }
+    closeUpdateSaleSheet();
+    render();
+    showToast('Sale price updated');
+  }
+
+  // ── Currency helper ──
+  function selectCurr(prefix, btn) {
+    const row = document.getElementById(`${prefix}-sale-curr-row`);
+    row.querySelectorAll('.curr-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`${prefix}-sale-curr-tag`).textContent = btn.dataset.curr;
+  }
+  function selectCurrReset(prefix, curr) {
+    const row = document.getElementById(`${prefix}-sale-curr-row`);
+    if (!row) return;
+    row.querySelectorAll('.curr-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.curr === curr);
+    });
+    document.getElementById(`${prefix}-sale-curr-tag`).textContent = curr;
+  }
+
   function render() {
     const list = filterAndSort();
     const listEl = document.getElementById('sale-list');
@@ -1884,6 +2928,7 @@
     updateStageFilterLabel('');
     updateMakeFilterLabel('');
     updateModelFilterLabel('');
+    updatePortFilterLabel('');
     renderActiveFilters(); updateFilterBadge(); render();
   }
 
@@ -1922,17 +2967,42 @@
     'Zeekr'
   ].sort((a, b) => a.localeCompare(b));
 
-  function renderMakeList() {
+  function renderMakeList(query = '') {
     const wrap = document.getElementById('make-list-wrap');
     const indexBar = document.getElementById('alpha-index');
     if (!wrap || !indexBar) return;
 
     const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
     const cur = state.filters.make;
+    const q = query.trim().toLowerCase();
 
-    // Group by first letter
+    // Filter list by query
+    const filtered = q ? MAKES_LIST.filter(m => m.toLowerCase().includes(q)) : MAKES_LIST;
+
+    if (filtered.length === 0) {
+      wrap.innerHTML = `<div class="picker-empty">No makes found for "${query}"</div>`;
+      indexBar.innerHTML = '';
+      return;
+    }
+
+    // If searching — flat list, no alphabet sections
+    if (q) {
+      wrap.innerHTML = filtered.map(m => {
+        const initials = m.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+        const checked = cur === m ? checkSVG : '';
+        return `<button class="stage-list-item" data-make="${m}" onclick="selectMakeFilter(this)">
+          <span class="make-logo-dot">${initials}</span>
+          <span class="stage-list-label">${m}</span>
+          <span class="stage-check">${checked}</span>
+        </button>`;
+      }).join('');
+      indexBar.innerHTML = '';
+      return;
+    }
+
+    // Normal grouped view
     const grouped = {};
-    MAKES_LIST.forEach(m => {
+    filtered.forEach(m => {
       const letter = m[0].toUpperCase();
       if (!grouped[letter]) grouped[letter] = [];
       grouped[letter].push(m);
@@ -1940,12 +3010,6 @@
     const letters = Object.keys(grouped).sort();
 
     let html = '';
-    // All Makes row at top
-    html += `<button class="stage-list-item" onclick="selectMakeFilter(this)" data-make="">
-      <span class="make-all-label">All Makes</span>
-      <span class="stage-check" id="make-check-all">${cur === '' ? checkSVG : ''}</span>
-    </button>`;
-
     letters.forEach(letter => {
       html += `<div class="make-alpha-header" id="make-section-${letter}">${letter}</div>`;
       grouped[letter].forEach(m => {
@@ -1958,13 +3022,26 @@
         </button>`;
       });
     });
-
     wrap.innerHTML = html;
 
     // Render index bar
     indexBar.innerHTML = letters.map(l =>
       `<div class="alpha-index-letter" onclick="scrollToMakeLetter('${l}', event)">${l}</div>`
     ).join('');
+  }
+
+  function filterMakeList(val) {
+    const clearBtn = document.getElementById('make-search-clear');
+    if (clearBtn) clearBtn.style.display = val ? 'flex' : 'none';
+    renderMakeList(val);
+  }
+
+  function clearMakeSearch() {
+    const input = document.getElementById('make-search-input');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('make-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    renderMakeList('');
   }
 
   function scrollToMakeLetter(letter, e) {
@@ -1986,7 +3063,12 @@
   function openMakeSheet() {
     document.getElementById('make-backdrop').classList.add('show');
     document.getElementById('make-sheet').classList.add('show');
-    renderMakeList();
+    // Clear search on open
+    const input = document.getElementById('make-search-input');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('make-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    renderMakeList('');
   }
   function closeMakeSheet() {
     document.getElementById('make-backdrop').classList.remove('show');
@@ -2066,32 +3148,58 @@
     return ['All Models', ...(MAKE_MODELS[make] || [])];
   }
 
-  function renderModelList() {
+  function renderModelList(query = '') {
     const list = document.getElementById('model-list');
     if (!list) return;
     const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
     const cur = state.filters.model;
-    const models = getModelsForMake(state.filters.make);
-    const selectedMake = state.filters.make;
+    const q = query.trim().toLowerCase();
 
-    list.innerHTML = models.map(m => {
-      const val = m === 'All Models' ? '' : m;
-      const checked = cur === val ? checkSVG : '';
-      return `<button class="stage-list-item" data-model="${val}" onclick="selectModelFilter(this)">
+    // Get models for selected make (exclude 'All Models')
+    const allModels = getModelsForMake(state.filters.make).filter(m => m !== 'All Models');
+    const filtered = q ? allModels.filter(m => m.toLowerCase().includes(q)) : allModels;
+
+    // Update title
+    const title = document.querySelector('#model-sheet .sheet-title');
+    if (title) title.textContent = state.filters.make ? `${state.filters.make} Models` : 'Select Model';
+
+    if (filtered.length === 0) {
+      list.innerHTML = `<div class="picker-empty">No models found for "${query}"</div>`;
+      return;
+    }
+
+    list.innerHTML = filtered.map(m => {
+      const checked = cur === m ? checkSVG : '';
+      return `<button class="stage-list-item" data-model="${m}" onclick="selectModelFilter(this)">
         <span class="stage-list-label">${m}</span>
-        <span class="stage-check" id="model-check-${val.replace(/\s+/g,'-')}">${checked}</span>
+        <span class="stage-check">${checked}</span>
       </button>`;
     }).join('');
+  }
 
-    // Update sheet title to show which make is selected
-    const title = document.querySelector('#model-sheet .sheet-title');
-    if (title) title.textContent = selectedMake ? `${selectedMake} Models` : 'Select Model';
+  function filterModelList(val) {
+    const clearBtn = document.getElementById('model-search-clear');
+    if (clearBtn) clearBtn.style.display = val ? 'flex' : 'none';
+    renderModelList(val);
+  }
+
+  function clearModelSearch() {
+    const input = document.getElementById('model-search-input');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('model-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    renderModelList('');
   }
 
   function openModelSheet() {
     document.getElementById('model-backdrop').classList.add('show');
     document.getElementById('model-sheet').classList.add('show');
-    renderModelList();
+    // Clear search on open
+    const input = document.getElementById('model-search-input');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('model-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    renderModelList('');
   }
   function closeModelSheet() {
     document.getElementById('model-backdrop').classList.remove('show');
@@ -2114,10 +3222,102 @@
     const label = document.getElementById('model-filter-label');
     if (!label) return;
     if (!model) {
-      label.textContent = state.filters.make ? 'All Models' : 'All Models';
+      label.textContent = 'All Models';
       label.classList.add('placeholder');
     } else {
       label.textContent = model;
+      label.classList.remove('placeholder');
+    }
+  }
+
+  // ---- Destination Port sheet ----
+  const PORTS_LIST = [
+    'Dar es Salaam','Djibouti','Durban','Freetown','Lagos','Lomé',
+    'Maputo','Mombasa','Nacala','Port Louis','Port Sudan',
+    'Tema','Walvis Bay',
+    'Chittagong','Colombo','Jakarta','Karachi','Kolkata',
+    'Manila','Mumbai','Port Klang','Singapore',
+    'Auckland','Brisbane','Melbourne','Sydney',
+    'Antwerp','Bremerhaven','Felixstowe','Hamburg','Rotterdam',
+    'Jebel Ali','Salalah',
+    'Long Beach','Los Angeles','New York','Vancouver',
+    'Busan','Guangzhou','Ningbo','Qingdao','Shanghai','Tianjin',
+    'Zimbabwe'
+  ].sort((a,b) => a.localeCompare(b));
+
+  function renderPortList(query = '') {
+    const list = document.getElementById('port-list');
+    if (!list) return;
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    const cur = state.filters.port;
+    const q = query.trim().toLowerCase();
+    const filtered = q ? PORTS_LIST.filter(p => p.toLowerCase().includes(q)) : PORTS_LIST;
+
+    if (filtered.length === 0) {
+      list.innerHTML = `<div class="picker-empty">No destinations found for "${query}"</div>`;
+      return;
+    }
+    list.innerHTML = filtered.map(p => {
+      const checked = cur === p ? checkSVG : '';
+      return `<button class="stage-list-item" data-port="${p}" onclick="selectPortFilter(this)">
+        <span class="stage-list-label">${p}</span>
+        <span class="stage-check">${checked}</span>
+      </button>`;
+    }).join('');
+  }
+
+  function filterPortList(val) {
+    const clearBtn = document.getElementById('port-search-clear');
+    if (clearBtn) clearBtn.style.display = val ? 'flex' : 'none';
+    renderPortList(val);
+  }
+
+  function clearPortSearch() {
+    const input = document.getElementById('port-search-input');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('port-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    renderPortList('');
+  }
+
+  function openPortSheet() {
+    document.getElementById('port-backdrop').classList.add('show');
+    document.getElementById('port-sheet').classList.add('show');
+    const input = document.getElementById('port-search-input');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('port-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    renderPortList('');
+  }
+
+  function closePortSheet() {
+    document.getElementById('port-backdrop').classList.remove('show');
+    document.getElementById('port-sheet').classList.remove('show');
+  }
+
+  function selectPortFilter(btn) {
+    const port = btn.dataset.port;
+    state.filters.port = port;
+    document.getElementById('filter-port').value = port;
+    updatePortFilterLabel(port);
+    setTimeout(() => closePortSheet(), 180);
+  }
+
+  function clearPortFilter() {
+    state.filters.port = '';
+    document.getElementById('filter-port').value = '';
+    updatePortFilterLabel('');
+    renderPortList('');
+  }
+
+  function updatePortFilterLabel(port) {
+    const label = document.getElementById('port-filter-label');
+    if (!label) return;
+    if (!port) {
+      label.textContent = 'All Destinations';
+      label.classList.add('placeholder');
+    } else {
+      label.textContent = port;
       label.classList.remove('placeholder');
     }
   }
@@ -2190,6 +3390,9 @@
     } else if (key === 'model') {
       document.getElementById('filter-model').value = '';
       updateModelFilterLabel('');
+    } else if (key === 'port') {
+      document.getElementById('filter-port').value = '';
+      updatePortFilterLabel('');
     } else {
       document.getElementById('filter-' + key).value = '';
     }
