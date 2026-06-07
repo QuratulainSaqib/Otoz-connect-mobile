@@ -2126,6 +2126,308 @@
     }
     .screen-wrapper { border-radius: 0; }
   }
+
+  /* ============ VIEW CONSIGNEE PAGE ============ */
+  #view-consignee-page { z-index: 450; }
+
+  .vw-details-card {
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    margin-bottom: 14px;
+  }
+  .vw-section-head {
+    padding: 11px 16px;
+    background: linear-gradient(180deg, #fafbfd 0%, #f5f6f9 100%);
+    border-bottom: 1px solid var(--c-divider);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.005em;
+  }
+  .vw-section-body {
+    padding: 4px 16px;
+  }
+  .vw-section-body.same {
+    padding: 12px 16px;
+    font-size: 12.5px;
+    color: var(--c-text-muted);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .vw-section-body.same svg {
+    width: 14px; height: 14px;
+    color: var(--c-success);
+    flex-shrink: 0;
+  }
+  .vw-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px dashed var(--c-divider);
+    font-size: 12.5px;
+  }
+  .vw-row:last-child { border-bottom: none; }
+  .vw-key {
+    color: var(--c-text-muted);
+    font-weight: 500;
+    flex-shrink: 0;
+    min-width: 95px;
+  }
+  .vw-val {
+    color: var(--c-text);
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+  }
+  .vw-footer {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 12px 16px 24px;
+    background: #fff;
+    border-top: 1px solid var(--c-divider);
+    z-index: 10;
+  }
+  .vw-footer-note {
+    font-size: 11px;
+    color: var(--c-text-muted);
+    text-align: center;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  .vw-footer-note svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .btn-danger-outline {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 12px 16px;
+    background: var(--c-danger);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-family: inherit;
+    letter-spacing: -0.01em;
+    box-shadow: 0 2px 8px rgba(255,59,48,0.28);
+  }
+  .btn-danger-outline:hover { background: #ff5246; box-shadow: 0 4px 12px rgba(255,59,48,0.38); }
+  .btn-danger-outline:active { transform: scale(0.98); }
+  .btn-danger-outline i { font-size: 16px; color: #fff; }
+
+
+  /* ============ REQUEST CONSIGNEE CHANGE PAGE ============ */
+  #request-change-page { z-index: 460; }
+  #request-change-page .full-page-body { background: var(--c-bg-app); padding-bottom: 100px; }
+
+  .rcc-pending-banner {
+    background: linear-gradient(180deg, #fff8e6 0%, #fff3cf 100%);
+    border: 1px solid #f4d97a;
+    border-radius: 14px;
+    padding: 13px 14px;
+    display: flex;
+    gap: 11px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .rcc-pb-ico { width:24px;height:24px;border-radius:50%;background:#f5b400;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .rcc-pb-ico svg { width:13px;height:13px; }
+  .rcc-pb-text { font-size:12px;line-height:1.55;color:#8a6500; }
+  .rcc-pb-text strong { font-weight:700;color:#6b4f00;display:block;margin-bottom:2px;font-size:12.5px; }
+
+  .rcc-dark-band {
+    background: linear-gradient(135deg, #1d3557 0%, #2a4a73 100%);
+    color: #fff;
+    padding: 11px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+
+  .rcc-form-card { background:#fff;border:1px solid var(--c-divider);border-radius:16px;margin-bottom:14px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.03); }
+  .rcc-card-header { display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:linear-gradient(180deg,#fafbfd 0%,#f5f6f9 100%);border-bottom:1px solid var(--c-divider); }
+  .rcc-card-title { display:inline-flex;align-items:center;gap:9px;font-size:13.5px;font-weight:700;color:var(--c-text);letter-spacing:-0.01em; }
+  .rcc-icon-sq { width:26px;height:26px;border-radius:7px;color:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .rcc-icon-sq svg { width:14px;height:14px; }
+  .rcc-icon-sq.blue  { background:linear-gradient(135deg,#0071e3,#00a3ff);box-shadow:0 2px 6px rgba(0,113,227,0.3); }
+  .rcc-icon-sq.purple{ background:linear-gradient(135deg,#6f54e0,#9b7bff);box-shadow:0 2px 6px rgba(111,84,224,0.3); }
+  .rcc-icon-sq.green { background:linear-gradient(135deg,#30c46d,#4adf86);box-shadow:0 2px 6px rgba(48,196,109,0.3); }
+
+  .rcc-same-chk-row { display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-size:11.5px;color:var(--c-text-muted);font-weight:500;user-select:none; }
+  .rcc-same-chk-row input { display:none; }
+  .rcc-chk-box { width:20px;height:20px;border-radius:6px;background:var(--c-primary);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s; }
+  .rcc-chk-box svg { width:12px;height:12px;color:#fff; }
+  .rcc-same-chk-row input:not(:checked)+.rcc-chk-box { background:#fff;border:1.5px solid var(--c-divider); }
+  .rcc-same-chk-row input:not(:checked)+.rcc-chk-box svg { opacity:0; }
+
+  .rcc-same-hint { padding:10px 16px;font-size:12px;color:var(--c-text-muted);font-style:italic;border-top:1px dashed var(--c-divider);background:#fbfbfd;display:flex;align-items:center;gap:6px; }
+  .rcc-same-hint svg { width:12px;height:12px;flex-shrink:0;color:var(--c-success); }
+
+  .rcc-collapsible { max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1),padding 0.3s ease;padding:0 16px;display:flex;flex-direction:column;gap:13px;background:#fff; }
+  .rcc-collapsible.open { max-height:1200px;padding:16px;border-top:1px solid var(--c-divider); }
+
+  .rcc-card-body { padding:16px;display:flex;flex-direction:column;gap:13px; }
+  .rcc-field { display:flex;flex-direction:column;gap:5px; }
+  .rcc-field label { font-size:11.5px;font-weight:500;color:var(--c-text-muted); }
+  .rcc-req { color:var(--c-danger);margin-left:2px; }
+  .rcc-input,.rcc-select { width:100%;height:40px;padding:0 13px;background:#fff;border:1px solid var(--c-divider);border-radius:11px;font-family:inherit;font-size:13.5px;color:var(--c-text);outline:none;transition:border-color 0.15s,box-shadow 0.15s;box-sizing:border-box; }
+  .rcc-input:focus,.rcc-select:focus { border-color:var(--c-accent);box-shadow:0 0 0 3px rgba(43,166,255,0.12); }
+  .rcc-input::placeholder { color:#c5c5c7; }
+  .rcc-select { padding-right:32px;appearance:none;-webkit-appearance:none;cursor:pointer; }
+  .rcc-select-wrap { position:relative; }
+  .rcc-select-chev { position:absolute;right:11px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--c-text-subtle);pointer-events:none; }
+  .rcc-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+
+  .rcc-phone-wrap { display:flex;align-items:center;border:1px solid var(--c-divider);border-radius:11px;overflow:hidden;background:#fff;transition:border-color 0.15s,box-shadow 0.15s; }
+  .rcc-phone-wrap:focus-within { border-color:var(--c-accent);box-shadow:0 0 0 3px rgba(43,166,255,0.12); }
+  .rcc-phone-prefix { display:flex;align-items:center;gap:4px;padding:0 10px 0 12px;border-right:1px solid var(--c-divider);height:40px;flex-shrink:0;background:var(--c-bg-app); }
+  .rcc-phone-flag { font-size:15px;line-height:1; }
+  .rcc-phone-code { font-size:12px;color:var(--c-text-muted);font-weight:600; }
+  .rcc-phone-input { border:none!important;border-radius:0!important;box-shadow:none!important;flex:1;height:40px;background:transparent;padding:0 12px;font-family:inherit;font-size:13.5px;color:var(--c-text);outline:none; }
+  .rcc-phone-input::placeholder { color:#c5c5c7; }
+
+  .rcc-uploaded-file { display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--c-bg-app);border:1px solid var(--c-divider);border-radius:11px; }
+  .rcc-uf-thumb { width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:var(--c-success);display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .rcc-uf-thumb svg { width:16px;height:16px; }
+  .rcc-uf-name { font-size:13px;font-weight:600;color:var(--c-text); }
+  .rcc-uf-size { font-size:11px;color:var(--c-text-muted);margin-top:1px; }
+  .rcc-uf-replace { margin-left:auto;flex-shrink:0;padding:6px 12px;background:#fff;border:1px solid var(--c-divider);border-radius:8px;font-size:12px;font-weight:600;color:var(--c-accent);cursor:pointer;font-family:inherit;transition:all 0.15s; }
+
+  .rcc-agree-card { display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid var(--c-divider);border-radius:13px;padding:14px;cursor:pointer;margin-bottom:0;transition:border-color 0.15s; }
+  .rcc-agree-card.error { border-color:var(--c-danger);background:#fff5f5;box-shadow:0 0 0 3px rgba(255,59,48,0.08); }
+  .rcc-agree-card input { display:none; }
+  .rcc-agree-chk-box { width:22px;height:22px;border-radius:6px;background:var(--c-primary);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;margin-top:1px; }
+  .rcc-agree-chk-box svg { width:13px;height:13px;color:#fff;transition:opacity 0.15s; }
+  .rcc-agree-card input:not(:checked)+.rcc-agree-chk-box { background:#fff;border:1.5px solid var(--c-divider); }
+  .rcc-agree-card input:not(:checked)+.rcc-agree-chk-box svg { opacity:0; }
+  .rcc-agree-text { font-size:12.5px;color:var(--c-text);line-height:1.55;font-weight:500; }
+
+  .rcc-footer { position:absolute;bottom:0;left:0;right:0;padding:12px 16px 28px;background:#fff;border-top:0.5px solid var(--c-divider);z-index:10; }
+  .rcc-submit-btn { width:100%;height:48px;background:var(--c-primary);color:#fff;border:none;border-radius:14px;font-family:inherit;font-size:15px;font-weight:600;letter-spacing:-0.01em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;box-shadow:0 4px 12px rgba(23,53,89,0.25); }
+  .rcc-submit-btn:active { background:var(--c-primary-hover);transform:scale(0.98); }
+  .rcc-submit-btn svg { width:17px;height:17px; }
+
+
+  /* ============ CHANGE REQUEST VIEW PAGE ============ */
+  #change-view-page { z-index: 455; }
+  #change-view-page .full-page-body { background: var(--c-bg-app); }
+
+  /* Pending/amber banner */
+  .crv-pending-banner {
+    background: linear-gradient(180deg, #fff8e6 0%, #fff3cf 100%);
+    border: 1px solid #f4d97a;
+    border-radius: 14px;
+    padding: 13px 14px;
+    display: flex;
+    gap: 11px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .crv-pb-ico { width:24px;height:24px;border-radius:50%;background:#f5b400;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .crv-pb-ico svg { width:13px;height:13px; }
+  .crv-pb-text { font-size:12px;line-height:1.55;color:#8a6500; }
+  .crv-pb-text strong { font-weight:700;color:#6b4f00;display:block;margin-bottom:3px;font-size:12.5px; }
+
+  /* Stack comparison card */
+  .crv-stack-card {
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    margin-bottom: 14px;
+  }
+
+  /* Stack banner header */
+  .crv-stack-banner {
+    padding: 11px 16px;
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .crv-stack-banner.old {
+    background: linear-gradient(135deg, #1d3557 0%, #2a4a73 100%);
+  }
+  .crv-stack-banner.requested {
+    background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+  }
+  .crv-badge-date {
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 3px 9px;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  /* Section head inside stack card */
+  .crv-section-head {
+    padding: 10px 16px;
+    background: linear-gradient(180deg, #fafbfd 0%, #f5f6f9 100%);
+    border-top: 1px solid var(--c-divider);
+    border-bottom: 1px solid var(--c-divider);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.005em;
+  }
+  .crv-stack-card.requested-tint .crv-section-head {
+    background: linear-gradient(180deg, #fef0f0 0%, #fce5e5 100%);
+  }
+
+  /* Row inside stack card */
+  .crv-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 9px 16px;
+    border-bottom: 1px dashed var(--c-divider-soft);
+    font-size: 12.5px;
+  }
+  .crv-row:last-child { border-bottom: none; }
+  .crv-key { color: var(--c-text-muted); font-weight: 500; flex-shrink: 0; min-width: 95px; }
+  .crv-val { color: var(--c-text); font-weight: 600; text-align: right; word-break: break-word; }
+  .crv-val a { color: var(--c-accent); text-decoration: none; font-weight: 600; }
+  .crv-stack-card.requested-tint .crv-row { background: #fef7f7; }
+
+  /* Same-as text inside stack */
+  .crv-same-row {
+    padding: 11px 16px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--c-text-muted);
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #fbfbfd;
+  }
+  .crv-stack-card.requested-tint .crv-same-row { background: #fef7f7; }
+  .crv-same-row svg { width:13px;height:13px;color:var(--c-success);flex-shrink:0; }
+
 </style>
 </head>
 <body>
@@ -2804,6 +3106,64 @@
         </div>
       </div>
     </div>
+    <!-- ===== VIEW CONSIGNEE FULL SCREEN ===== -->
+    <div class="full-screen-page" id="view-consignee-page">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686-4.687 12.284-4.687 16.97 0"/></svg>
+          <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+        </span>
+      </div>
+      <div class="full-page-nav">
+        <button class="sheet-back-btn" onclick="closeViewConsignee()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+        <div class="full-page-title">Consignee Details</div>
+        <span style="width:32px;"></span>
+      </div>
+      <div class="full-page-body" style="padding-bottom:130px;" id="vw-page-body">
+
+        <!-- Vehicle card -->
+        <div class="vc-card" id="vw-vehicle-card"></div>
+
+        <!-- Consignee Details -->
+        <div class="vw-details-card">
+          <div class="vw-section-head">Consignee Details</div>
+          <div class="vw-section-body" id="vw-consignee-body"></div>
+        </div>
+
+        <!-- Notify Details -->
+        <div class="vw-details-card">
+          <div class="vw-section-head">Notify Details</div>
+          <div id="vw-notify-body" class="vw-section-body same">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Same as Consignee
+          </div>
+        </div>
+
+        <!-- Buyer Details -->
+        <div class="vw-details-card">
+          <div class="vw-section-head">Buyer Details</div>
+          <div id="vw-buyer-body" class="vw-section-body same">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Same as Consignee
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="vw-footer">
+        <div class="vw-footer-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          These details are reflected on the Bill of Lading
+        </div>
+        <div id="vw-footer-btn-area"></div>
+      </div>
+    </div>
+
     <div class="full-screen-page" id="consignee-page">
       <div class="status-bar">
         <span>9:41</span>
@@ -2911,8 +3271,8 @@
             Notify party will use the same details as the consignee.
           </div>
           <div class="con-collapsible" id="notify-form-con">
-            <div class="con-field"><label>Notify Name <span class="con-req">*</span></label><input type="text" class="con-input" placeholder="Enter Notify Name"></div>
-            <div class="con-field"><label>Address <span class="con-req">*</span></label><input type="text" class="con-input" placeholder="Enter notify address"></div>
+            <div class="con-field"><label>Notify Name <span class="con-req">*</span></label><input type="text" class="con-input" id="notify-name" placeholder="Enter Notify Name"></div>
+            <div class="con-field"><label>Address <span class="con-req">*</span></label><input type="text" class="con-input" id="notify-address" placeholder="Enter notify address"></div>
             <div class="con-field">
               <label>Country <span class="con-req">*</span></label>
               <button class="filter-row-btn" onclick="openConCountrySheet('notify')">
@@ -2962,8 +3322,8 @@
             Buyer will use the same details as the consignee.
           </div>
           <div class="con-collapsible" id="buyer-form-con">
-            <div class="con-field"><label>Buyer Name <span class="con-req">*</span></label><input type="text" class="con-input" placeholder="Enter Buyer Name"></div>
-            <div class="con-field"><label>Address <span class="con-req">*</span></label><input type="text" class="con-input" placeholder="Enter buyer address"></div>
+            <div class="con-field"><label>Buyer Name <span class="con-req">*</span></label><input type="text" class="con-input" id="buyer-name" placeholder="Enter Buyer Name"></div>
+            <div class="con-field"><label>Address <span class="con-req">*</span></label><input type="text" class="con-input" id="buyer-address" placeholder="Enter buyer address"></div>
             <div class="con-field">
               <label>Country <span class="con-req">*</span></label>
               <button class="filter-row-btn" onclick="openConCountrySheet('buyer')">
@@ -3041,6 +3401,320 @@
 
     </div>
 
+    <!-- ===== REQUEST CONSIGNEE CHANGE PAGE ===== -->
+    <div class="full-screen-page" id="request-change-page">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686-4.687 12.284-4.687 16.97 0"/></svg>
+          <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+        </span>
+      </div>
+      <div class="full-page-nav">
+        <button class="sheet-back-btn" onclick="closeRequestChangePage()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+        <div class="full-page-title">Request Consignee Change</div>
+        <span style="width:32px;"></span>
+      </div>
+
+      <div class="full-page-body" style="background:var(--c-bg-app);padding-bottom:100px;">
+
+        <!-- Vehicle card -->
+        <div class="vc-card" id="rcc-vehicle-card"></div>
+
+        <!-- Warning banner -->
+        <div class="rcc-pending-banner">
+          <div class="rcc-pb-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="rcc-pb-text">Your request will be sent to the sales team for approval before the <strong>Bill of Lading is amended.</strong></div>
+        </div>
+
+        <!-- Dark band -->
+        <div class="rcc-dark-band">New Details</div>
+
+        <!-- ── Card 1: Consignee ── -->
+        <div class="con-form-card">
+          <div class="con-form-card-header">
+            <div class="con-form-card-title">
+              <span class="con-icon-sq" style="background:linear-gradient(135deg,#0071e3,#00a3ff);box-shadow:0 2px 6px rgba(0,113,227,0.3);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              Consignee Details
+            </div>
+          </div>
+          <div class="con-form-body">
+            <div class="con-field"><label>Consignee Name <span class="con-req">*</span></label><input type="text" class="con-input" id="rcc-con-name" placeholder="Enter Consignee Name"></div>
+            <div class="con-field"><label>Address <span class="con-req">*</span></label><input type="text" class="con-input" id="rcc-con-address" placeholder="Enter address"></div>
+            <div class="con-field">
+              <label>Country <span class="con-req">*</span></label>
+              <button class="filter-row-btn" onclick="openRccCountrySheet('con')">
+                <span id="rcc-con-country-label" class="filter-row-value placeholder">Select Country</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <div class="con-field">
+              <label>City <span class="con-req">*</span></label>
+              <button class="filter-row-btn" onclick="openRccCitySheet('con')">
+                <span id="rcc-con-city-label" class="filter-row-value placeholder">Select City</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <div class="con-grid-2">
+              <div class="con-field"><label>Postal Code</label><input type="text" class="con-input" id="rcc-con-postal" placeholder="Enter Postal Code"></div>
+              <div class="con-field"><label>Email <span class="con-req">*</span></label><input type="email" class="con-input" id="rcc-con-email" placeholder="Enter email"></div>
+            </div>
+            <div class="con-field">
+              <label>Phone Number <span class="con-req">*</span></label>
+              <div class="con-phone-wrap">
+                <div class="con-phone-prefix">
+                  <span class="con-phone-flag" id="rcc-con-phone-flag">&#127758;</span>
+                  <span class="con-phone-code" id="rcc-con-phone-code">+</span>
+                </div>
+                <input type="tel" class="con-input con-phone-input" id="rcc-con-phone" placeholder="Phone number">
+              </div>
+            </div>
+            <!-- Passport file -->
+            <div class="con-field">
+              <label>Passport / ID Copy <span class="con-req">*</span></label>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--c-bg-app);border:1px solid var(--c-divider);border-radius:11px;">
+                <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:var(--c-success);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13px;font-weight:600;color:var(--c-text);">PASSPORT.JPG</div>
+                  <div style="font-size:11px;color:var(--c-text-muted);margin-top:1px;">ID Copy · 1.4 MB · Uploaded</div>
+                </div>
+                <button style="padding:5px 11px;background:#fff;border:1px solid var(--c-divider);border-radius:8px;font-size:12px;font-weight:600;color:var(--c-accent);cursor:pointer;font-family:inherit;">Replace</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Card 2: Notify ── -->
+        <div class="con-form-card">
+          <div class="con-form-card-header">
+            <div class="con-form-card-title">
+              <span class="con-icon-sq" style="background:linear-gradient(135deg,#6f54e0,#9b7bff);box-shadow:0 2px 6px rgba(111,84,224,0.3);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              </span>
+              Notify Details
+            </div>
+            <label class="con-check-row">
+              <input type="checkbox" id="rcc-notify-same" checked onchange="rccToggleSame('notify')">
+              <span class="con-check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              Same as Consignee
+            </label>
+          </div>
+          <div class="con-same-hint" id="rcc-notify-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Notify party will use the same details as the consignee.
+          </div>
+          <div class="con-collapsible" id="rcc-notify-form">
+            <div class="con-field"><label>Notify Name <span class="con-req">*</span></label><input type="text" class="con-input" id="rcc-notify-name" placeholder="Enter Notify Name"></div>
+            <div class="con-field"><label>Address <span class="con-req">*</span></label><input type="text" class="con-input" id="rcc-notify-address" placeholder="Enter notify address"></div>
+            <div class="con-field">
+              <label>Country <span class="con-req">*</span></label>
+              <button class="filter-row-btn" onclick="openRccCountrySheet('notify')">
+                <span id="rcc-notify-country-label" class="filter-row-value placeholder">Select Country</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <div class="con-field">
+              <label>City <span class="con-req">*</span></label>
+              <button class="filter-row-btn" onclick="openRccCitySheet('notify')">
+                <span id="rcc-notify-city-label" class="filter-row-value placeholder">Select City</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <div class="con-field"><label>Postal Code</label><input type="text" class="con-input" placeholder="Enter Postal Code"></div>
+            <div class="con-field"><label>Email <span class="con-req">*</span></label><input type="email" class="con-input" placeholder="Enter email"></div>
+            <div class="con-field">
+              <label>Phone Number <span class="con-req">*</span></label>
+              <div class="con-phone-wrap">
+                <div class="con-phone-prefix">
+                  <span class="con-phone-flag" id="rcc-notify-phone-flag">&#127758;</span>
+                  <span class="con-phone-code" id="rcc-notify-phone-code">+</span>
+                </div>
+                <input type="tel" class="con-input con-phone-input" placeholder="Phone number">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Card 3: Buyer ── -->
+        <div class="con-form-card">
+          <div class="con-form-card-header">
+            <div class="con-form-card-title">
+              <span class="con-icon-sq" style="background:linear-gradient(135deg,#30c46d,#4adf86);box-shadow:0 2px 6px rgba(48,196,109,0.3);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V7a3 3 0 0 1 6 0v4"/><rect x="5" y="11" width="14" height="10" rx="2"/></svg>
+              </span>
+              Buyer Details
+            </div>
+            <label class="con-check-row">
+              <input type="checkbox" id="rcc-buyer-same" checked onchange="rccToggleSame('buyer')">
+              <span class="con-check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              Same as Consignee
+            </label>
+          </div>
+          <div class="con-same-hint" id="rcc-buyer-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Buyer will use the same details as the consignee.
+          </div>
+          <div class="con-collapsible" id="rcc-buyer-form">
+            <div class="con-field"><label>Buyer Name <span class="con-req">*</span></label><input type="text" class="con-input" id="rcc-buyer-name" placeholder="Enter Buyer Name"></div>
+            <div class="con-field"><label>Address <span class="con-req">*</span></label><input type="text" class="con-input" id="rcc-buyer-address" placeholder="Enter buyer address"></div>
+            <div class="con-field">
+              <label>Country <span class="con-req">*</span></label>
+              <button class="filter-row-btn" onclick="openRccCountrySheet('buyer')">
+                <span id="rcc-buyer-country-label" class="filter-row-value placeholder">Select Country</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <div class="con-field">
+              <label>City <span class="con-req">*</span></label>
+              <button class="filter-row-btn" onclick="openRccCitySheet('buyer')">
+                <span id="rcc-buyer-city-label" class="filter-row-value placeholder">Select City</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <div class="con-field"><label>Postal Code</label><input type="text" class="con-input" placeholder="Enter Postal Code"></div>
+            <div class="con-field"><label>Email <span class="con-req">*</span></label><input type="email" class="con-input" placeholder="Enter email"></div>
+            <div class="con-field">
+              <label>Phone Number <span class="con-req">*</span></label>
+              <div class="con-phone-wrap">
+                <div class="con-phone-prefix">
+                  <span class="con-phone-flag" id="rcc-buyer-phone-flag">&#127758;</span>
+                  <span class="con-phone-code" id="rcc-buyer-phone-code">+</span>
+                </div>
+                <input type="tel" class="con-input con-phone-input" placeholder="Phone number">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Confirm checkbox -->
+        <label class="cf-agree-card" id="rcc-agree-card" style="margin-bottom:0;">
+          <input type="checkbox" id="rcc-agree">
+          <span class="cf-check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="cf-agree-text" style="font-size:12.5px;">I confirm the new details are accurate as per the buyer's official document, and understand that amendment charges from the shipping line may apply.</span>
+        </label>
+
+      </div>
+
+      <!-- Fixed footer -->
+      <div class="con-footer" style="padding:10px 16px 28px;">
+        <!-- Error message above button -->
+        <div id="rcc-error-msg" style="display:none;align-items:center;gap:6px;padding:10px 14px;background:#fff1f0;border:1px solid rgba(255,59,48,0.25);border-radius:10px;margin-bottom:10px;font-size:12.5px;font-weight:500;color:var(--c-danger);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Please confirm the checkbox before sending the request.
+        </div>
+        <button class="btn-primary" style="width:100%;justify-content:center;font-size:15px;gap:8px;height:48px;" onclick="submitRequestChange()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Request Send
+        </button>
+      </div>
+
+      <!-- RCC Country Sheet (inside this page) -->
+      <div class="sheet-backdrop" id="rcc-country-backdrop" onclick="closeRccCountrySheet()" style="border-radius:0;"></div>
+      <div class="bottom-sheet" id="rcc-country-sheet" style="max-height:88%;z-index:520;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <button class="sheet-back-btn" onclick="closeRccCountrySheet()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+          </button>
+          <div class="sheet-title">Select Country</div>
+          <button class="sheet-action-btn" onclick="clearRccCountry()">Clear</button>
+        </div>
+        <div class="picker-search-wrap">
+          <div class="picker-search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="rcc-country-search" class="picker-search-input" placeholder="Search countries..." oninput="filterRccCountryList(this.value)" autocomplete="off">
+            <button class="picker-search-clear" id="rcc-country-search-clear" onclick="clearRccCountrySearch()" style="display:none">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+          <div class="stage-list" id="rcc-country-list"></div>
+        </div>
+      </div>
+
+      <!-- RCC City Sheet (inside this page) -->
+      <div class="sheet-backdrop" id="rcc-city-backdrop" onclick="closeRccCitySheet()" style="border-radius:0;"></div>
+      <div class="bottom-sheet" id="rcc-city-sheet" style="max-height:88%;z-index:520;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <button class="sheet-back-btn" onclick="closeRccCitySheet()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+          </button>
+          <div class="sheet-title" id="rcc-city-sheet-title">Select City</div>
+          <button class="sheet-action-btn" onclick="clearRccCity()">Clear</button>
+        </div>
+        <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+          <div class="stage-list" id="rcc-city-list"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===== CHANGE REQUEST VIEW PAGE ===== -->
+    <div class="full-screen-page" id="change-view-page">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686-4.687 12.284-4.687 16.97 0"/></svg>
+          <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+        </span>
+      </div>
+      <div class="full-page-nav">
+        <button class="sheet-back-btn" onclick="closeChangeView()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+        <div class="full-page-title">Change Request Status</div>
+        <span style="width:32px;"></span>
+      </div>
+
+      <div class="full-page-body" style="padding-bottom:24px;">
+
+        <!-- Vehicle card -->
+        <div class="vc-card" id="crv-vehicle-card"></div>
+
+        <!-- Pending amber banner -->
+        <div class="crv-pending-banner">
+          <div class="crv-pb-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="crv-pb-text">
+            <strong>Change request submitted to Sales Team</strong>
+            Your consignee amendment is being reviewed. The Bill of Lading will only be updated after sales team approval.
+          </div>
+        </div>
+
+        <!-- Old Details Card -->
+        <div class="crv-stack-card" id="crv-old-card">
+          <div class="crv-stack-banner old">
+            <span>Old Consignee Details</span>
+            <span class="crv-badge-date" id="crv-old-date">Created 02 Aug 2026</span>
+          </div>
+          <div id="crv-old-body"></div>
+        </div>
+
+        <!-- Requested Details Card -->
+        <div class="crv-stack-card requested-tint" id="crv-new-card">
+          <div class="crv-stack-banner requested">
+            <span>Requested Details</span>
+            <span class="crv-badge-date" id="crv-new-date">Requested Today</span>
+          </div>
+          <div id="crv-new-body"></div>
+        </div>
+
+      </div>
+    </div>
+
     <div class="home-indicator"></div>
 
   </div>
@@ -3090,29 +3764,22 @@
     return map[curr] || curr + ' ';
   }
 
-  // Web-style BCN logic:
-  //  - If state === 'change-requested': B grey, C RED+pulse, N grey
-  //  - Else: each letter is 'active' (blue) if present in bcn string, else 'muted' (grey)
   function renderBCN(v) {
     const b = v.bcn || '';
     if (v.state === 'change-requested') {
       return `<span class="bcn">
-        <span class="muted" onclick="event.stopPropagation(); showToast('View change request')">B</span>
-        <span class="danger" onclick="event.stopPropagation(); showToast('Pending change request')">C</span>
-        <span class="muted" onclick="event.stopPropagation(); showToast('View change request')">N</span>
+        <span class="muted">B</span>
+        <span class="danger" onclick="event.stopPropagation(); openChangeView(${v.id})">C</span>
+        <span class="muted">N</span>
       </span>`;
     }
-    const cell = (letter, label) => {
-      if (b.includes(letter)) {
-        return `<span class="active" onclick="event.stopPropagation(); showToast('View ${label}')">${letter}</span>`;
-      }
+    const cell = (letter) => {
+      if (!b) return `<span class="muted">${letter}</span>`;
+      if (letter === 'C') return `<span class="active" onclick="event.stopPropagation(); openViewConsignee(${v.id})">${letter}</span>`;
+      if (b.includes(letter)) return `<span class="active" onclick="event.stopPropagation(); openViewConsignee(${v.id})">${letter}</span>`;
       return `<span class="muted">${letter}</span>`;
     };
-    return `<span class="bcn">
-      ${cell('B', 'buyer')}
-      ${cell('C', 'consignee')}
-      ${cell('N', 'notify')}
-    </span>`;
+    return `<span class="bcn">${cell('B')}${cell('C')}${cell('N')}</span>`;
   }
 
   function renderCard(v) {
@@ -3374,6 +4041,84 @@
   }
   let activeConsigneeVehicleId = null;
 
+  // Sample consignee data for demo vehicles that already have BCN
+  const SAMPLE_CONSIGNEE = {
+    1: { consignee: [['Consignee Name','Charles Taurai Matshongwe'],['Address','27475 Unit O Examination, Chitungwiza'],['Country','Zimbabwe'],['City','Harare'],['Postal Code','00263'],['Email','pdupstyles@gmail.com'],['Phone','+263 77 304 6898']], notifySame: true, notify: null, buyerSame: true, buyer: null },
+    3: { consignee: [['Consignee Name','Ahmed Al-Rashidi'],['Address','Plot 45, Mombasa Road'],['Country','Kenya'],['City','Mombasa'],['Postal Code','80100'],['Email','ahmed.alrashidi@gmail.com'],['Phone','+254 712 345678']], notifySame: false, notify: [['Notify Name','Salim Hassan'],['Address','Plot 45, Mombasa Road'],['Country','Kenya'],['City','Mombasa'],['Postal Code','80100'],['Email','salim.h@gmail.com'],['Phone','+254 722 111222']], buyerSame: false, buyer: [['Buyer Name','Fatima Al-Rashidi'],['Address','Plot 12, Nairobi West'],['Country','Kenya'],['City','Nairobi'],['Postal Code','00100'],['Email','fatima.r@gmail.com'],['Phone','+254 701 998877']] },
+    4: { consignee: [['Consignee Name','David Okonkwo'],['Address','15 Victoria Island, Eti-Osa'],['Country','Nigeria'],['City','Lagos'],['Postal Code','101241'],['Email','david.okonkwo@mail.ng'],['Phone','+234 802 123 4567']], notifySame: true, notify: null, buyerSame: false, buyer: [['Buyer Name','Grace Okonkwo'],['Address','15 Victoria Island, Eti-Osa'],['Country','Nigeria'],['City','Lagos'],['Postal Code','101241'],['Email','grace.ok@mail.ng'],['Phone','+234 803 987 6543']] },
+    6: { consignee: [['Consignee Name','Sipho Ndlovu'],['Address','23 Berea Road, Musgrave'],['Country','South Africa'],['City','Durban'],['Postal Code','4001'],['Email','sipho.ndlovu@webmail.co.za'],['Phone','+27 82 123 4567']], notifySame: true, notify: null, buyerSame: true, buyer: null },
+    7: { consignee: [['Consignee Name','James Kariuki'],['Address','Westlands, Chiromo Lane'],['Country','Kenya'],['City','Nairobi'],['Postal Code','00800'],['Email','james.k@gmail.com'],['Phone','+254 701 234567']], notifySame: true, notify: null, buyerSame: true, buyer: null },
+    8: { consignee: [['Consignee Name','Robert Mugani'],['Address','Borrowdale, Harare North'],['Country','Zimbabwe'],['City','Harare'],['Postal Code','00263'],['Email','r.mugani@zol.co.zw'],['Phone','+263 71 234 5678']], notifySame: false, notify: [['Notify Name','Mary Mugani'],['Address','Borrowdale, Harare North'],['Country','Zimbabwe'],['City','Harare'],['Postal Code','00263'],['Email','mary.m@zol.co.zw'],['Phone','+263 77 987 6543']], buyerSame: false, buyer: [['Buyer Name','TarisaiLogistics Ltd'],['Address','Msasa Industrial Area'],['Country','Zimbabwe'],['City','Harare'],['Postal Code','00263'],['Email','ops@tarisai.co.zw'],['Phone','+263 4 662 0011']] },
+  };
+
+  function buildVwRows(rows) {
+    return rows.map(([k, v]) =>
+      `<div class="vw-row"><span class="vw-key">${k}</span><span class="vw-val">${v}</span></div>`
+    ).join('');
+  }
+
+  function openViewConsignee(id) {
+    const numId = parseInt(id, 10);
+    window._viewingConsigneeId = numId;
+    const v = vehicles.find(x => x.id === numId);
+    if (!v) return;
+
+    // Populate vehicle card
+    document.getElementById('vw-vehicle-card').innerHTML = buildVcCard(v);
+
+    // Get saved data or fall back to sample
+    const saved = (window._consigneeData && window._consigneeData[numId]);
+    const data = saved || SAMPLE_CONSIGNEE[numId] || {
+      consignee: [['Consignee Name','—'],['Address','—'],['Country','—'],['City','—'],['Postal Code','—'],['Email','—'],['Phone','—']],
+      notifySame: true, notify: null, buyerSame: true, buyer: null
+    };
+
+    // Consignee
+    document.getElementById('vw-consignee-body').innerHTML = buildVwRows(data.consignee);
+
+    // Notify
+    const notifyEl = document.getElementById('vw-notify-body');
+    if (data.notifySame) {
+      notifyEl.className = 'vw-section-body same';
+      notifyEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Same as Consignee';
+    } else {
+      notifyEl.className = 'vw-section-body';
+      notifyEl.innerHTML = buildVwRows(data.notify);
+    }
+
+    // Buyer
+    const buyerEl = document.getElementById('vw-buyer-body');
+    if (data.buyerSame) {
+      buyerEl.className = 'vw-section-body same';
+      buyerEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Same as Consignee';
+    } else {
+      buyerEl.className = 'vw-section-body';
+      buyerEl.innerHTML = buildVwRows(data.buyer);
+    }
+
+    // Smart footer button: if change-requested → show "View Change Request", else → "Request Change"
+    const btnArea = document.getElementById('vw-footer-btn-area');
+    if (v.state === 'change-requested') {
+      btnArea.innerHTML = `
+        <button class="btn-danger-outline" style="background:#ff9500;box-shadow:0 2px 8px rgba(255,149,0,0.28);" onclick="openChangeView(${numId})">
+          <i class="ti ti-eye" style="font-size:16px;color:#fff;"></i>
+          View Change Request
+        </button>`;
+    } else {
+      btnArea.innerHTML = `
+        <button class="btn-danger-outline" onclick="openRequestChangePage()">
+          <i class="ti ti-edit" style="font-size:16px;color:#fff;"></i>
+          Request Consignee Change
+        </button>`;
+    }
+
+    document.getElementById('view-consignee-page').classList.add('show');
+  }
+
+  function closeViewConsignee() {
+    document.getElementById('view-consignee-page').classList.remove('show');
+  }
+
   function openConsigneePage(id) {
     activeConsigneeVehicleId = id;
     const v = vehicles.find(x => x.id === id);
@@ -3424,23 +4169,68 @@
     openConfirmPage();
   }
 
+  function buildDetailRows(prefix) {
+    // prefix = 'con' | 'notify' | 'buyer'
+    const nameId   = prefix === 'con' ? 'con-name'    : null;
+    const addrId   = prefix === 'con' ? 'con-address' : null;
+    const postalId = prefix === 'con' ? 'con-postal'  : null;
+    const emailId  = prefix === 'con' ? 'con-email'   : null;
+    const phoneId  = prefix === 'con' ? 'con-phone'   : null;
+
+    // For notify/buyer — grab inputs from within their collapsible
+    const formEl = prefix === 'con' ? null : document.getElementById(prefix + '-form-con');
+
+    function getByFormId(id) {
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : '';
+    }
+    function getInputByIndex(idx) {
+      if (!formEl) return '';
+      const inputs = formEl.querySelectorAll('input.con-input:not(.con-phone-input), input[type="email"]');
+      return inputs[idx] ? inputs[idx].value.trim() : '';
+    }
+
+    const nameIdMap   = { con: 'con-name',    notify: 'notify-name',    buyer: 'buyer-name'    };
+    const addrIdMap   = { con: 'con-address', notify: 'notify-address', buyer: 'buyer-address' };
+    const postalIdMap = { con: 'con-postal',  notify: null,             buyer: null            };
+    const emailIdMap  = { con: 'con-email',   notify: null,             buyer: null            };
+    const phoneIdMap  = { con: 'con-phone',   notify: null,             buyer: null            };
+
+    const name    = getByFormId(nameIdMap[prefix])   || '—';
+    const address = getByFormId(addrIdMap[prefix])   || '—';
+    const country = conSelectedCountry[prefix] || '—';
+    const city    = conSelectedCity[prefix]    || '—';
+    const postal  = postalIdMap[prefix] ? (getByFormId(postalIdMap[prefix]) || '—') : (getInputByIndex(2) || '—');
+    const email   = emailIdMap[prefix]  ? (getByFormId(emailIdMap[prefix])  || '—') : (getInputByIndex(3) || '—');
+    const phoneCode = (document.getElementById(prefix + '-phone-code') || {}).textContent || '+';
+    const phoneVal  = phoneIdMap[prefix]
+      ? (getByFormId(phoneIdMap[prefix]) || '—')
+      : (() => { const el = formEl ? formEl.querySelector('input.con-phone-input') : null; return el ? el.value.trim() : '—'; })();
+    const phone = phoneCode + ' ' + phoneVal;
+
+    return [
+      [prefix === 'con' ? 'Consignee Name' : (prefix === 'notify' ? 'Notify Name' : 'Buyer Name'), name],
+      ['Address',      address],
+      ['Country',      country],
+      ['City',         city],
+      ['Postal Code',  postal],
+      ['Email',        email],
+      ['Phone',        phone],
+    ];
+  }
+
+  function rowsToHTML(rows) {
+    return rows.map(([k, val]) =>
+      `<div class="cf-row"><span class="cf-key">${k}</span><span class="cf-val">${val}</span></div>`
+    ).join('');
+  }
+
   function openConfirmPage() {
     const v = vehicles.find(x => x.id === activeConsigneeVehicleId);
     document.getElementById('cf-vehicle-card').innerHTML = buildVcCard(v);
 
-    // Build consignee rows
-    const rows = [
-      ['Consignee Name', document.getElementById('con-name').value || '—'],
-      ['Address',        document.getElementById('con-address').value || '—'],
-      ['Country',        conSelectedCountry.con || '—'],
-      ['City',           conSelectedCity.con || '—'],
-      ['Postal Code',    document.getElementById('con-postal').value || '—'],
-      ['Email',          document.getElementById('con-email').value || '—'],
-      ['Phone',          (document.getElementById('con-phone-code').textContent || '+') + ' ' + (document.getElementById('con-phone').value || '—')],
-    ];
-    document.getElementById('cf-consignee-body').innerHTML = rows.map(([k,val]) =>
-      `<div class="cf-row"><span class="cf-key">${k}</span><span class="cf-val">${val}</span></div>`
-    ).join('');
+    // Consignee rows
+    document.getElementById('cf-consignee-body').innerHTML = rowsToHTML(buildDetailRows('con'));
 
     // Notify
     const notifySame = document.getElementById('notify-same-chk').checked;
@@ -3448,7 +4238,7 @@
     if (notifySame) {
       cfNotify.innerHTML = '<span class="cf-same-text">Same as Consignee</span>';
     } else {
-      cfNotify.innerHTML = `<div class="cf-row"><span class="cf-key">Name</span><span class="cf-val">${document.querySelector('#notify-form-con input[placeholder="Enter Notify Name"]').value || '—'}</span></div>`;
+      cfNotify.innerHTML = rowsToHTML(buildDetailRows('notify'));
     }
 
     // Buyer
@@ -3457,7 +4247,7 @@
     if (buyerSame) {
       cfBuyer.innerHTML = '<span class="cf-same-text">Same as Consignee</span>';
     } else {
-      cfBuyer.innerHTML = `<div class="cf-row"><span class="cf-key">Name</span><span class="cf-val">${document.querySelector('#buyer-form-con input[placeholder="Enter Buyer Name"]').value || '—'}</span></div>`;
+      cfBuyer.innerHTML = rowsToHTML(buildDetailRows('buyer'));
     }
 
     // Reset checkbox
@@ -3476,7 +4266,22 @@
       return;
     }
     const v = vehicles.find(x => x.id === activeConsigneeVehicleId);
-    if (v) v.bcn = v.bcn || 'C';
+    if (v) {
+      const notifySame = document.getElementById('notify-same-chk').checked;
+      const buyerSame  = document.getElementById('buyer-same-chk').checked;
+      let bcnStr = 'C';
+      if (!buyerSame)  bcnStr = 'B' + bcnStr;
+      if (!notifySame) bcnStr = bcnStr + 'N';
+      v.bcn = bcnStr;
+      window._consigneeData = window._consigneeData || {};
+      window._consigneeData[v.id] = {
+        consignee: buildDetailRows('con'),
+        notifySame: notifySame,
+        notify: notifySame ? null : buildDetailRows('notify'),
+        buyerSame: buyerSame,
+        buyer: buyerSame ? null : buildDetailRows('buyer'),
+      };
+    }
     document.getElementById('confirm-page').classList.remove('show');
     closeConsigneePage();
     render();
@@ -4518,7 +5323,328 @@
     if (tab !== 'dashboard') showToast(`${tab.charAt(0).toUpperCase() + tab.slice(1)} coming soon`);
   }
 
+
+  // ── REQUEST CONSIGNEE CHANGE PAGE ──
+  let rccActivePrefix = 'con';
+  let rccSelectedCountry = { con:'', notify:'', buyer:'' };
+  let rccSelectedCity    = { con:'', notify:'', buyer:'' };
+
+  function openRequestChangePage() {
+    const id = window._viewingConsigneeId;
+    const v  = vehicles.find(x => x.id === id);
+    if (v) document.getElementById('rcc-vehicle-card').innerHTML = buildVcCard(v);
+
+    // Pre-fill from saved or sample data
+    const saved  = window._consigneeData && id ? window._consigneeData[id] : null;
+    const sample = id ? SAMPLE_CONSIGNEE[id] : null;
+    const con    = saved ? saved.consignee : (sample ? sample.consignee : []);
+
+    // Reset all fields
+    ['rcc-con-name','rcc-con-address','rcc-con-postal','rcc-con-email','rcc-con-phone',
+     'rcc-notify-name','rcc-notify-address','rcc-buyer-name','rcc-buyer-address'].forEach(fid => {
+      const el = document.getElementById(fid); if (el) el.value = '';
+    });
+    rccSelectedCountry = { con:'', notify:'', buyer:'' };
+    rccSelectedCity    = { con:'', notify:'', buyer:'' };
+    ['con','notify','buyer'].forEach(p => {
+      const cl = document.getElementById(`rcc-${p}-country-label`);
+      if (cl) { cl.textContent = 'Select Country'; cl.classList.add('placeholder'); }
+      const cl2 = document.getElementById(`rcc-${p}-city-label`);
+      if (cl2) { cl2.textContent = 'Select City'; cl2.classList.add('placeholder'); }
+      rccUpdatePhone(p, null);
+    });
+
+    // Fill consignee from existing data
+    if (con.length) {
+      const sv = (elId, val) => { const e = document.getElementById(elId); if (e && val && val !== '—') e.value = val; };
+      sv('rcc-con-name',    con[0] && con[0][1]);
+      sv('rcc-con-address', con[1] && con[1][1]);
+      sv('rcc-con-postal',  con[4] && con[4][1]);
+      sv('rcc-con-email',   con[5] && con[5][1]);
+      const country = con[2] && con[2][1];
+      if (country && country !== '—' && CON_COUNTRY_DATA[country]) {
+        rccSelectedCountry.con = country;
+        const lbl = document.getElementById('rcc-con-country-label');
+        if (lbl) { lbl.textContent = CON_COUNTRY_DATA[country].flag + ' ' + country; lbl.classList.remove('placeholder'); }
+        rccUpdatePhone('con', country);
+      }
+      const city = con[3] && con[3][1];
+      if (city && city !== '—') {
+        rccSelectedCity.con = city;
+        const lbl = document.getElementById('rcc-con-city-label');
+        if (lbl) { lbl.textContent = city; lbl.classList.remove('placeholder'); }
+      }
+      const ph = con[6] && con[6][1];
+      if (ph && ph !== '—') {
+        const e = document.getElementById('rcc-con-phone');
+        if (e) e.value = ph.replace(/^\+[\d]+\s?/, '');
+      }
+    }
+
+    // Reset notify/buyer checkboxes
+    document.getElementById('rcc-notify-same').checked = true;
+    document.getElementById('rcc-buyer-same').checked  = true;
+    document.getElementById('rcc-notify-form').classList.remove('open');
+    document.getElementById('rcc-buyer-form').classList.remove('open');
+    document.getElementById('rcc-notify-hint').style.display = 'flex';
+    document.getElementById('rcc-buyer-hint').style.display  = 'flex';
+    document.getElementById('rcc-agree').checked = false;
+    const errMsg = document.getElementById('rcc-error-msg');
+    if (errMsg) errMsg.style.display = 'none';
+
+    document.getElementById('request-change-page').classList.add('show');
+  }
+
+  function closeRequestChangePage() {
+    document.getElementById('request-change-page').classList.remove('show');
+    closeRccCountrySheet();
+    closeRccCitySheet();
+  }
+
+  function rccToggleSame(type) {
+    const chk  = document.getElementById('rcc-' + type + '-same');
+    const form = document.getElementById('rcc-' + type + '-form');
+    const hint = document.getElementById('rcc-' + type + '-hint');
+    if (chk.checked) { form.classList.remove('open'); hint.style.display = 'flex'; }
+    else             { form.classList.add('open');    hint.style.display = 'none'; }
+  }
+
+  function rccUpdatePhone(prefix, country) {
+    const flagEl = document.getElementById(`rcc-${prefix}-phone-flag`);
+    const codeEl = document.getElementById(`rcc-${prefix}-phone-code`);
+    if (!flagEl || !codeEl) return;
+    if (country && CON_COUNTRY_DATA[country]) {
+      flagEl.textContent = CON_COUNTRY_DATA[country].flag;
+      codeEl.textContent = CON_COUNTRY_DATA[country].code;
+    } else {
+      flagEl.textContent = '🌐'; codeEl.textContent = '+';
+    }
+  }
+
+  // RCC Country Sheet
+  function openRccCountrySheet(prefix) {
+    rccActivePrefix = prefix;
+    const input = document.getElementById('rcc-country-search');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('rcc-country-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    renderRccCountryList('');
+    document.getElementById('rcc-country-backdrop').classList.add('show');
+    document.getElementById('rcc-country-sheet').classList.add('show');
+  }
+  function closeRccCountrySheet() {
+    document.getElementById('rcc-country-backdrop').classList.remove('show');
+    document.getElementById('rcc-country-sheet').classList.remove('show');
+  }
+  function renderRccCountryList(q) {
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    const filtered = q ? CON_COUNTRIES.filter(c => c.toLowerCase().includes(q.toLowerCase())) : CON_COUNTRIES;
+    const cur = rccSelectedCountry[rccActivePrefix] || '';
+    document.getElementById('rcc-country-list').innerHTML = filtered.length
+      ? filtered.map(c => `<button class="stage-list-item" onclick="selectRccCountry('${c}')">
+          <span style="font-size:18px;flex-shrink:0;">${CON_COUNTRY_DATA[c].flag}</span>
+          <span class="stage-list-label">${c}</span>
+          <span class="stage-check">${cur===c?checkSVG:''}</span>
+        </button>`).join('')
+      : `<div class="picker-empty">No countries found</div>`;
+  }
+  function filterRccCountryList(val) {
+    const clearBtn = document.getElementById('rcc-country-search-clear');
+    if (clearBtn) clearBtn.style.display = val ? 'flex' : 'none';
+    renderRccCountryList(val);
+  }
+  function clearRccCountrySearch() {
+    const input = document.getElementById('rcc-country-search');
+    if (input) input.value = '';
+    document.getElementById('rcc-country-search-clear').style.display = 'none';
+    renderRccCountryList('');
+  }
+  function clearRccCountry() {
+    rccSelectedCountry[rccActivePrefix] = '';
+    const label = document.getElementById(`rcc-${rccActivePrefix}-country-label`);
+    if (label) { label.textContent = 'Select Country'; label.classList.add('placeholder'); }
+    rccUpdatePhone(rccActivePrefix, null);
+    rccSelectedCity[rccActivePrefix] = '';
+    const cityLabel = document.getElementById(`rcc-${rccActivePrefix}-city-label`);
+    if (cityLabel) { cityLabel.textContent = 'Select City'; cityLabel.classList.add('placeholder'); }
+    renderRccCountryList('');
+  }
+  function selectRccCountry(country) {
+    rccSelectedCountry[rccActivePrefix] = country;
+    const label = document.getElementById(`rcc-${rccActivePrefix}-country-label`);
+    if (label) { label.textContent = CON_COUNTRY_DATA[country].flag + ' ' + country; label.classList.remove('placeholder'); }
+    rccUpdatePhone(rccActivePrefix, country);
+    // Reset city
+    rccSelectedCity[rccActivePrefix] = '';
+    const cityLabel = document.getElementById(`rcc-${rccActivePrefix}-city-label`);
+    if (cityLabel) { cityLabel.textContent = 'Select City'; cityLabel.classList.add('placeholder'); }
+    setTimeout(() => closeRccCountrySheet(), 180);
+  }
+
+  // RCC City Sheet
+  function openRccCitySheet(prefix) {
+    const country = rccSelectedCountry[prefix];
+    if (!country) { showToast('Please select a country first'); return; }
+    rccActivePrefix = prefix;
+    const title = document.getElementById('rcc-city-sheet-title');
+    if (title) title.textContent = 'Cities — ' + country;
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    const cities = CON_COUNTRY_DATA[country]?.cities || [];
+    const cur = rccSelectedCity[prefix] || '';
+    document.getElementById('rcc-city-list').innerHTML = cities.length
+      ? cities.map(c => `<button class="stage-list-item" onclick="selectRccCity('${prefix}','${c}')">
+          <span class="stage-list-label">${c}</span>
+          <span class="stage-check">${cur===c?checkSVG:''}</span>
+        </button>`).join('')
+      : `<div class="picker-empty">No cities available</div>`;
+    document.getElementById('rcc-city-backdrop').classList.add('show');
+    document.getElementById('rcc-city-sheet').classList.add('show');
+  }
+  function closeRccCitySheet() {
+    document.getElementById('rcc-city-backdrop').classList.remove('show');
+    document.getElementById('rcc-city-sheet').classList.remove('show');
+  }
+  function clearRccCity() {
+    rccSelectedCity[rccActivePrefix] = '';
+    const el = document.getElementById(`rcc-${rccActivePrefix}-city-label`);
+    if (el) { el.textContent = 'Select City'; el.classList.add('placeholder'); }
+    closeRccCitySheet();
+  }
+  function selectRccCity(prefix, city) {
+    rccSelectedCity[prefix] = city;
+    const el = document.getElementById(`rcc-${prefix}-city-label`);
+    if (el) { el.textContent = city; el.classList.remove('placeholder'); }
+    setTimeout(() => closeRccCitySheet(), 180);
+  }
+
+  function submitRequestChange() {
+    const errMsg = document.getElementById('rcc-error-msg');
+    if (!document.getElementById('rcc-agree').checked) {
+      errMsg.style.display = 'flex';
+      return;
+    }
+    errMsg.style.display = 'none';
+    const name = (document.getElementById('rcc-con-name')?.value || '').trim();
+    if (!name) { showToast('Please enter consignee name'); return; }
+    const id = window._viewingConsigneeId;
+    const v  = vehicles.find(x => x.id === id);
+    if (v) {
+      v.state = 'change-requested';
+      // Save requested details snapshot for change view
+      const getVal = (elId) => (document.getElementById(elId)?.value || '').trim();
+      const country = rccSelectedCountry['con'] || '';
+      const city    = rccSelectedCity['con']    || '';
+      const notifySame = document.getElementById('rcc-notify-same')?.checked !== false;
+      const buyerSame  = document.getElementById('rcc-buyer-same')?.checked  !== false;
+      const requestedData = {
+        consignee: [
+          ['Consignee Name', getVal('rcc-con-name')  || '—'],
+          ['Address',        getVal('rcc-con-address')|| '—'],
+          ['Country',        country || '—'],
+          ['City',           city    || '—'],
+          ['Postal Code',    getVal('rcc-con-postal') || '—'],
+          ['Email',          getVal('rcc-con-email')  || '—'],
+          ['Phone',          ((document.getElementById('rcc-con-phone-code')?.textContent||'+') + ' ' + getVal('rcc-con-phone')) || '—'],
+          ['Passport Copy',  'PASSPORT.JPG'],
+        ],
+        notifySame,
+        notify: notifySame ? null : [
+          ['Notify Name', getVal('rcc-notify-name')   || '—'],
+          ['Address',     getVal('rcc-notify-address') || '—'],
+          ['Country',     rccSelectedCountry['notify'] || '—'],
+          ['City',        rccSelectedCity['notify']    || '—'],
+        ],
+        buyerSame,
+        buyer: buyerSame ? null : [
+          ['Buyer Name', getVal('rcc-buyer-name')   || '—'],
+          ['Address',    getVal('rcc-buyer-address') || '—'],
+          ['Country',    rccSelectedCountry['buyer'] || '—'],
+          ['City',       rccSelectedCity['buyer']    || '—'],
+        ],
+        requestedDate: new Date().toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'}),
+      };
+      window._requestedData = window._requestedData || {};
+      window._requestedData[id] = requestedData;
+    }
+    closeRequestChangePage();
+    closeViewConsignee();
+    render();
+    setTimeout(() => showToast('Change request submitted successfully'), 200);
+  }
+
+  // ── CHANGE VIEW PAGE ──
+  function buildCrvSection(rows) {
+    return rows.map(([k, val]) => {
+      const valHtml = k === 'Passport Copy'
+        ? `<a href="#" style="color:var(--c-accent);">${val}</a>`
+        : `<span class="crv-val">${val}</span>`;
+      return `<div class="crv-row"><span class="crv-key">${k}</span>${valHtml}</div>`;
+    }).join('');
+  }
+
+  function buildCrvCardBody(data, tint) {
+    let html = '';
+    // Consignee section
+    html += `<div class="crv-section-head">Consignee Details</div>`;
+    html += buildCrvSection(data.consignee);
+    // Notify
+    html += `<div class="crv-section-head">Notify Details</div>`;
+    if (data.notifySame) {
+      html += `<div class="crv-same-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Same as Consignee</div>`;
+    } else {
+      html += buildCrvSection(data.notify);
+    }
+    // Buyer
+    html += `<div class="crv-section-head">Buyer Details</div>`;
+    if (data.buyerSame) {
+      html += `<div class="crv-same-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Same as Consignee</div>`;
+    } else {
+      html += buildCrvSection(data.buyer);
+    }
+    return html;
+  }
+
+  function openChangeView(id) {
+    const numId = parseInt(id, 10);
+    window._viewingConsigneeId = numId;
+    const v = vehicles.find(x => x.id === numId);
+    if (!v) return;
+
+    document.getElementById('crv-vehicle-card').innerHTML = buildVcCard(v);
+
+    // Old data
+    const saved  = (window._consigneeData && window._consigneeData[numId]);
+    const sample = SAMPLE_CONSIGNEE[numId];
+    const oldData = saved || sample || {
+      consignee: [['Consignee Name','—'],['Address','—'],['Country','—'],['City','—'],['Postal Code','—'],['Email','—'],['Phone','—'],['Passport Copy','—']],
+      notifySame: true, notify: null, buyerSame: true, buyer: null,
+    };
+
+    // Requested data
+    const reqData = (window._requestedData && window._requestedData[numId]) || null;
+    const requestedData = reqData || {
+      consignee: [['Consignee Name','(pending)'],['Address','(pending)'],['Country','(pending)'],['City','(pending)'],['Postal Code','(pending)'],['Email','(pending)'],['Phone','(pending)'],['Passport Copy','(pending)']],
+      notifySame: true, notify: null, buyerSame: true, buyer: null,
+      requestedDate: 'Pending',
+    };
+
+    // Set dates
+    document.getElementById('crv-old-date').textContent   = 'Created 02 Aug 2026';
+    document.getElementById('crv-new-date').textContent   = 'Requested ' + (requestedData.requestedDate || 'Today');
+
+    // Render bodies
+    document.getElementById('crv-old-body').innerHTML = buildCrvCardBody(oldData, false);
+    document.getElementById('crv-new-body').innerHTML = buildCrvCardBody(requestedData, true);
+
+    document.getElementById('change-view-page').classList.add('show');
+  }
+
+  function closeChangeView() {
+    document.getElementById('change-view-page').classList.remove('show');
+  }
+
   render();
+
 </script>
 
 </body>
