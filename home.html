@@ -2428,6 +2428,291 @@
   .crv-stack-card.requested-tint .crv-same-row { background: #fef7f7; }
   .crv-same-row svg { width:13px;height:13px;color:var(--c-success);flex-shrink:0; }
 
+
+  /* ============================================================
+     STAGE TIMELINE SCREEN  — Clean full-width design
+  ============================================================ */
+  #stage-screen { z-index: 470; }
+  #stage-screen .full-page-body { background: #f2f2f7; padding: 0 0 32px; }
+  #stage-screen .full-page-nav  { background: #fff; border-bottom: 0.5px solid var(--c-divider); }
+
+  /* ── Vehicle strip — full bleed, no side margins ── */
+  .stg-vehicle-strip {
+    background: linear-gradient(135deg, #1a2e4a 0%, #0f1f35 100%);
+    margin: 16px 16px 0;
+    border-radius: 16px 16px 0 0;
+    padding: 14px 16px 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .stg-vs-img {
+    width: 62px; height: 48px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .stg-vs-info { flex: 1; min-width: 0; }
+  .stg-vs-name {
+    font-size: 16px; font-weight: 700; color: #fff;
+    letter-spacing: -0.02em; line-height: 1.2;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .stg-vs-chassis {
+    font-size: 10.5px; color: rgba(255,255,255,0.45);
+    font-weight: 500; margin-top: 3px;
+    letter-spacing: 0.06em; font-family: 'SF Mono', Menlo, monospace;
+  }
+  .stg-vs-dest {
+    display: flex; align-items: center; gap: 4px;
+    margin-top: 6px; font-size: 12px; color: rgba(255,255,255,0.65);
+  }
+  .stg-vs-dest svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+  /* Progress bar strip below vehicle banner */
+  .stg-progress-strip {
+    background: #1a2e4a;
+    margin: 0 16px 16px;
+    border-radius: 0 0 16px 16px;
+    padding: 4px 14px 12px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .stg-progress-seg {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.18);
+    transition: background 0.3s ease;
+  }
+  .stg-progress-seg.done  { background: #30c46d; }
+  .stg-progress-seg.active{ background: #fff; }
+
+  /* ── Section label ── */
+  .stg-section-label {
+    font-size: 10.5px; font-weight: 700;
+    color: var(--c-text-muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 14px 20px 6px;
+  }
+
+  /* ── Accordion list ── */
+  .stg-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0 16px;
+    background: transparent;
+    border-top: none;
+    border-bottom: none;
+  }
+
+  /* Each row */
+  .stg-row {
+    background: #fff;
+    position: relative;
+    transition: background 0.15s ease;
+    border-radius: 0;
+    overflow: hidden;
+  }
+  .stg-row:first-child { border-radius: 16px 16px 0 0; }
+  .stg-row:last-child  { border-radius: 0 0 16px 16px; }
+  .stg-row + .stg-row  { border-top: 0.5px solid #f0f0f5; }
+
+  /* Left accent bar */
+  .stg-row::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: background 0.25s ease;
+  }
+  .stg-row.completed::before { background: var(--c-success); }
+  .stg-row.current::before   { background: var(--stg-color, var(--c-accent)); }
+  .stg-row.locked::before    { background: transparent; }
+
+  /* ── Header row ── */
+  .stg-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 16px 13px 18px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .stg-header:active { background: #f7f7f9; }
+
+  /* Number circle */
+  .stg-num {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    flex-shrink: 0;
+    transition: all 0.25s ease;
+  }
+  .stg-row.completed .stg-num {
+    background: linear-gradient(135deg, #30c46d 0%, #4adf86 100%);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(48,196,109,0.3);
+  }
+  .stg-row.current .stg-num {
+    background: var(--stg-color, var(--c-accent));
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    animation: stgPulse 2s ease-in-out infinite;
+  }
+  .stg-row.locked .stg-num {
+    background: #f0f0f5;
+    color: #b8b8c0;
+  }
+  @keyframes stgPulse {
+    0%,100% { box-shadow: 0 2px 8px rgba(0,0,0,0.18), 0 0 0 0 color-mix(in srgb, var(--stg-color) 30%, transparent); }
+    50%      { box-shadow: 0 2px 8px rgba(0,0,0,0.18), 0 0 0 5px transparent; }
+  }
+  .stg-num svg { width: 15px; height: 15px; }
+
+  /* Text group */
+  .stg-title-group { flex: 1; min-width: 0; }
+  .stg-title {
+    font-size: 14px; font-weight: 600;
+    color: var(--c-text);
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+  .stg-row.locked .stg-title    { color: #b8b8c0; }
+  .stg-row.completed .stg-title { color: var(--c-text); }
+  .stg-sub {
+    font-size: 11.5px; color: var(--c-text-muted);
+    margin-top: 2px; line-height: 1.4; font-weight: 400;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .stg-row.locked .stg-sub    { color: #c8c8d0; }
+  .stg-row.completed .stg-sub { color: var(--c-text-muted); }
+
+  /* Status pill */
+  .stg-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .stg-badge-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .stg-row.completed .stg-badge     { background: #d1fae5; color: #047857; }
+  .stg-row.completed .stg-badge-dot { background: #10b981; }
+  .stg-row.current .stg-badge       { background: rgba(43,166,255,0.1); color: var(--c-accent); }
+  .stg-row.current .stg-badge-dot   { background: var(--c-accent); animation: dotBlink 1.4s ease-in-out infinite; }
+  @keyframes dotBlink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+  .stg-row.locked .stg-badge        { background: #f0f0f5; color: #b8b8c0; }
+  .stg-row.locked .stg-badge-dot    { background: #c8c8d0; }
+
+  /* Chevron */
+  .stg-chev { width: 18px; height: 18px; color: #c0c0c8; transition: transform 0.26s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0; }
+  .stg-chev svg { width: 18px; height: 18px; }
+  .stg-row.open .stg-chev { transform: rotate(90deg); color: var(--c-text-muted); }
+  .stg-row.locked .stg-chev { opacity: 0.3; }
+
+  /* ── Expanded body ── */
+  .stg-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .stg-row.open .stg-body { max-height: 1400px; }
+
+  .stg-body-inner {
+    padding: 14px 16px 18px 18px;
+    background: #fafafa;
+    border-top: 0.5px solid #f0f0f5;
+  }
+
+  /* Fields table */
+  .stg-fields {
+    background: #fff;
+    border: 0.5px solid var(--c-divider);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .stg-field-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 14px;
+    border-bottom: 0.5px solid #f2f2f7;
+  }
+  .stg-field-row:last-child { border-bottom: none; }
+  .stg-field-key {
+    font-size: 12.5px; font-weight: 500;
+    color: var(--c-text-muted);
+    flex-shrink: 0;
+  }
+  .stg-field-val {
+    font-size: 12.5px; font-weight: 600;
+    color: var(--c-text);
+    text-align: right; word-break: break-word;
+  }
+
+  /* Body section heading */
+  .stg-body-section {
+    font-size: 10.5px; font-weight: 700;
+    color: var(--c-text-muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin: 16px 0 8px;
+  }
+
+  /* Doc row */
+  .stg-doc-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 13px;
+    background: #fff;
+    border: 0.5px solid var(--c-divider);
+    border-radius: 12px;
+  }
+  .stg-doc-icon {
+    width: 36px; height: 40px; border-radius: 8px;
+    background: linear-gradient(180deg, #fff 0%, #f4f4f7 100%);
+    border: 0.5px solid var(--c-divider);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: var(--c-text-muted);
+  }
+  .stg-doc-icon svg { width: 16px; height: 18px; }
+  .stg-doc-info { flex: 1; min-width: 0; }
+  .stg-doc-name { font-size: 12.5px; font-weight: 600; color: var(--c-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .stg-doc-meta { font-size: 11px; color: var(--c-text-muted); margin-top: 1px; }
+  .stg-doc-dl {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(43,166,255,0.08); border: none;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--c-accent); cursor: pointer; flex-shrink: 0;
+  }
+  .stg-doc-dl svg { width: 14px; height: 14px; }
+
+  /* Accessories chips */
+  .stg-accessories { display: flex; flex-wrap: wrap; gap: 6px; }
+  .stg-acc-chip {
+    display: inline-flex; align-items: center;
+    padding: 5px 10px;
+    background: rgba(43,166,255,0.07);
+    border: 0.5px solid rgba(43,166,255,0.2);
+    border-radius: 999px;
+    font-size: 11.5px; font-weight: 600; color: var(--c-accent);
+  }
+
+  /* Locked hint */
+  .stg-locked-hint {
+    display: flex; align-items: flex-start; gap: 9px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 0.5px solid #e8e8ed;
+    border-radius: 12px;
+    font-size: 12px; line-height: 1.55; color: var(--c-text-muted);
+  }
+  .stg-locked-hint svg { width: 14px; height: 14px; color: #c0c0c8; flex-shrink: 0; margin-top: 2px; }
+
 </style>
 </head>
 <body>
@@ -3713,6 +3998,61 @@
       </div>
     </div>
 
+    <!-- ===== STAGE SCREEN ===== -->
+    <div class="full-screen-page" id="stage-screen">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686-4.687 12.284-4.687 16.97 0"/></svg>
+          <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+        </span>
+      </div>
+      <div class="full-page-nav">
+        <button class="sheet-back-btn" onclick="closeStageScreen()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+        <div class="full-page-title">Vehicle Progress</div>
+        <span style="width:32px;"></span>
+      </div>
+      <div class="full-page-body">
+
+        <!-- Vehicle strip + progress bar (full bleed) -->
+        <div class="stg-vehicle-strip" id="stg-vehicle-strip">
+          <img class="stg-vs-img" id="stg-vs-img" src="" alt="">
+          <div class="stg-vs-info">
+            <div class="stg-vs-name" id="stg-vs-name">Toyota Raize · 2022</div>
+            <div class="stg-vs-chassis" id="stg-vs-chassis">WDC2539052F422655</div>
+            <div class="stg-vs-dest">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span id="stg-vs-dest">Mombasa Port</span>
+            </div>
+          </div>
+          <div id="stg-vs-badge" style="display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;gap:4px;"></div>
+        </div>
+        <!-- 8-segment progress bar -->
+        <div class="stg-progress-strip" id="stg-progress-strip">
+          <div class="stg-progress-seg" data-n="1"></div>
+          <div class="stg-progress-seg" data-n="2"></div>
+          <div class="stg-progress-seg" data-n="3"></div>
+          <div class="stg-progress-seg" data-n="4"></div>
+          <div class="stg-progress-seg" data-n="5"></div>
+          <div class="stg-progress-seg" data-n="6"></div>
+          <div class="stg-progress-seg" data-n="7"></div>
+          <div class="stg-progress-seg" data-n="8"></div>
+        </div>
+
+        <!-- Section label -->
+        <div class="stg-section-label">STAGES</div>
+
+        <!-- Full-width accordion list -->
+        <div class="stg-list" id="stg-list">
+          <!-- Rendered by JS -->
+        </div>
+
+      </div>
+    </div>
+
     <div class="home-indicator"></div>
 
   </div>
@@ -3834,11 +4174,11 @@
     }
 
     return `
-      <div class="sale-card stage-${stage.class}" onclick="openVehicleStage(${v.id})">
+      <div class="sale-card stage-${stage.class}">
 
         <div class="card-header">
           <div class="card-header-left">
-            <span class="stage-pill ${stage.class}"><span class="num">${stage.num}</span> ${stage.name}</span>
+            <span class="stage-pill ${stage.class}" onclick="openVehicleStage(${v.id})" style="cursor:pointer;"><span class="num">${stage.num}</span> ${stage.name}</span>
             ${v.updated ? '' : v.updated ? '<span class="updated-dot" title="Recently updated"></span>' : ''}
           </div>
           <div class="card-actions">
@@ -5310,9 +5650,191 @@
     }
   }
 
+  // ── STAGE SCREEN ──
+  const STAGE_META = [
+    null,
+    { name:'Purchase Info',       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><polyline points="16 21 12 17 8 21"/><polyline points="12 3 12 17"/></svg>' },
+    { name:'Yard Images',         icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>' },
+    { name:'Export Certificate',  icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>' },
+    { name:'Inspection',          icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' },
+    { name:'Shipment',            icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>' },
+    { name:'Bill of Lading',      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' },
+    { name:'Finance Status',      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>' },
+    { name:'Unit Received',       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' },
+  ];
+
+  const STAGE_DATA = {
+    1: {
+      sub: 'Auction won · payment confirmed',
+      doneSub: 'Vehicle purchased and initial payment received.',
+      fields: [
+        ['Make',              'Toyota'],
+        ['Model',             'Raize'],
+        ['Code',              '5BA-A200A'],
+        ['Chassis No.',       'WDC2539052F422655'],
+        ['Reg. Year',         '2022'],
+        ['Currency',          'USD'],
+        ['Purchase Price',    '$24,205'],
+        ['Purchase Date',     '02 / 08 / 2026'],
+        ['Auction Site',      'i-Auc'],
+        ['Destination Port',  'Zimbabwe'],
+      ],
+      accessories: ['Floor Mats','Spare Tyre','Tool Kit','Owners Manual','Smart Key ×2','Cargo Cover','Wheel Lock Set'],
+      doc: { name: 'Auction_Sheet_A00116.pdf', label: 'Auction Sheet', size: '1.2 MB' },
+    },
+    2: { sub: '13 yard photos uploaded', doneSub: 'Detailed inspection photos uploaded.', locked_hint: 'Yard Images should be uploaded by <b>Purchase Date + 6 days</b>' },
+    3: { sub: 'Export certificate issued', doneSub: 'Export documents available.', locked_hint: 'Export Certificate will be issued within <b>15 days</b> of Purchase Date' },
+    4: { sub: 'Inspection completed · Pass', doneSub: 'Inspection certificate available.', locked_hint: 'Inspection Certificate should be uploaded within <b>20 days</b>' },
+    5: { sub: 'Vessel in transit', doneSub: 'Vessel booking confirmed.', locked_hint: 'Shipment details available within <b>30 days</b> of Purchase Date' },
+    6: { sub: 'Bill of Lading ready', doneSub: 'BL document available.', locked_hint: 'Please add the consignee to issue <b>Bill of Lading</b> copy' },
+    7: { sub: 'Finance overview', doneSub: 'Settlement summary available.', locked_hint: 'Complete <b>Bill of Lading</b> first to unlock' },
+    8: { sub: 'Unit received · payment complete', doneSub: 'Vehicle handover completed.', locked_hint: 'Complete <b>Finance Status</b> first to unlock' },
+  };
+
   function openVehicleStage(id) {
     const v = vehicles.find(x => x.id === id);
-    if (v) showToast(`Opening ${v.make} ${v.model} · Stage ${v.stage}`);
+    if (!v) return;
+
+    // Vehicle strip
+    document.getElementById('stg-vs-name').textContent    = v.make + ' ' + v.model + ' · ' + v.year;
+    document.getElementById('stg-vs-chassis').textContent = v.chassis;
+    document.getElementById('stg-vs-dest').textContent    = v.port || 'Destination TBC';
+
+    // Stage badge in strip
+    const stageMeta = stagesMeta[v.stage];
+    const badgeArea = document.getElementById('stg-vs-badge');
+    if (badgeArea && stageMeta) {
+      const c = STAGE_COLORS[v.stage] || '#2BA6FF';
+      badgeArea.innerHTML = `
+        <span style="font-size:10px;color:rgba(255,255,255,0.5);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;">Stage</span>
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:${c};border-radius:999px;font-size:11px;font-weight:700;color:#fff;">
+          ${v.stage} · ${stageMeta.name}
+        </span>`;
+    }
+
+    // Progress bar
+    document.querySelectorAll('.stg-progress-seg').forEach(seg => {
+      const n = parseInt(seg.dataset.n);
+      seg.classList.remove('done','active');
+      if (n < v.stage)      seg.classList.add('done');
+      else if (n === v.stage) seg.classList.add('active');
+    });
+
+    // Build accordion
+    document.getElementById('stg-list').innerHTML = buildStageList(v.stage);
+
+    // Auto-open current stage
+    const curRow = document.querySelector('.stg-row.current');
+    if (curRow) curRow.classList.add('open');
+
+    document.getElementById('stage-screen').classList.add('show');
+  }
+
+  function closeStageScreen() {
+    document.getElementById('stage-screen').classList.remove('show');
+  }
+
+  function buildStageList(currentStage) {
+    return Array.from({length: 8}, (_, i) => {
+      const n = i + 1;
+      const meta  = STAGE_META[n];
+      const data  = STAGE_DATA[n] || {};
+      const color = STAGE_COLORS[n];
+
+      let state, badge, numContent;
+      if (n < currentStage) {
+        state = 'completed';
+        badge = `<span class="stg-badge"><span class="stg-badge-dot"></span>Done</span>`;
+        numContent = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+      } else if (n === currentStage) {
+        state = 'current';
+        badge = `<span class="stg-badge"><span class="stg-badge-dot"></span>In Progress</span>`;
+        numContent = n;
+      } else {
+        state = 'locked';
+        badge = `<span class="stg-badge"><span class="stg-badge-dot"></span>Locked</span>`;
+        numContent = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+      }
+
+      const sub = (n < currentStage && data.doneSub) ? data.doneSub
+                : (n === currentStage ? data.sub : (data.locked_hint || 'Pending'));
+
+      const body = buildStageBody(n, state, data, color);
+
+      return `<div class="stg-row ${state}" style="--stg-color:${color};" onclick="toggleStageRow(this)" data-stage="${n}">
+        <div class="stg-header">
+          <div class="stg-num">${numContent}</div>
+          <div class="stg-title-group">
+            <div class="stg-title">${meta.name}</div>
+            <div class="stg-sub">${sub}</div>
+          </div>
+          ${badge}
+          <div class="stg-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+        </div>
+        <div class="stg-body"><div class="stg-body-inner">${body}</div></div>
+      </div>`;
+    }).join('');
+  }
+
+  function buildStageBody(n, state, data, color) {
+    if (state === 'locked') {
+      const hint = data.locked_hint || 'Complete the previous stage to unlock.';
+      return `<div class="stg-locked-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>${hint}</span>
+      </div>`;
+    }
+
+    let html = '';
+
+    // Fields
+    if (data.fields && data.fields.length) {
+      html += '<div class="stg-fields">';
+      data.fields.forEach(([k, v]) => {
+        html += `<div class="stg-field-row">
+          <span class="stg-field-key">${k}</span>
+          <span class="stg-field-val">${v}</span>
+        </div>`;
+      });
+      html += '</div>';
+    }
+
+    // Accessories
+    if (data.accessories && data.accessories.length) {
+      html += `<div class="stg-body-section" style="margin-top:16px;">Accessories</div>`;
+      html += '<div class="stg-accessories">';
+      data.accessories.forEach(a => {
+        html += `<span class="stg-acc-chip">${a}</span>`;
+      });
+      html += '</div>';
+    }
+
+    // Document
+    if (data.doc) {
+      html += `<div class="stg-body-section" style="margin-top:16px;">${n === 1 ? 'Auction Sheet' : 'Document'}</div>`;
+      html += `<div class="stg-doc-row" onclick="event.stopPropagation(); showToast('Downloading ${data.doc.name}')">
+        <div class="stg-doc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="stg-doc-info">
+          <div class="stg-doc-name">${data.doc.name}</div>
+          <div class="stg-doc-meta">${data.doc.label} · ${data.doc.size}</div>
+        </div>
+        <div class="stg-doc-dl" onclick="event.stopPropagation(); showToast('Downloading...')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+      </div>`;
+    }
+
+    return html || '<div style="padding:8px 0;font-size:12.5px;color:var(--c-text-muted);">No details available yet.</div>';
+  }
+
+  function toggleStageRow(row) {
+    const isOpen = row.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.stg-row.open').forEach(r => r.classList.remove('open'));
+    // Toggle clicked
+    if (!isOpen) row.classList.add('open');
   }
 
   function navTo(tab, btn) {
