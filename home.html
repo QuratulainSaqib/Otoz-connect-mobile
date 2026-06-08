@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>otozflow · Dashboard</title>
+<title>Otoz Connect · Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -2463,6 +2463,8 @@
      STAGE TIMELINE SCREEN  — Clean full-width design
   ============================================================ */
   #stage-screen { z-index: 470; }
+  #bl-country-backdrop, #bl-city-backdrop { z-index: 480; }
+  #bl-country-sheet, #bl-city-sheet { z-index: 490; }
   #stage-screen .full-page-body { background: #f2f2f7; padding: 0 0 40px; }
   #stage-screen .full-page-nav  { background: #fff; border-bottom: 0.5px solid var(--c-divider); }
   /* vc-card inside stage screen — full width with margins */
@@ -2516,8 +2518,8 @@
   /* ── Header row ── */
   .stg-header {
     display: flex;
-    align-items: flex-start;
-    gap: 14px;
+    align-items: center;
+    gap: 10px;
     padding: 13px 16px 13px 18px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
@@ -2533,7 +2535,7 @@
     font-size: 13px; font-weight: 700;
     flex-shrink: 0;
     transition: all 0.25s ease;
-    margin-top: 1px;
+
   }
   /* Completed — green (web) */
   .stg-row.completed .stg-num {
@@ -2612,14 +2614,22 @@
   .stg-row.locked .stg-badge-dot    { background: #c0c0c5; }
 
   /* Chevron */
-  .stg-chev { width: 18px; height: 18px; color: #c0c0c8; transition: transform 0.26s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0; margin-top: 7px; }
+  .stg-right-col {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .stg-badge { margin-top: 0 !important; }
+  .stg-chev { width: 18px; height: 18px; color: #c0c0c8; transition: transform 0.26s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0; }
   .stg-chev svg { width: 18px; height: 18px; }
   .stg-row.open .stg-chev { transform: rotate(90deg); color: var(--c-text-muted); }
   .stg-row.locked .stg-chev { opacity: 0.3; }
 
   /* ── Expanded body ── */
   .stg-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
-  .stg-row.open .stg-body { max-height: 1400px; }
+  .stg-row.open .stg-body { max-height: 3000px; }
 
   .stg-body-inner {
     padding: 14px 16px 18px 18px;
@@ -2839,6 +2849,49 @@
     background: transparent;
   }
   .stg-dispatch-card .stg-field-row { border-bottom-color: #f5f5f7; }
+
+  /* Dispatch input form */
+  .stg-dispatch-hint-text {
+    font-size: 12px; color: var(--c-text-muted);
+    font-style: italic; margin-bottom: 14px;
+    padding: 0 2px;
+  }
+  .stg-dispatch-form-body {
+    display: flex; flex-direction: column; gap: 13px;
+  }
+  .con-picker-btn {
+    width: 100%; height: 42px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 12px 0 14px;
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .con-picker-btn:focus { border-color: var(--c-accent); box-shadow: 0 0 0 3px rgba(43,166,255,0.12); outline: none; }
+  .con-picker-label {
+    font-size: 14px; color: var(--c-text); font-family: inherit; font-weight: 400;
+  }
+  .con-picker-label.placeholder { color: #c5c5c7; }
+  .stg-dispatch-form-body .con-chev { position: static; width: 14px; height: 14px; color: var(--c-text-subtle); flex-shrink: 0; transform: none; }
+
+  /* Dispatch form collapsible */
+  .stg-dispatch-form {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+    opacity: 0;
+    margin-bottom: 0;
+  }
+  .stg-dispatch-form.open {
+    max-height: 800px;
+    opacity: 1;
+    margin-bottom: 10px;
+    padding: 14px 2px 4px;
+  }
+  .stg-hidden { display: none !important; }
 
   /* Send / Confirm button */
   .stg-bl-send-btn {
@@ -4443,6 +4496,44 @@
         </div>
 
       </div>
+
+      <!-- ===== BL DISPATCH — COUNTRY SHEET ===== -->
+      <div class="sheet-backdrop" id="bl-country-backdrop" onclick="closeBlCountrySheet()" style="border-radius:0;z-index:480;"></div>
+      <div class="bottom-sheet" id="bl-country-sheet" style="max-height:88%;z-index:490;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <button class="sheet-back-btn" onclick="closeBlCountrySheet()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+          </button>
+          <div class="sheet-title">Select Country</div>
+          <button class="sheet-action-btn" onclick="clearBlCountry()">Clear</button>
+        </div>
+        <div class="picker-search-wrap">
+          <div class="picker-search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="bl-country-search" class="picker-search-input" placeholder="Search countries…" oninput="filterBlCountryList(this.value)" autocomplete="off">
+            <button class="picker-search-clear" id="bl-country-search-clear" onclick="clearBlCountrySearch()" style="display:none">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div style="flex:1;overflow-y:auto;"><div class="stage-list" id="bl-country-list"></div></div>
+      </div>
+
+      <!-- ===== BL DISPATCH — CITY SHEET ===== -->
+      <div class="sheet-backdrop" id="bl-city-backdrop" onclick="closeBlCitySheet()" style="border-radius:0;z-index:480;"></div>
+      <div class="bottom-sheet" id="bl-city-sheet" style="max-height:88%;z-index:490;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <button class="sheet-back-btn" onclick="closeBlCitySheet()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+          </button>
+          <div class="sheet-title" id="bl-city-sheet-title">Select City</div>
+          <button class="sheet-action-btn" onclick="clearBlCitySelection()">Clear</button>
+        </div>
+        <div style="flex:1;overflow-y:auto;"><div class="stage-list" id="bl-city-list"></div></div>
+      </div>
+
     </div>
 
     <!-- ===== YARD IMAGE LIGHTBOX ===== -->
@@ -6290,8 +6381,10 @@
             <div class="stg-title">${meta.name}</div>
             <div class="stg-sub">${sub}</div>
           </div>
-          ${badge}
-          <div class="stg-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+          <div class="stg-right-col">
+            ${badge}
+            <div class="stg-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+          </div>
         </div>
         <div class="stg-body"><div class="stg-body-inner">${body}</div></div>
       </div>`;
@@ -6359,18 +6452,22 @@
 
       // 4. BL Method selector
       const method = data.blMethod || 'surrender';
+      const blUid = `bl-${n}`;
+      // Pre-populate BL country/city state if dispatch data already exists
+      if (d.country) { _blSelectedCountry[blUid] = d.country; }
+      if (d.city)    { _blSelectedCity[blUid]    = d.city; }
       html += `<div class="stg-body-section" style="margin-top:16px;">Bill of Lading Method</div>`;
       html += `<div class="stg-bl-method-grid">
-        <label class="stg-bl-card ${method === 'surrender' ? 'selected' : ''}">
-          <input type="radio" name="bl-method-${n}" value="surrender" ${method === 'surrender' ? 'checked' : ''} onchange="event.stopPropagation()">
+        <label class="stg-bl-card ${method === 'surrender' ? 'selected' : ''}" onclick="event.stopPropagation(); selectBlMethodMobile('surrender','${blUid}')">
+          <input type="radio" name="bl-method-${blUid}" value="surrender" ${method === 'surrender' ? 'checked' : ''}>
           <span class="stg-bl-radio"><span class="stg-bl-radio-dot"></span></span>
           <span class="stg-bl-text">
             <span class="stg-bl-title">Surrender</span>
             <span class="stg-bl-sub">Buyer collects from origin</span>
           </span>
         </label>
-        <label class="stg-bl-card ${method === 'dispatch' ? 'selected' : ''}">
-          <input type="radio" name="bl-method-${n}" value="dispatch" ${method === 'dispatch' ? 'checked' : ''} onchange="event.stopPropagation()">
+        <label class="stg-bl-card ${method === 'dispatch' ? 'selected' : ''}" onclick="event.stopPropagation(); selectBlMethodMobile('dispatch','${blUid}')">
+          <input type="radio" name="bl-method-${blUid}" value="dispatch" ${method === 'dispatch' ? 'checked' : ''}>
           <span class="stg-bl-radio"><span class="stg-bl-radio-dot"></span></span>
           <span class="stg-bl-text">
             <span class="stg-bl-title">Dispatch</span>
@@ -6379,26 +6476,69 @@
         </label>
       </div>`;
 
-      // 5. Dispatch details card (read-only for mobile view)
-      if (method === 'dispatch' && d.name) {
-        html += `<div class="stg-dispatch-card">
-          <div class="stg-dispatch-hint">Dispatch details</div>
-          <div class="stg-fields">
-            <div class="stg-field-row"><span class="stg-field-key">Name</span><span class="stg-field-val">${d.name}</span></div>
-            <div class="stg-field-row"><span class="stg-field-key">Address</span><span class="stg-field-val">${d.address}</span></div>
-            <div class="stg-field-row"><span class="stg-field-key">City</span><span class="stg-field-val">${d.city}, ${d.country}</span></div>
-            <div class="stg-field-row"><span class="stg-field-key">Postal Code</span><span class="stg-field-val">${d.postalCode}</span></div>
-            <div class="stg-field-row"><span class="stg-field-key">Email</span><span class="stg-field-val" style="word-break:break-all;">${d.email}</span></div>
-            <div class="stg-field-row"><span class="stg-field-key">Phone</span><span class="stg-field-val">${d.phone}</span></div>
+      // 5. Dispatch details form (collapsible — shown when dispatch is selected)
+      const dispatchOpen = method === 'dispatch';
+      html += `<div class="stg-dispatch-form ${dispatchOpen ? 'open' : ''}" id="${blUid}-dispatch-form">
+        <div class="stg-dispatch-hint-text">Dispatch details — filled by agent</div>
+        <div class="stg-dispatch-form-body">
+          <div class="con-field">
+            <label class="con-label">Name <span class="con-req">*</span></label>
+            <input type="text" class="con-input" id="${blUid}-bl-name" placeholder="Recipient name" value="${d.name || ''}" onclick="event.stopPropagation()">
           </div>
-        </div>`;
-      }
+          <div class="con-field">
+            <label class="con-label">Address <span class="con-req">*</span></label>
+            <input type="text" class="con-input" id="${blUid}-bl-address" placeholder="Street address" value="${d.address || ''}" onclick="event.stopPropagation()">
+          </div>
+          <div class="con-field">
+            <label class="con-label">Country <span class="con-req">*</span></label>
+            <button class="con-picker-btn" onclick="event.stopPropagation(); openBlCountrySheet('${blUid}')" type="button">
+              <span class="con-picker-label ${d.country ? '' : 'placeholder'}" id="${blUid}-bl-country-label">${d.country ? (CON_COUNTRY_DATA[d.country] ? CON_COUNTRY_DATA[d.country].flag + ' ' : '') + d.country : 'Select Country'}</span>
+              <svg class="con-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+          <div class="con-field">
+            <label class="con-label">City <span class="con-req">*</span></label>
+            <button class="con-picker-btn" onclick="event.stopPropagation(); openBlCitySheet('${blUid}')" type="button">
+              <span class="con-picker-label ${d.city ? '' : 'placeholder'}" id="${blUid}-bl-city-label">${d.city || 'Select City'}</span>
+              <svg class="con-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+          <div class="con-field">
+            <label class="con-label">Postal Code</label>
+            <input type="text" class="con-input" id="${blUid}-bl-postal" placeholder="Enter postal code" value="${d.postalCode || ''}" onclick="event.stopPropagation()">
+          </div>
+          <div class="con-field">
+            <label class="con-label">Email <span class="con-req">*</span></label>
+            <input type="email" class="con-input" id="${blUid}-bl-email" placeholder="email@example.com" value="${d.email || ''}" onclick="event.stopPropagation()">
+          </div>
+          <div class="con-field">
+            <label class="con-label">Phone Number <span class="con-req">*</span></label>
+            <div class="con-phone-wrap">
+              <div class="con-phone-prefix">
+                <span class="con-phone-flag" id="${blUid}-bl-phone-flag">${d.country && CON_COUNTRY_DATA[d.country] ? CON_COUNTRY_DATA[d.country].flag : '🌐'}</span>
+                <span class="con-phone-code" id="${blUid}-bl-phone-code">${d.country && CON_COUNTRY_DATA[d.country] ? CON_COUNTRY_DATA[d.country].code : '+'}</span>
+              </div>
+              <input type="tel" class="con-input con-phone-input" id="${blUid}-bl-phone" placeholder="Phone number" value="${d.phoneLocal || ''}" onclick="event.stopPropagation()">
+            </div>
+          </div>
+        </div>
+      </div>`;
 
-      // 6. Confirm button
-      html += `<button class="stg-bl-send-btn" onclick="event.stopPropagation(); showToast('${method === 'dispatch' ? 'Dispatch confirmed!' : 'Surrender confirmed!'}')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        ${method === 'dispatch' ? 'Confirm Dispatch' : 'Confirm Surrender'}
-      </button>`;
+      // 6. Confirm Surrender button (shown only when surrender is selected)
+      html += `<div class="stg-surrender-actions ${dispatchOpen ? 'stg-hidden' : ''}" id="${blUid}-surrender-actions">
+        <button class="stg-bl-send-btn" onclick="event.stopPropagation(); showToast('Surrender confirmed!')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Confirm Surrender
+        </button>
+      </div>`;
+
+      // 7. Confirm Dispatch button (shown only when dispatch is selected)
+      html += `<div class="stg-dispatch-actions ${dispatchOpen ? '' : 'stg-hidden'}" id="${blUid}-dispatch-actions">
+        <button class="stg-bl-send-btn" onclick="event.stopPropagation(); showToast('Dispatch confirmed!')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Confirm Dispatch
+        </button>
+      </div>`;
 
       return html;
     }
@@ -7140,6 +7280,144 @@
     if (e.key === 'ArrowRight') yiLbGoTo(_yiCurrent + 1);
     if (e.key === 'Escape')     closeYiLightbox();
   });
+
+  // ===== BL Dispatch — Dedicated Country & City Sheets =====
+  let _blActiveUid = '';
+  let _blSelectedCountry = {};  // uid -> country
+  let _blSelectedCity    = {};  // uid -> city
+
+  function openBlCountrySheet(uid) {
+    _blActiveUid = uid;
+    const input = document.getElementById('bl-country-search');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('bl-country-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    renderBlCountryList('');
+    document.getElementById('bl-country-backdrop').classList.add('show');
+    document.getElementById('bl-country-sheet').classList.add('show');
+  }
+
+  function closeBlCountrySheet() {
+    document.getElementById('bl-country-backdrop').classList.remove('show');
+    document.getElementById('bl-country-sheet').classList.remove('show');
+  }
+
+  function filterBlCountryList(val) {
+    const clearBtn = document.getElementById('bl-country-search-clear');
+    if (clearBtn) clearBtn.style.display = val ? 'flex' : 'none';
+    renderBlCountryList(val);
+  }
+
+  function clearBlCountrySearch() {
+    const input = document.getElementById('bl-country-search');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('bl-country-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    renderBlCountryList('');
+  }
+
+  function clearBlCountry() {
+    const uid = _blActiveUid;
+    _blSelectedCountry[uid] = '';
+    _blSelectedCity[uid] = '';
+    const label = document.getElementById(`${uid}-bl-country-label`);
+    if (label) { label.textContent = 'Select Country'; label.classList.add('placeholder'); }
+    const cityLabel = document.getElementById(`${uid}-bl-city-label`);
+    if (cityLabel) { cityLabel.textContent = 'Select City'; cityLabel.classList.add('placeholder'); }
+    const flagEl = document.getElementById(`${uid}-bl-phone-flag`);
+    const codeEl = document.getElementById(`${uid}-bl-phone-code`);
+    if (flagEl) flagEl.textContent = '🌐';
+    if (codeEl) codeEl.textContent = '+';
+    renderBlCountryList('');
+  }
+
+  function renderBlCountryList(q) {
+    const uid = _blActiveUid;
+    const cur = _blSelectedCountry[uid] || '';
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    const filtered = q ? CON_COUNTRIES.filter(c => c.toLowerCase().includes(q.toLowerCase())) : CON_COUNTRIES;
+    document.getElementById('bl-country-list').innerHTML = filtered.length
+      ? filtered.map(c => `<button class="stage-list-item" onclick="selectBlCountry('${c}')">
+          <span style="font-size:18px;flex-shrink:0;">${CON_COUNTRY_DATA[c].flag}</span>
+          <span class="stage-list-label">${c}</span>
+          <span class="stage-check">${cur===c ? checkSVG : ''}</span>
+        </button>`).join('')
+      : `<div class="picker-empty">No countries found</div>`;
+  }
+
+  function selectBlCountry(country) {
+    const uid = _blActiveUid;
+    _blSelectedCountry[uid] = country;
+    _blSelectedCity[uid] = '';
+    const label = document.getElementById(`${uid}-bl-country-label`);
+    if (label) { label.textContent = CON_COUNTRY_DATA[country].flag + ' ' + country; label.classList.remove('placeholder'); }
+    const cityLabel = document.getElementById(`${uid}-bl-city-label`);
+    if (cityLabel) { cityLabel.textContent = 'Select City'; cityLabel.classList.add('placeholder'); }
+    const flagEl = document.getElementById(`${uid}-bl-phone-flag`);
+    const codeEl = document.getElementById(`${uid}-bl-phone-code`);
+    if (flagEl) flagEl.textContent = CON_COUNTRY_DATA[country].flag;
+    if (codeEl) codeEl.textContent = CON_COUNTRY_DATA[country].code;
+    setTimeout(() => closeBlCountrySheet(), 180);
+  }
+
+  function openBlCitySheet(uid) {
+    _blActiveUid = uid;
+    const country = _blSelectedCountry[uid] || '';
+    if (!country) { showToast('Please select a country first'); return; }
+    const title = document.getElementById('bl-city-sheet-title');
+    if (title) title.textContent = 'Cities — ' + country;
+    const cur = _blSelectedCity[uid] || '';
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    const cities = (CON_COUNTRY_DATA[country] && CON_COUNTRY_DATA[country].cities) ? CON_COUNTRY_DATA[country].cities : [];
+    document.getElementById('bl-city-list').innerHTML = cities.length
+      ? cities.map(c => `<button class="stage-list-item" onclick="selectBlCity('${c}')">
+          <span class="stage-list-label">${c}</span>
+          <span class="stage-check">${cur===c ? checkSVG : ''}</span>
+        </button>`).join('')
+      : `<div class="picker-empty">No cities available</div>`;
+    document.getElementById('bl-city-backdrop').classList.add('show');
+    document.getElementById('bl-city-sheet').classList.add('show');
+  }
+
+  function closeBlCitySheet() {
+    document.getElementById('bl-city-backdrop').classList.remove('show');
+    document.getElementById('bl-city-sheet').classList.remove('show');
+  }
+
+  function clearBlCitySelection() {
+    const uid = _blActiveUid;
+    _blSelectedCity[uid] = '';
+    const el = document.getElementById(`${uid}-bl-city-label`);
+    if (el) { el.textContent = 'Select City'; el.classList.add('placeholder'); }
+    closeBlCitySheet();
+  }
+
+  function selectBlCity(city) {
+    const uid = _blActiveUid;
+    _blSelectedCity[uid] = city;
+    const el = document.getElementById(`${uid}-bl-city-label`);
+    if (el) { el.textContent = city; el.classList.remove('placeholder'); }
+    setTimeout(() => closeBlCitySheet(), 180);
+  }
+
+  // ===== Unit Received — BL Method Toggle =====
+  function selectBlMethodMobile(method, uid) {
+    const grid = document.querySelector('input[name="bl-method-' + uid + '"]')?.closest('.stg-bl-method-grid');
+    if (grid) {
+      grid.querySelectorAll('.stg-bl-card').forEach(c => c.classList.remove('selected'));
+      const radio = grid.querySelector('input[value="' + method + '"]');
+      if (radio) {
+        radio.checked = true;
+        radio.closest('.stg-bl-card').classList.add('selected');
+      }
+    }
+    const dispatchForm = document.getElementById(uid + '-dispatch-form');
+    if (dispatchForm) dispatchForm.classList.toggle('open', method === 'dispatch');
+    const surrenderActions = document.getElementById(uid + '-surrender-actions');
+    const dispatchActions  = document.getElementById(uid + '-dispatch-actions');
+    if (surrenderActions) surrenderActions.classList.toggle('stg-hidden', method === 'dispatch');
+    if (dispatchActions)  dispatchActions.classList.toggle('stg-hidden', method !== 'dispatch');
+  }
 
   render();
 
