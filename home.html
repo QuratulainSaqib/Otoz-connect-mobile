@@ -2433,69 +2433,17 @@
      STAGE TIMELINE SCREEN  — Clean full-width design
   ============================================================ */
   #stage-screen { z-index: 470; }
-  #stage-screen .full-page-body { background: #f2f2f7; padding: 0 0 32px; }
+  #stage-screen .full-page-body { background: #f2f2f7; padding: 0 0 40px; }
   #stage-screen .full-page-nav  { background: #fff; border-bottom: 0.5px solid var(--c-divider); }
-
-  /* ── Vehicle strip — full bleed, no side margins ── */
-  .stg-vehicle-strip {
-    background: linear-gradient(135deg, #1a2e4a 0%, #0f1f35 100%);
-    margin: 16px 16px 0;
-    border-radius: 16px 16px 0 0;
-    padding: 14px 16px 14px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .stg-vs-img {
-    width: 62px; height: 48px;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.1);
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-  .stg-vs-info { flex: 1; min-width: 0; }
-  .stg-vs-name {
-    font-size: 16px; font-weight: 700; color: #fff;
-    letter-spacing: -0.02em; line-height: 1.2;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .stg-vs-chassis {
-    font-size: 10.5px; color: rgba(255,255,255,0.45);
-    font-weight: 500; margin-top: 3px;
-    letter-spacing: 0.06em; font-family: 'SF Mono', Menlo, monospace;
-  }
-  .stg-vs-dest {
-    display: flex; align-items: center; gap: 4px;
-    margin-top: 6px; font-size: 12px; color: rgba(255,255,255,0.65);
-  }
-  .stg-vs-dest svg { width: 12px; height: 12px; flex-shrink: 0; }
-
-  /* Progress bar strip below vehicle banner */
-  .stg-progress-strip {
-    background: #1a2e4a;
-    margin: 0 16px 16px;
-    border-radius: 0 0 16px 16px;
-    padding: 4px 14px 12px;
-    display: flex;
-    align-items: center;
-    gap: 3px;
-  }
-  .stg-progress-seg {
-    flex: 1;
-    height: 3px;
-    border-radius: 2px;
-    background: rgba(255,255,255,0.18);
-    transition: background 0.3s ease;
-  }
-  .stg-progress-seg.done  { background: #30c46d; }
-  .stg-progress-seg.active{ background: #fff; }
+  /* vc-card inside stage screen — full width with margins */
+  #stage-screen .vc-card { margin: 16px 16px 0; border-radius: 16px; }
 
   /* ── Section label ── */
   .stg-section-label {
     font-size: 10.5px; font-weight: 700;
     color: var(--c-text-muted);
     text-transform: uppercase; letter-spacing: 0.1em;
-    padding: 14px 20px 6px;
+    padding: 12px 20px 6px;
   }
 
   /* ── Accordion list ── */
@@ -2687,29 +2635,84 @@
   /* Doc row */
   .stg-doc-row {
     display: flex; align-items: center; gap: 12px;
-    padding: 11px 13px;
+    padding: 12px 13px;
     background: #fff;
-    border: 0.5px solid var(--c-divider);
+    border: 1px solid var(--c-divider);
     border-radius: 12px;
+    transition: all 0.18s ease;
   }
+  .stg-doc-row:active { transform: scale(0.98); }
+  /* doc thumbnail — matches web doc-thumb exactly */
   .stg-doc-icon {
-    width: 36px; height: 40px; border-radius: 8px;
-    background: linear-gradient(180deg, #fff 0%, #f4f4f7 100%);
-    border: 0.5px solid var(--c-divider);
+    width: 40px; height: 48px; border-radius: 8px;
+    background: linear-gradient(180deg, #ffffff 0%, #f4f4f7 100%);
+    border: 1px solid var(--c-divider);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 1px 2px rgba(0,0,0,0.04);
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0; color: var(--c-text-muted);
   }
-  .stg-doc-icon svg { width: 16px; height: 18px; }
+  .stg-doc-icon svg { width: 18px; height: 22px; }
   .stg-doc-info { flex: 1; min-width: 0; }
-  .stg-doc-name { font-size: 12.5px; font-weight: 600; color: var(--c-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .stg-doc-name { font-size: 12.5px; font-weight: 700; color: var(--c-text); word-break: break-word; }
   .stg-doc-meta { font-size: 11px; color: var(--c-text-muted); margin-top: 1px; }
+  /* download button — matches web inv-act.primary: dark navy bg, white icon */
   .stg-doc-dl {
-    width: 32px; height: 32px; border-radius: 8px;
-    background: rgba(43,166,255,0.08); border: none;
+    width: 34px; height: 34px; border-radius: 8px;
+    background: #173559;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 2px 6px rgba(23,53,89,0.25);
+    border: none;
     display: flex; align-items: center; justify-content: center;
-    color: var(--c-accent); cursor: pointer; flex-shrink: 0;
+    color: #fff; cursor: pointer; flex-shrink: 0;
+    transition: all 0.18s ease;
   }
+  .stg-doc-dl:active { transform: translateY(1px); box-shadow: 0 1px 3px rgba(23,53,89,0.2); }
   .stg-doc-dl svg { width: 14px; height: 14px; }
+
+  /* ====== Stage 3 — Export Certificate Docs ====== */
+  .ec-doc-section-head {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 10.5px; font-weight: 700; color: var(--c-text-muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin: 16px 0 8px;
+  }
+  .ec-doc-section-head svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .ec-docs-list { display: flex; flex-direction: column; gap: 8px; }
+
+  /* ====== Stage 4 — Status Pill (Pass/Fail) ====== */
+  .stg-status-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px 4px 8px;
+    border-radius: 999px;
+    font-size: 12px; font-weight: 700; letter-spacing: -0.005em;
+    border: 1px solid transparent;
+    line-height: 1;
+  }
+  .stg-status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor; opacity: 0.9; flex-shrink: 0;
+  }
+  .stg-status-pill--success {
+    background: rgba(48,196,109,0.12); color: #047857;
+    border-color: rgba(48,196,109,0.22);
+  }
+  .stg-status-pill--warning {
+    background: rgba(245,180,0,0.14); color: #92670a;
+    border-color: rgba(245,180,0,0.28);
+  }
+  .stg-status-pill--danger {
+    background: rgba(255,59,48,0.10); color: #b91c1c;
+    border-color: rgba(255,59,48,0.22);
+  }
+
+  /* ====== Stage 5 — Shipment fieldDividers ====== */
+  .stg-divider {
+    height: 1px; background: var(--c-divider); margin: 14px 0;
+  }
+  .stg-section-heading {
+    font-size: 11px; font-weight: 700; color: var(--c-text-muted);
+    letter-spacing: 0; margin-bottom: 8px; text-transform: none;
+  }
 
   /* Accessories chips */
   .stg-accessories { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -2721,6 +2724,142 @@
     border-radius: 999px;
     font-size: 11.5px; font-weight: 600; color: var(--c-accent);
   }
+
+  /* ====== Stage 8 — Unit Received ====== */
+  .stg-ps-line {
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .stg-ps-percent {
+    font-size: 18px; font-weight: 800; color: #047857; letter-spacing: -0.02em;
+  }
+  .stg-ps-label {
+    font-size: 13.5px; font-weight: 700; color: #047857; letter-spacing: -0.01em;
+  }
+  .stg-ps-check {
+    width: 18px; height: 18px; color: #047857;
+    background: rgba(48,196,109,0.12); padding: 3px;
+    border-radius: 50%; flex-shrink: 0;
+  }
+
+  /* BL method radio cards */
+  .stg-bl-method-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin-bottom: 10px;
+  }
+  .stg-bl-card {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 13px;
+    background: #fff;
+    border: 1.5px solid var(--c-divider);
+    border-radius: 13px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .stg-bl-card input { display: none; }
+  .stg-bl-card.selected {
+    border-color: #30c46d;
+    background: linear-gradient(180deg, #f0fdf4 0%, #ecfdf5 100%);
+    box-shadow: 0 0 0 3px rgba(48,196,109,0.12);
+  }
+  .stg-bl-radio {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 1.5px solid var(--c-divider);
+    background: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.18s;
+  }
+  .stg-bl-radio-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: transparent; transition: all 0.18s;
+  }
+  .stg-bl-card.selected .stg-bl-radio { border-color: #30c46d; }
+  .stg-bl-card.selected .stg-bl-radio-dot {
+    background: #30c46d;
+    box-shadow: 0 0 0 3px rgba(48,196,109,0.16);
+  }
+  .stg-bl-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .stg-bl-title { font-size: 13px; font-weight: 700; color: var(--c-text); letter-spacing: -0.01em; }
+  .stg-bl-card.selected .stg-bl-title { color: #047857; }
+  .stg-bl-sub { font-size: 10px; color: var(--c-text-muted); font-weight: 500; }
+
+  /* Dispatch details card */
+  .stg-dispatch-card {
+    background: #fff;
+    border: 0.5px solid var(--c-divider);
+    border-radius: 13px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .stg-dispatch-hint {
+    padding: 10px 14px 0;
+    font-size: 10.5px; font-weight: 700; color: var(--c-text-muted);
+    text-transform: uppercase; letter-spacing: 0.07em;
+  }
+  .stg-dispatch-card .stg-fields {
+    border: none; border-radius: 0;
+    background: transparent;
+  }
+  .stg-dispatch-card .stg-field-row { border-bottom-color: #f5f5f7; }
+
+  /* Send / Confirm button */
+  .stg-bl-send-btn {
+    width: 100%; height: 44px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: #173559; color: #fff;
+    border: none; border-radius: 12px;
+    font-family: inherit; font-size: 14px; font-weight: 600;
+    letter-spacing: -0.01em; cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 10px rgba(23,53,89,0.25);
+    transition: all 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .stg-bl-send-btn:active { transform: scale(0.98); box-shadow: 0 2px 6px rgba(23,53,89,0.2); }
+  .stg-bl-send-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* ====== Stage 7 — Finance Status: Highlight value & Payment Cards ====== */
+  .stg-highlight {
+    font-size: 17px; font-weight: 700; letter-spacing: -0.02em;
+  }
+  .stg-highlight--success { color: #047857; }
+  .stg-highlight--warning { color: #92670a; }
+  .stg-highlight--danger  { color: #b91c1c; }
+  .stg-highlight--info    { color: #0058c7; }
+
+  .stg-payment-summary {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+  .stg-payment-card {
+    padding: 12px 13px;
+    border-radius: 13px;
+    border: 1px solid var(--c-divider);
+    position: relative; overflow: hidden;
+  }
+  .stg-payment-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  }
+  .stg-payment-label {
+    font-size: 10px; font-weight: 600; text-transform: capitalize;
+    letter-spacing: 0.06em; color: var(--c-text-muted); margin-bottom: 5px;
+  }
+  .stg-payment-value {
+    font-size: 19px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.1;
+  }
+  .stg-payment-card--success {
+    background: linear-gradient(180deg, #f0fdf4 0%, #ecfdf5 100%);
+    border-color: rgba(48,196,109,0.22);
+  }
+  .stg-payment-card--success::before { background: linear-gradient(180deg, #30c46d, #4adf86); }
+  .stg-payment-card--success .stg-payment-value { color: #047857; }
+  .stg-payment-card--warning {
+    background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+    border-color: rgba(245,180,0,0.32);
+  }
+  .stg-payment-card--warning::before { background: linear-gradient(180deg, #f59e0b, #fbbf24); }
+  .stg-payment-card--warning .stg-payment-value { color: #92670a; }
+  .stg-payment-card--neutral { background: #fff; }
+  .stg-payment-card--neutral::before { background: var(--c-divider); }
+  .stg-payment-card--neutral .stg-payment-value { color: var(--c-text); }
 
   /* Locked hint */
   .stg-locked-hint {
@@ -4254,30 +4393,8 @@
       </div>
       <div class="full-page-body">
 
-        <!-- Vehicle strip + progress bar (full bleed) -->
-        <div class="stg-vehicle-strip" id="stg-vehicle-strip">
-          <img class="stg-vs-img" id="stg-vs-img" src="" alt="">
-          <div class="stg-vs-info">
-            <div class="stg-vs-name" id="stg-vs-name">Toyota Raize · 2022</div>
-            <div class="stg-vs-chassis" id="stg-vs-chassis">WDC2539052F422655</div>
-            <div class="stg-vs-dest">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              <span id="stg-vs-dest">Mombasa Port</span>
-            </div>
-          </div>
-          <div id="stg-vs-badge" style="display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;gap:4px;"></div>
-        </div>
-        <!-- 8-segment progress bar -->
-        <div class="stg-progress-strip" id="stg-progress-strip">
-          <div class="stg-progress-seg" data-n="1"></div>
-          <div class="stg-progress-seg" data-n="2"></div>
-          <div class="stg-progress-seg" data-n="3"></div>
-          <div class="stg-progress-seg" data-n="4"></div>
-          <div class="stg-progress-seg" data-n="5"></div>
-          <div class="stg-progress-seg" data-n="6"></div>
-          <div class="stg-progress-seg" data-n="7"></div>
-          <div class="stg-progress-seg" data-n="8"></div>
-        </div>
+        <!-- Simple vehicle info card (same as add sale) -->
+        <div class="vc-card" id="stg-vc-card" style="margin:16px 16px 0;"></div>
 
         <!-- Section label -->
         <div class="stg-section-label">STAGES</div>
@@ -5982,42 +6099,110 @@
         { angle: 'Under' },
       ]
     },
-    3: { sub: 'Export certificate issued', doneSub: 'Export documents available.', locked_hint: 'Export Certificate will be issued within <b>15 days</b> of Purchase Date' },
-    4: { sub: 'Inspection completed · Pass', doneSub: 'Inspection certificate available.', locked_hint: 'Inspection Certificate should be uploaded within <b>20 days</b>' },
-    5: { sub: 'Vessel in transit', doneSub: 'Vessel booking confirmed.', locked_hint: 'Shipment details available within <b>30 days</b> of Purchase Date' },
-    6: { sub: 'Bill of Lading ready', doneSub: 'BL document available.', locked_hint: 'Please add the consignee to issue <b>Bill of Lading</b> copy' },
-    7: { sub: 'Finance overview', doneSub: 'Settlement summary available.', locked_hint: 'Complete <b>Bill of Lading</b> first to unlock' },
-    8: { sub: 'Unit received · payment complete', doneSub: 'Vehicle handover completed.', locked_hint: 'Complete <b>Finance Status</b> first to unlock' },
+    3: {
+      sub: 'Export certificate issued · JP & EN versions available',
+      doneSub: 'Official export documents uploaded in Japanese & English versions.',
+      locked_hint: 'Export Certificate will be issued within <b>15 days</b> of Purchase Date',
+      fields: [
+        ['Upload EC Date', '18 / 08 / 2026'],
+      ],
+      ecDocs: [
+        { name: 'Export_Certificate_JP.pdf', lang: 'JP', size: '890 KB' },
+        { name: 'Export_Certificate_EN.pdf', lang: 'EN', size: '1.1 MB' },
+      ],
+    },
+    4: {
+      sub: 'Inspection completed · result: <b>Pass</b>',
+      doneSub: 'Final inspection certificate and verification status updated.',
+      locked_hint: 'Inspection Certificate should be uploaded within <b>20 days</b> of Purchase Date',
+      fields: [
+        ['Inspection Date',   '25 / 08 / 2026'],
+        ['Inspection Status', { kind: 'status-pill', value: 'Pass', tone: 'success' }],
+      ],
+      inspectionDoc: { name: 'Inspection_Certificate_A00150.pdf' },
+      docTitle: 'Inspection Certificate',
+    },
+    5: {
+      sub: 'Vessel in transit',
+      doneSub: 'Vessel booking confirmed and shipping schedule updated.',
+      locked_hint: 'Shipment details available within <b>30 days</b> of Purchase Date',
+      fieldDividers: [
+        {
+          title: 'Vessel',
+          fields: [['Vessel Name', 'MV Sakura Express']]
+        },
+        {
+          title: 'Departure',
+          fields: [
+            ['Port of Loading', 'Yokohama, Japan'],
+            ['ETD (Departure)',  '02 / 09 / 2026'],
+          ]
+        },
+        {
+          title: 'Arrival',
+          fields: [
+            ['Destination Port', 'Durban, South Africa'],
+            ['ETA (Arrival)',    '05 / 10 / 2026'],
+          ]
+        }
+      ],
+    },
+    6: {
+      sub: 'Copy Bill of Lading uploaded · ready to view',
+      doneSub: 'Official Bill of Lading (BL) document available for download.',
+      locked_hint: 'Please add the consignee to issue <b>Bill of Lading</b> copy',
+      fields: [
+        ['Shipment Tracking', '0123243s44vdgfg55'],
+      ],
+      blDoc: { name: 'Bill_of_Lading_Copy_A00116.pdf' },
+      docTitle: 'Copy Bill of Lading',
+      blUploadDate: '22 / 09 / 2026',
+      amendedBL: {
+        updatedDate: '15 / 10 / 2026',
+        doc: { name: 'Amended_Bill_of_Lading_A00116.pdf' }
+      },
+    },
+    7: {
+      sub: 'Final settlement & remaining payment overview',
+      doneSub: 'Total cost, paid amount, and remaining balance summary.',
+      locked_hint: 'Complete <b>Bill of Lading</b> first to unlock',
+      fields: [
+        ['PURCH. CURR.',  'USD'],
+        ['Purchase Price', { kind: 'highlight', value: '16,120', tone: 'success' }],
+        ['ETD Date',      '05 / 10 / 2026'],
+      ],
+      paymentSummary: [
+        { label: 'Allocated Amount', value: '$3,450',  tone: 'success' },
+        { label: 'Remaining Amount', value: '$12,670', tone: 'warning' },
+      ],
+    },
+    8: {
+      sub: 'Payment 100% completed · Original BL ready for handover',
+      doneSub: '100% payment settled and vehicle handover completed.',
+      locked_hint: 'Complete <b>Finance Status</b> first to unlock',
+      unitReceived: true,
+      paymentStatus: { percent: 100, label: 'Completed' },
+      docTracking: { company: 'DHL', trackingNo: '0123243s44vdgfg55' },
+      blDoc: { name: 'Original_Bill_of_Lading_A00116.pdf' },
+      blMethod: 'dispatch',
+      dispatch: {
+        name:       'John Mwangi',
+        address:    '14 Samora Machel Ave, CBD',
+        country:    'Zimbabwe',
+        city:       'Harare',
+        postalCode: '00263',
+        email:      'john.mwangi@example.com',
+        phone:      '+263 77 123 4567',
+      },
+    },
   };
 
   function openVehicleStage(id) {
     const v = vehicles.find(x => x.id === id);
     if (!v) return;
 
-    // Vehicle strip
-    document.getElementById('stg-vs-name').textContent    = v.make + ' ' + v.model + ' · ' + v.year;
-    document.getElementById('stg-vs-chassis').textContent = v.chassis;
-    document.getElementById('stg-vs-dest').textContent    = v.port || 'Destination TBC';
-
-    // Stage badge in strip
-    const stageMeta = stagesMeta[v.stage];
-    const badgeArea = document.getElementById('stg-vs-badge');
-    if (badgeArea && stageMeta) {
-      const c = STAGE_COLORS[v.stage] || '#2BA6FF';
-      badgeArea.innerHTML = `
-        <span style="font-size:10px;color:rgba(255,255,255,0.5);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;">Stage</span>
-        <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:${c};border-radius:999px;font-size:11px;font-weight:700;color:#fff;">
-          ${v.stage} · ${stageMeta.name}
-        </span>`;
-    }
-
-    // Progress bar
-    document.querySelectorAll('.stg-progress-seg').forEach(seg => {
-      const n = parseInt(seg.dataset.n);
-      seg.classList.remove('done','active');
-      if (n < v.stage)      seg.classList.add('done');
-      else if (n === v.stage) seg.classList.add('active');
-    });
+    // Vehicle info card — same as add sale sheet
+    document.getElementById('stg-vc-card').innerHTML = buildVcCard(v);
 
     // Build accordion
     document.getElementById('stg-list').innerHTML = buildStageList(v.stage);
@@ -6086,6 +6271,141 @@
 
     let html = '';
 
+    // ===== STAGE 8 — Unit Received =====
+    if (data.unitReceived) {
+      const ps = data.paymentStatus || { percent: 0, label: '' };
+      const d  = data.dispatch || {};
+
+      // 1. Payment Status row
+      html += `<div class="stg-fields">
+        <div class="stg-field-row">
+          <span class="stg-field-key">Payment Status</span>
+          <span class="stg-field-val">
+            <span class="stg-ps-line">
+              <span class="stg-ps-percent">${ps.percent}%</span>
+              <span class="stg-ps-label">${ps.label}</span>
+              <svg class="stg-ps-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </span>
+        </div>
+      </div>`;
+
+      // 2. Document Tracking
+      if (data.docTracking) {
+        html += '<div class="stg-divider"></div>';
+        html += `<div class="stg-body-section" style="margin-top:0;">Document Tracking</div>`;
+        html += `<div class="stg-fields">
+          <div class="stg-field-row">
+            <span class="stg-field-key">Company</span>
+            <span class="stg-field-val">${data.docTracking.company}</span>
+          </div>
+          <div class="stg-field-row">
+            <span class="stg-field-key">Tracking No.</span>
+            <span class="stg-field-val" style="font-family:monospace;font-size:11.5px;">${data.docTracking.trackingNo}</span>
+          </div>
+        </div>`;
+      }
+
+      // 3. Original BL doc
+      html += '<div class="stg-divider"></div>';
+      html += `<div class="stg-body-section" style="margin-top:0;">Original Bill of Lading</div>`;
+      html += `<div class="stg-doc-row" onclick="event.stopPropagation(); showToast('Downloading ${data.blDoc.name}...')">
+        <div class="stg-doc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="stg-doc-info">
+          <div class="stg-doc-name">${data.blDoc.name}</div>
+        </div>
+        <div class="stg-doc-dl" onclick="event.stopPropagation(); showToast('Downloading...')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+      </div>`;
+
+      // 4. BL Method selector
+      const method = data.blMethod || 'surrender';
+      html += '<div class="stg-divider"></div>';
+      html += `<div class="stg-body-section" style="margin-top:0;">Bill of Lading Method</div>`;
+      html += `<div class="stg-bl-method-grid">
+        <label class="stg-bl-card ${method === 'surrender' ? 'selected' : ''}">
+          <input type="radio" name="bl-method-${n}" value="surrender" ${method === 'surrender' ? 'checked' : ''} onchange="event.stopPropagation()">
+          <span class="stg-bl-radio"><span class="stg-bl-radio-dot"></span></span>
+          <span class="stg-bl-text">
+            <span class="stg-bl-title">Surrender</span>
+            <span class="stg-bl-sub">Buyer collects from origin</span>
+          </span>
+        </label>
+        <label class="stg-bl-card ${method === 'dispatch' ? 'selected' : ''}">
+          <input type="radio" name="bl-method-${n}" value="dispatch" ${method === 'dispatch' ? 'checked' : ''} onchange="event.stopPropagation()">
+          <span class="stg-bl-radio"><span class="stg-bl-radio-dot"></span></span>
+          <span class="stg-bl-text">
+            <span class="stg-bl-title">Dispatch</span>
+            <span class="stg-bl-sub">Courier to buyer's address</span>
+          </span>
+        </label>
+      </div>`;
+
+      // 5. Dispatch details card (read-only for mobile view)
+      if (method === 'dispatch' && d.name) {
+        html += `<div class="stg-dispatch-card">
+          <div class="stg-dispatch-hint">Dispatch details</div>
+          <div class="stg-fields">
+            <div class="stg-field-row"><span class="stg-field-key">Name</span><span class="stg-field-val">${d.name}</span></div>
+            <div class="stg-field-row"><span class="stg-field-key">Address</span><span class="stg-field-val">${d.address}</span></div>
+            <div class="stg-field-row"><span class="stg-field-key">City</span><span class="stg-field-val">${d.city}, ${d.country}</span></div>
+            <div class="stg-field-row"><span class="stg-field-key">Postal Code</span><span class="stg-field-val">${d.postalCode}</span></div>
+            <div class="stg-field-row"><span class="stg-field-key">Email</span><span class="stg-field-val" style="word-break:break-all;">${d.email}</span></div>
+            <div class="stg-field-row"><span class="stg-field-key">Phone</span><span class="stg-field-val">${d.phone}</span></div>
+          </div>
+        </div>`;
+      }
+
+      // 6. Confirm button
+      html += `<button class="stg-bl-send-btn" onclick="event.stopPropagation(); showToast('${method === 'dispatch' ? 'Dispatch confirmed!' : 'Surrender confirmed!'}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        ${method === 'dispatch' ? 'Confirm Dispatch' : 'Confirm Surrender'}
+      </button>`;
+
+      return html;
+    }
+
+    // Export Certificate (Stage 3)
+    if (n === 3 && data.ecDocs && data.ecDocs.length) {
+      // EC Date field
+      if (data.fields && data.fields.length) {
+        html += '<div class=\"stg-fields\">';
+        data.fields.forEach(([k, v]) => {
+          html += `<div class=\"stg-field-row\">
+            <span class=\"stg-field-key\">${k}</span>
+            <span class=\"stg-field-val\">${v}</span>
+          </div>`;
+        });
+        html += '</div>';
+      }
+
+      // EC Documents section header — same style as Purchase Info "Auction Sheet"
+      html += `<div class=\"stg-body-section\" style=\"margin-top:16px;\">Export Certificate Documents</div>`;
+
+      // EC Doc rows — exact same structure as stg-doc-row (Purchase Info style)
+      html += '<div class=\"ec-docs-list\">';
+      data.ecDocs.forEach(doc => {
+        html += `
+          <div class=\"stg-doc-row\" onclick=\"event.stopPropagation(); showToast('Downloading ${doc.name}...')\">
+            <div class=\"stg-doc-icon\">
+              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"/><polyline points=\"14 2 14 8 20 8\"/></svg>
+            </div>
+            <div class=\"stg-doc-info\">
+              <div class=\"stg-doc-name\">${doc.name}</div>
+            </div>
+            <div class=\"stg-doc-dl\" onclick=\"event.stopPropagation(); showToast('Downloading ${doc.name}...')\">
+              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>
+            </div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      return html;
+    }
+
     // Yard Photos (Stage 2)
     if (data.yardPhotos && data.yardPhotos.length) {
       const CAR_IMG = document.querySelector('.car-image img')?.src || '';
@@ -6133,16 +6453,42 @@
       return html;
     }
 
-    // Fields
+    // Fields (with status-pill and highlight support for Stage 4 & 7)
     if (data.fields && data.fields.length) {
       html += '<div class="stg-fields">';
       data.fields.forEach(([k, v]) => {
+        let valHTML;
+        if (typeof v === 'object' && v !== null && v.kind === 'status-pill') {
+          valHTML = `<span class="stg-status-pill stg-status-pill--${v.tone || 'success'}"><span class="stg-status-dot"></span>${v.value}</span>`;
+        } else if (typeof v === 'object' && v !== null && v.kind === 'highlight') {
+          valHTML = `<span class="stg-highlight stg-highlight--${v.tone || 'success'}">${v.value}</span>`;
+        } else {
+          valHTML = v;
+        }
         html += `<div class="stg-field-row">
           <span class="stg-field-key">${k}</span>
-          <span class="stg-field-val">${v}</span>
+          <span class="stg-field-val">${valHTML}</span>
         </div>`;
       });
       html += '</div>';
+    }
+
+    // fieldDividers — Stage 5 Shipment sections (Vessel / Departure / Arrival)
+    if (data.fieldDividers && data.fieldDividers.length) {
+      data.fieldDividers.forEach((section, idx) => {
+        if (idx > 0) html += '<div class="stg-divider"></div>';
+        if (section.title) {
+          html += `<div class="stg-section-heading">${section.title}</div>`;
+        }
+        html += '<div class="stg-fields">';
+        section.fields.forEach(([k, v]) => {
+          html += `<div class="stg-field-row">
+            <span class="stg-field-key">${k}</span>
+            <span class="stg-field-val">${v}</span>
+          </div>`;
+        });
+        html += '</div>';
+      });
     }
 
     // Accessories
@@ -6155,12 +6501,28 @@
       html += '</div>';
     }
 
-    // Document
+    // Inspection Certificate doc (Stage 4)
+    if (data.inspectionDoc) {
+      html += `<div class="stg-body-section" style="margin-top:16px;">${data.docTitle || 'Document'}</div>`;
+      html += `<div class="stg-doc-row" onclick="event.stopPropagation(); showToast('Downloading ${data.inspectionDoc.name}...')">
+        <div class="stg-doc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="stg-doc-info">
+          <div class="stg-doc-name">${data.inspectionDoc.name}</div>
+        </div>
+        <div class="stg-doc-dl" onclick="event.stopPropagation(); showToast('Downloading...')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+      </div>`;
+    }
+
+    // Document (Stage 1 — Auction Sheet)
     if (data.doc) {
       html += `<div class="stg-body-section" style="margin-top:16px;">${n === 1 ? 'Auction Sheet' : 'Document'}</div>`;
       html += `<div class="stg-doc-row" onclick="event.stopPropagation(); showToast('Downloading ${data.doc.name}')">
         <div class="stg-doc-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
         <div class="stg-doc-info">
           <div class="stg-doc-name">${data.doc.name}</div>
@@ -6170,6 +6532,58 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         </div>
       </div>`;
+    }
+
+    // Bill of Lading doc (Stage 6)
+    if (data.blDoc) {
+      html += `<div class="stg-body-section" style="margin-top:16px;">${data.docTitle || 'Copy Bill of Lading'}</div>`;
+      html += `<div class="stg-doc-row" onclick="event.stopPropagation(); showToast('Downloading ${data.blDoc.name}...')">
+        <div class="stg-doc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="stg-doc-info">
+          <div class="stg-doc-name">${data.blDoc.name}</div>
+        </div>
+        <div class="stg-doc-dl" onclick="event.stopPropagation(); showToast('Downloading...')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+      </div>`;
+    }
+
+    // Amended BL (Stage 6)
+    if (data.amendedBL) {
+      html += `<div class="stg-divider"></div>`;
+      html += `<div class="stg-body-section" style="margin-top:0;">Amended Copy of Bill of Lading</div>`;
+      html += `<div class="stg-fields" style="margin-bottom:10px;">
+        <div class="stg-field-row">
+          <span class="stg-field-key">Updated Date</span>
+          <span class="stg-field-val">${data.amendedBL.updatedDate}</span>
+        </div>
+      </div>`;
+      html += `<div class="stg-doc-row" onclick="event.stopPropagation(); showToast('Downloading ${data.amendedBL.doc.name}...')">
+        <div class="stg-doc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="stg-doc-info">
+          <div class="stg-doc-name">${data.amendedBL.doc.name}</div>
+        </div>
+        <div class="stg-doc-dl" onclick="event.stopPropagation(); showToast('Downloading...')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+      </div>`;
+    }
+
+    // Payment summary cards (Stage 7 — Finance Status)
+    if (data.paymentSummary && data.paymentSummary.length) {
+      html += '<div class="stg-divider"></div>';
+      html += '<div class="stg-payment-summary">';
+      data.paymentSummary.forEach(p => {
+        html += `<div class="stg-payment-card stg-payment-card--${p.tone || 'neutral'}">
+          <div class="stg-payment-label">${p.label}</div>
+          <div class="stg-payment-value">${p.value}</div>
+        </div>`;
+      });
+      html += '</div>';
     }
 
     return html || '<div style="padding:8px 0;font-size:12.5px;color:var(--c-text-muted);">No details available yet.</div>';
