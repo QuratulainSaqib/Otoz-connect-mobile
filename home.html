@@ -2530,14 +2530,15 @@
     background: transparent;
     transition: background 0.25s ease;
   }
-  .stg-row.completed::before { background: var(--c-success); }
-  .stg-row.current::before   { background: var(--stg-color, var(--c-accent)); }
+  /* Left accent bar — web colours */
+  .stg-row.completed::before { background: linear-gradient(180deg, #30c46d, #4adf86); }
+  .stg-row.current::before   { background: linear-gradient(180deg, #0071e3, #00a3ff); }
   .stg-row.locked::before    { background: transparent; }
 
   /* ── Header row ── */
   .stg-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 14px;
     padding: 13px 16px 13px 18px;
     cursor: pointer;
@@ -2554,25 +2555,29 @@
     font-size: 13px; font-weight: 700;
     flex-shrink: 0;
     transition: all 0.25s ease;
+    margin-top: 1px;
   }
+  /* Completed — green (web) */
   .stg-row.completed .stg-num {
     background: linear-gradient(135deg, #30c46d 0%, #4adf86 100%);
     color: #fff;
-    box-shadow: 0 2px 8px rgba(48,196,109,0.3);
+    box-shadow: 0 4px 10px -2px rgba(48,196,109,0.4);
   }
+  /* Current — blue (web) */
   .stg-row.current .stg-num {
-    background: var(--stg-color, var(--c-accent));
+    background: linear-gradient(135deg, #0071e3 0%, #00a3ff 100%);
     color: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    box-shadow: 0 0 0 4px rgba(0,113,227,0.2);
     animation: stgPulse 2s ease-in-out infinite;
   }
+  /* Locked — grey (web) */
   .stg-row.locked .stg-num {
-    background: #f0f0f5;
-    color: #b8b8c0;
+    background: #f0f0f2;
+    color: #b0b0b5;
   }
   @keyframes stgPulse {
-    0%,100% { box-shadow: 0 2px 8px rgba(0,0,0,0.18), 0 0 0 0 color-mix(in srgb, var(--stg-color) 30%, transparent); }
-    50%      { box-shadow: 0 2px 8px rgba(0,0,0,0.18), 0 0 0 5px transparent; }
+    0%,100% { box-shadow: 0 0 0 4px rgba(0,113,227,0.2); }
+    50%      { box-shadow: 0 0 0 8px rgba(0,113,227,0.05); }
   }
   .stg-num svg { width: 15px; height: 15px; }
 
@@ -2584,37 +2589,52 @@
     letter-spacing: -0.01em;
     line-height: 1.25;
   }
-  .stg-row.locked .stg-title    { color: #b8b8c0; }
-  .stg-row.completed .stg-title { color: var(--c-text); }
+  /* Completed title — green (web) */
+  .stg-row.completed .stg-title { color: #047857; }
+  /* Locked title — grey (web) */
+  .stg-row.locked .stg-title    { color: #8b8b8f; }
+
   .stg-sub {
     font-size: 11.5px; color: var(--c-text-muted);
     margin-top: 2px; line-height: 1.4; font-weight: 400;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    white-space: normal; overflow: visible; text-overflow: unset;
+    word-break: break-word;
   }
-  .stg-row.locked .stg-sub    { color: #c8c8d0; }
-  .stg-row.completed .stg-sub { color: var(--c-text-muted); }
+  /* Completed sub — green tint (web) */
+  .stg-row.completed .stg-sub { color: #047857; opacity: 0.85; }
+  /* Locked sub — grey (web) */
+  .stg-row.locked .stg-sub    { color: #8b8b8f; }
 
-  /* Status pill */
+  /* Status pill (badge) */
   .stg-badge {
     display: inline-flex; align-items: center; gap: 5px;
-    padding: 3px 9px;
+    padding: 4px 11px;
     border-radius: 999px;
     font-size: 10px; font-weight: 700;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
     flex-shrink: 0;
     white-space: nowrap;
+    margin-top: 3px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
   }
-  .stg-badge-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-  .stg-row.completed .stg-badge     { background: #d1fae5; color: #047857; }
-  .stg-row.completed .stg-badge-dot { background: #10b981; }
-  .stg-row.current .stg-badge       { background: rgba(43,166,255,0.1); color: var(--c-accent); }
-  .stg-row.current .stg-badge-dot   { background: var(--c-accent); animation: dotBlink 1.4s ease-in-out infinite; }
+  .stg-badge-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; background: var(--c-text-tertiary); }
+
+  /* Completed badge — green border, green text (web) */
+  .stg-row.completed .stg-badge     { background: #fff; color: #047857; border-color: rgba(48,196,109,0.3); }
+  .stg-row.completed .stg-badge-dot { background: #30c46d; }
+
+  /* Current badge — blue gradient, white text (web) */
+  .stg-row.current .stg-badge       { background: linear-gradient(135deg, #0071e3 0%, #00a3ff 100%); color: #fff; border-color: transparent; box-shadow: 0 2px 6px rgba(0,113,227,0.25); }
+  .stg-row.current .stg-badge-dot   { background: rgba(255,255,255,0.9); animation: dotBlink 1.4s ease-in-out infinite; }
   @keyframes dotBlink { 0%,100%{opacity:1} 50%{opacity:0.25} }
-  .stg-row.locked .stg-badge        { background: #f0f0f5; color: #b8b8c0; }
-  .stg-row.locked .stg-badge-dot    { background: #c8c8d0; }
+
+  /* Locked badge — grey (web) */
+  .stg-row.locked .stg-badge        { background: #fff; color: #8b8b8f; border-color: #e0e0e3; }
+  .stg-row.locked .stg-badge-dot    { background: #c0c0c5; }
 
   /* Chevron */
-  .stg-chev { width: 18px; height: 18px; color: #c0c0c8; transition: transform 0.26s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0; }
+  .stg-chev { width: 18px; height: 18px; color: #c0c0c8; transition: transform 0.26s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0; margin-top: 7px; }
   .stg-chev svg { width: 18px; height: 18px; }
   .stg-row.open .stg-chev { transform: rotate(90deg); color: var(--c-text-muted); }
   .stg-row.locked .stg-chev { opacity: 0.3; }
@@ -2712,6 +2732,221 @@
     font-size: 12px; line-height: 1.55; color: var(--c-text-muted);
   }
   .stg-locked-hint svg { width: 14px; height: 14px; color: #c0c0c8; flex-shrink: 0; margin-top: 2px; }
+
+  /* ===== YARD IMAGE STAGE ===== */
+  /* Info bar: date + count */
+  .yi-info-bar {
+    display: flex; align-items: center; gap: 0;
+    background: #fff;
+    border: 0.5px solid var(--c-divider);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .yi-info-cell {
+    flex: 1; padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .yi-info-cell + .yi-info-cell { border-left: 0.5px solid var(--c-divider); }
+  .yi-info-key {
+    font-size: 10px; font-weight: 600; color: var(--c-text-muted);
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .yi-info-val {
+    font-size: 13px; font-weight: 700; color: var(--c-text);
+    letter-spacing: -0.01em;
+  }
+
+  /* Section header for photos */
+  .yi-section-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .yi-section-title {
+    font-size: 11px; font-weight: 700; color: var(--c-text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .yi-section-title svg { width: 13px; height: 13px; }
+
+  /* Photo grid */
+  .yi-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+  .yi-thumb {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #f1f5f9;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .yi-thumb:active { transform: scale(0.95); }
+  .yi-thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+  }
+
+  /* ZIP download button — matches web dashboard dark navy */
+  .yi-zip-btn {
+    margin-top: 12px; width: 100%;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    padding: 11px 16px;
+    background: #173559;
+    color: #fff; border: none; border-radius: 12px;
+    font-size: 13px; font-weight: 600; font-family: inherit;
+    cursor: pointer; letter-spacing: -0.01em;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 2px 6px rgba(23,53,89,0.25);
+    transition: all 0.18s ease;
+  }
+  .yi-zip-btn:active { transform: scale(0.98); }
+  .yi-zip-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* ===== YARD LIGHTBOX (Mobile) ===== */
+  #yi-lightbox {
+    position: absolute;
+    inset: 0;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+    border-radius: 43px;
+    overflow: hidden;
+  }
+  #yi-lightbox.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .yi-lb-bg {
+    position: absolute; inset: 0;
+    background: rgba(8,8,12,0.93);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+  }
+  /* Top bar */
+  .yi-lb-topbar {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 56px 18px 12px;
+    flex-shrink: 0;
+  }
+  .yi-lb-title-group { display: flex; flex-direction: column; gap: 1px; }
+  .yi-lb-title {
+    font-size: 14px; font-weight: 700; color: #fff;
+    letter-spacing: -0.01em;
+  }
+  .yi-lb-subtitle {
+    font-size: 11px; color: rgba(255,255,255,0.45);
+    letter-spacing: 0.01em;
+  }
+  .yi-lb-close {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.75); cursor: pointer; flex-shrink: 0;
+  }
+  .yi-lb-close svg { width: 15px; height: 15px; }
+
+  /* Main image */
+  .yi-lb-stage {
+    position: relative; z-index: 2; flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; min-height: 0;
+  }
+  .yi-lb-track {
+    display: flex; height: 100%;
+    transition: transform 0.34s cubic-bezier(0.4,0,0.2,1);
+  }
+  .yi-lb-slide {
+    flex: 0 0 100%; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 16px;
+  }
+  .yi-lb-slide img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain; border-radius: 12px;
+    display: block;
+  }
+  /* Angle badge overlay */
+  .yi-lb-angle {
+    position: absolute; top: 14px; left: 18px;
+    padding: 4px 10px;
+    background: rgba(10,10,15,0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 999px;
+    font-size: 10.5px; font-weight: 700; color: rgba(255,255,255,0.85);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    pointer-events: none; z-index: 3;
+  }
+  /* Counter */
+  .yi-lb-counter {
+    position: absolute; bottom: 14px; right: 18px;
+    padding: 3px 9px;
+    background: rgba(10,10,15,0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+    font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6);
+    pointer-events: none; z-index: 3;
+  }
+  /* Prev / Next arrows */
+  .yi-lb-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(15,15,20,0.7);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.8);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 4;
+    transition: all 0.18s ease;
+  }
+  .yi-lb-nav:disabled { opacity: 0.2; cursor: not-allowed; }
+  .yi-lb-nav svg { width: 17px; height: 17px; }
+  .yi-lb-prev { left: 10px; }
+  .yi-lb-next { right: 10px; }
+
+  /* Bottom: thumbnails */
+  .yi-lb-bottom {
+    position: relative; z-index: 2; flex-shrink: 0;
+    padding: 12px 16px 28px;
+  }
+  .yi-lb-thumbs {
+    display: flex; gap: 6px; overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .yi-lb-thumbs::-webkit-scrollbar { display: none; }
+  .yi-lb-thumb {
+    flex: 0 0 52px; height: 38px; border-radius: 7px;
+    overflow: hidden; cursor: pointer;
+    border: 2px solid transparent;
+    opacity: 0.45; transition: all 0.18s ease;
+  }
+  .yi-lb-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .yi-lb-thumb.active { border-color: #fff; opacity: 1; }
+  /* Download action */
+  .yi-lb-actions {
+    display: flex; gap: 8px; margin-top: 10px;
+  }
+  .yi-lb-dl-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 9px 14px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; color: rgba(255,255,255,0.75);
+    font-size: 12px; font-weight: 600; font-family: inherit;
+    cursor: pointer; transition: all 0.18s ease;
+  }
+  .yi-lb-dl-btn:active { background: rgba(255,255,255,0.18); }
+  .yi-lb-dl-btn svg { width: 13px; height: 13px; }
 
 </style>
 </head>
@@ -4050,6 +4285,50 @@
           <!-- Rendered by JS -->
         </div>
 
+      </div>
+    </div>
+
+    <!-- ===== YARD IMAGE LIGHTBOX ===== -->
+    <div id="yi-lightbox">
+      <div class="yi-lb-bg" onclick="closeYiLightbox()"></div>
+      <!-- Top bar -->
+      <div class="yi-lb-topbar">
+        <div class="yi-lb-title-group">
+          <div class="yi-lb-title">Yard Photos</div>
+          <div class="yi-lb-subtitle" id="yi-lb-subtitle">13 photos · Honda Vezel 2023</div>
+        </div>
+        <button class="yi-lb-close" onclick="closeYiLightbox()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <!-- Main image stage -->
+      <div class="yi-lb-stage">
+        <div class="yi-lb-track" id="yi-lb-track"></div>
+        <!-- Angle badge -->
+        <div class="yi-lb-angle" id="yi-lb-angle">Front</div>
+        <!-- Counter -->
+        <div class="yi-lb-counter" id="yi-lb-counter">1 / 13</div>
+        <!-- Nav arrows -->
+        <button class="yi-lb-nav yi-lb-prev" id="yi-lb-prev" onclick="yiLbNav(-1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="yi-lb-nav yi-lb-next" id="yi-lb-next" onclick="yiLbNav(1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+      <!-- Bottom: thumbnails + actions -->
+      <div class="yi-lb-bottom">
+        <div class="yi-lb-thumbs" id="yi-lb-thumbs"></div>
+        <div class="yi-lb-actions">
+          <button class="yi-lb-dl-btn" onclick="showToast('Downloading photo...')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </button>
+          <button class="yi-lb-dl-btn" onclick="yiLbDownloadAll()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/><line x1="8" y1="3" x2="8" y2="9"/><line x1="16" y1="3" x2="16" y2="9"/></svg>
+            All as ZIP
+          </button>
+        </div>
       </div>
     </div>
 
@@ -5682,7 +5961,31 @@
       accessories: ['Floor Mats','Spare Tyre','Tool Kit','Owners Manual','Smart Key ×2','Cargo Cover','Wheel Lock Set'],
       doc: { name: 'Auction_Sheet_A00116.pdf', label: 'Auction Sheet', size: '1.2 MB' },
     },
-    2: { sub: '13 yard photos uploaded', doneSub: 'Detailed inspection photos uploaded.', locked_hint: 'Yard Images should be uploaded by <b>Purchase Date + 6 days</b>' },
+    2: {
+      sub: '13 yard photos uploaded',
+      doneSub: 'Detailed inspection photos uploaded.',
+      locked_hint: 'Yard Images should be uploaded by <b>Purchase Date + 6 days</b>',
+      fields: [
+        ['Receive Date', '10 / 08 / 2026'],
+        ['Upload Date',  '11 / 08 / 2026'],
+        ['Total Images', '13 photos'],
+      ],
+      yardPhotos: [
+        { angle: 'Front' },
+        { angle: 'Rear' },
+        { angle: 'Left' },
+        { angle: 'Right' },
+        { angle: 'Engine' },
+        { angle: 'Interior' },
+        { angle: 'Dashboard' },
+        { angle: 'Trunk' },
+        { angle: 'Wheels' },
+        { angle: 'Odometer' },
+        { angle: 'VIN' },
+        { angle: 'Top' },
+        { angle: 'Under' },
+      ]
+    },
     3: { sub: 'Export certificate issued', doneSub: 'Export documents available.', locked_hint: 'Export Certificate will be issued within <b>15 days</b> of Purchase Date' },
     4: { sub: 'Inspection completed · Pass', doneSub: 'Inspection certificate available.', locked_hint: 'Inspection Certificate should be uploaded within <b>20 days</b>' },
     5: { sub: 'Vessel in transit', doneSub: 'Vessel booking confirmed.', locked_hint: 'Shipment details available within <b>30 days</b> of Purchase Date' },
@@ -5761,7 +6064,7 @@
 
       const body = buildStageBody(n, state, data, color);
 
-      return `<div class="stg-row ${state}" style="--stg-color:${color};" onclick="toggleStageRow(this)" data-stage="${n}">
+      return `<div class="stg-row ${state}" onclick="toggleStageRow(this)" data-stage="${n}">
         <div class="stg-header">
           <div class="stg-num">${numContent}</div>
           <div class="stg-title-group">
@@ -5786,6 +6089,41 @@
     }
 
     let html = '';
+
+    // Yard Photos (Stage 2)
+    if (data.yardPhotos && data.yardPhotos.length) {
+      const CAR_IMG = document.querySelector('.car-image img')?.src || '';
+      html += `
+        <div class="yi-info-bar">
+          <div class="yi-info-cell">
+            <div class="yi-info-key">Receive Date</div>
+            <div class="yi-info-val">${(data.fields && data.fields[0] && data.fields[0][1]) || '—'}</div>
+          </div>
+          <div class="yi-info-cell">
+            <div class="yi-info-key">Upload Date</div>
+            <div class="yi-info-val">${(data.fields && data.fields[1] && data.fields[1][1]) || '—'}</div>
+          </div>
+        </div>
+        <div class="yi-section-head">
+          <div class="yi-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Yard Photos
+          </div>
+        </div>
+        <div class="yi-gallery">
+          ${data.yardPhotos.map((p, idx) => `
+            <div class="yi-thumb" onclick="openYiLightbox(${idx})" role="button" tabindex="0">
+              <img src="${CAR_IMG}" alt="${p.angle}" loading="lazy">
+            </div>
+          `).join('')}
+        </div>
+        <button class="yi-zip-btn" onclick="event.stopPropagation(); yiLbDownloadAll()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download All as ZIP
+        </button>
+      `;
+      return html;
+    }
 
     // Fields
     if (data.fields && data.fields.length) {
@@ -6162,6 +6500,109 @@
   function closeChangeView() {
     document.getElementById('change-view-page').classList.remove('show');
   }
+
+  // ===== YARD IMAGE LIGHTBOX =====
+  let _yiPhotos = [];
+  let _yiCurrent = 0;
+  let _yiCarImg = '';
+
+  function openYiLightbox(startIdx) {
+    const data = STAGE_DATA[2];
+    if (!data || !data.yardPhotos) return;
+    _yiPhotos = data.yardPhotos;
+    _yiCurrent = startIdx;
+    _yiCarImg = document.querySelector('.car-image img')?.src || '';
+
+    // Build the slides
+    const track = document.getElementById('yi-lb-track');
+    const thumbsEl = document.getElementById('yi-lb-thumbs');
+    track.innerHTML = '';
+    thumbsEl.innerHTML = '';
+
+    _yiPhotos.forEach((p, i) => {
+      // Slide
+      const slide = document.createElement('div');
+      slide.className = 'yi-lb-slide';
+      const img = document.createElement('img');
+      img.src = _yiCarImg;
+      img.alt = p.angle || `Photo ${i + 1}`;
+      slide.appendChild(img);
+      track.appendChild(slide);
+
+      // Thumbnail
+      const thumb = document.createElement('div');
+      thumb.className = 'yi-lb-thumb' + (i === startIdx ? ' active' : '');
+      const tImg = document.createElement('img');
+      tImg.src = _yiCarImg;
+      tImg.alt = p.angle || '';
+      thumb.appendChild(tImg);
+      thumb.addEventListener('click', () => yiLbGoTo(i));
+      thumbsEl.appendChild(thumb);
+    });
+
+    // Subtitle
+    const v = vehicles.find(x => x.stage === 2) || {};
+    document.getElementById('yi-lb-subtitle').textContent =
+      `${_yiPhotos.length} photos · ${v.make || ''} ${v.model || ''} ${v.year || ''}`.trim();
+
+    yiLbRender(false);
+    document.getElementById('yi-lightbox').classList.add('open');
+  }
+
+  function closeYiLightbox() {
+    document.getElementById('yi-lightbox').classList.remove('open');
+  }
+
+  function yiLbRender(animate) {
+    const track = document.getElementById('yi-lb-track');
+    track.style.transition = animate ? 'transform 0.34s cubic-bezier(0.4,0,0.2,1)' : 'none';
+    track.style.transform = `translateX(-${_yiCurrent * 100}%)`;
+
+    const p = _yiPhotos[_yiCurrent];
+    document.getElementById('yi-lb-angle').textContent = p ? (p.angle || '') : '';
+    document.getElementById('yi-lb-counter').textContent = `${_yiCurrent + 1} / ${_yiPhotos.length}`;
+
+    // Update nav buttons
+    const prev = document.getElementById('yi-lb-prev');
+    const next = document.getElementById('yi-lb-next');
+    if (prev) prev.disabled = _yiCurrent === 0;
+    if (next) next.disabled = _yiCurrent === _yiPhotos.length - 1;
+
+    // Update thumbnails
+    document.querySelectorAll('.yi-lb-thumb').forEach((t, i) => {
+      t.classList.toggle('active', i === _yiCurrent);
+    });
+
+    // Scroll active thumbnail into view
+    const thumbsWrap = document.getElementById('yi-lb-thumbs');
+    const activThumb = thumbsWrap?.children[_yiCurrent];
+    if (activThumb) activThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+
+  function yiLbGoTo(idx) {
+    _yiCurrent = idx;
+    yiLbRender(true);
+  }
+
+  function yiLbNav(dir) {
+    const next = _yiCurrent + dir;
+    if (next < 0 || next >= _yiPhotos.length) return;
+    _yiCurrent = next;
+    yiLbRender(true);
+  }
+
+  function yiLbDownloadAll() {
+    showToast(`Downloading all ${_yiPhotos.length || STAGE_DATA[2]?.yardPhotos?.length || 13} photos as ZIP…`);
+  }
+
+  // Keyboard nav for lightbox
+  document.addEventListener('keydown', e => {
+    const lb = document.getElementById('yi-lightbox');
+    if (!lb || !lb.classList.contains('open')) return;
+    if (e.key === 'ArrowLeft')  yiLbNav(-1);
+    if (e.key === 'ArrowRight') yiLbNav(1);
+    if (e.key === 'Escape')     closeYiLightbox();
+  });
 
   render();
 
