@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>otozflow · Mobile Auth Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+  /* ============================================
+     DESIGN SYSTEM TOKENS — single source of truth
+     ============================================ */
+  :root {
+    --c-primary: #173559;
+    --c-primary-hover: #122a47;
+    --c-accent: #0071e3;
+    --c-text: #1d1d1f;
+    --c-text-muted: #6e6e73;
+    --c-text-subtle: #86868b;
+    --c-bg-input: #f5f5f7;
+    --c-bg-input-hover: #efeff2;
+    --c-divider: #e8e8ed;
+    --c-success: #30c46d;
+
+    --space-screen-x: 28px;
+    --space-logo-to-heading: 36px;
+    --space-heading-to-form: 32px;
+    --space-field-gap: 14px;
+    --space-button-top: 28px;
+
+    --logo-size: 32px;
+    --heading-size: 26px;
+    --subtitle-size: 13.5px;
+    --label-size: 13px;
+    --input-size: 15px;
+    --button-size: 16px;
+    --radius-input: 14px;
+    --radius-button: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: #e8e8ed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ============ DEVICE FRAME ============ */
+  .device {
+    width: 380px;
+    height: 800px;
+    background: #1d1d1f;
+    border-radius: 54px;
+    padding: 11px;
+    position: relative;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.08);
+  }
+
+  .screen-wrapper {
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    border-radius: 43px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .dynamic-island {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 126px;
+    height: 33px;
+    background: #1d1d1f;
+    border-radius: 18px;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .home-indicator {
+    position: absolute;
+    bottom: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 5px;
+    background: #1d1d1f;
+    border-radius: 3px;
+    opacity: 0.9;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  /* ============ SCREEN SYSTEM ============ */
+  .screen {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+  }
+
+  .screen.active {
+    display: flex;
+    animation: slideIn 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .screen.active.back-anim {
+    animation: slideInBack 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes slideInBack {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ============ STATUS BAR ============ */
+  .status-bar {
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 32px 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--c-text);
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+  }
+
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; }
+
+  /* ============ BACK BUTTON (same design every screen) ============ */
+  .back-row {
+    padding: 10px 20px 0;
+    flex-shrink: 0;
+    min-height: 54px;
+  }
+
+  .back-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: var(--c-bg-input);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .back-btn:hover { background: #ebebef; }
+  .back-btn:active { transform: scale(0.95); }
+  .back-btn svg {
+    width: 20px;
+    height: 20px;
+    color: var(--c-text);
+  }
+
+  /* ============ LOGO (identical every screen) ============ */
+  .brand-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 0 var(--space-screen-x);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: var(--logo-size);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .logo-otoz { color: var(--c-accent); }
+  .logo-flow { color: #0a2540; }
+
+  /* Login-only brand extras */
+  .tagline {
+    margin-top: 22px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--c-text);
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    text-align: center;
+  }
+  .tagline-accent { color: var(--c-accent); }
+
+  .live-indicator {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .live-dot-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 10px;
+    height: 10px;
+  }
+  .live-dot-ripple {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--c-success);
+    opacity: 0.5;
+    animation: ripple 1.8s ease-out infinite;
+  }
+  .live-dot-core {
+    position: relative;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--c-success);
+    z-index: 1;
+  }
+  @keyframes ripple {
+    0% { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(3); opacity: 0; }
+  }
+  .live-text {
+    font-size: 13.5px;
+    color: var(--c-text-muted);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  /* ============ HEADING ============ */
+  .heading-section {
+    text-align: center;
+    flex-shrink: 0;
+    padding: 0 var(--space-screen-x);
+    margin-top: var(--space-logo-to-heading);
+  }
+
+  .heading-title {
+    font-size: var(--heading-size);
+    font-weight: 600;
+    color: var(--c-text);
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  .heading-subtitle {
+    font-size: var(--subtitle-size);
+    color: var(--c-text-muted);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  /* ============ FORM ============ */
+  .form {
+    padding: 0 var(--space-screen-x);
+    margin-top: var(--space-heading-to-form);
+    flex: 1;
+  }
+
+  .field { margin-bottom: var(--space-field-gap); }
+
+  .field-label {
+    font-size: var(--label-size);
+    font-weight: 500;
+    color: var(--c-text-muted);
+    padding-left: 4px;
+    display: block;
+    margin-bottom: 7px;
+  }
+
+  .field-input {
+    background: var(--c-bg-input);
+    border-radius: var(--radius-input);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1.5px solid transparent;
+    transition: all 0.2s ease;
+  }
+  .field-input:hover { background: var(--c-bg-input-hover); }
+  .field-input:focus-within { background: #ffffff; border-color: var(--c-accent); }
+
+  .field-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--c-text-subtle);
+    flex-shrink: 0;
+  }
+
+  .field-input input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: var(--input-size);
+    color: var(--c-text);
+    font-family: inherit;
+    min-width: 0;
+  }
+  .field-input input::placeholder { color: var(--c-text-subtle); }
+
+  .eye-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    color: var(--c-text-subtle);
+  }
+  .eye-btn svg { width: 18px; height: 18px; }
+
+  /* Remember / Forgot row */
+  .row-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 4px 0;
+  }
+
+  .remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* Checkbox uses brand primary 173559 */
+  .checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    background: var(--c-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  .checkbox.unchecked {
+    background: transparent;
+    border: 1.5px solid #d2d2d7;
+  }
+  .checkbox svg { width: 13px; height: 13px; color: #fff; }
+  .checkbox.unchecked svg { display: none; }
+
+  .remember-text { font-size: 13.5px; color: var(--c-text); }
+
+  .forgot {
+    font-size: 13.5px;
+    color: var(--c-accent);
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    padding: 0;
+  }
+  .forgot:hover { text-decoration: underline; }
+
+  /* Password strength */
+  .strength-meter {
+    display: flex;
+    gap: 4px;
+    margin-top: 10px;
+    padding: 0 2px;
+  }
+  .strength-bar {
+    flex: 1;
+    height: 3px;
+    background: var(--c-divider);
+    border-radius: 2px;
+    transition: background 0.3s ease;
+  }
+  .strength-bar.active-weak { background: #ff3b30; }
+  .strength-bar.active-fair { background: #ff9500; }
+  .strength-bar.active-good { background: var(--c-success); }
+  .strength-bar.active-strong { background: var(--c-success); }
+  .strength-hint {
+    font-size: 11.5px;
+    color: var(--c-text-muted);
+    margin-top: 8px;
+    padding-left: 4px;
+    line-height: 1.4;
+  }
+
+  /* ============ PRIMARY BUTTON ============ */
+  .primary-btn {
+    background: var(--c-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-button);
+    padding: 17px;
+    width: 100%;
+    text-align: center;
+    font-size: var(--button-size);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    margin-top: var(--space-button-top);
+  }
+  .primary-btn:hover { background: var(--c-primary-hover); }
+  .primary-btn:active { transform: scale(0.98); }
+  .primary-btn svg { width: 18px; height: 18px; }
+
+  .need-help {
+    margin-top: 18px;
+    text-align: center;
+  }
+  .need-help a {
+    font-size: 13.5px;
+    color: var(--c-accent);
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .need-help a:hover { text-decoration: underline; }
+
+  /* ============ RESET LINK SENT ============ */
+  .sent-centered-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px var(--space-screen-x) 32px;
+  }
+
+  .sent-centered-body .email-pill-wrap {
+    margin-top: 20px;
+    padding: 0;
+  }
+
+  .sent-actions {
+    margin-top: 24px;
+  }
+
+  .email-pill-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 0 var(--space-screen-x);
+  }
+
+  .email-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0c4a6e;
+    letter-spacing: -0.01em;
+    max-width: 100%;
+    box-shadow: 0 4px 16px -4px rgba(14,165,233,0.15);
+  }
+  .email-pill .check-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #16a34a;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .email-pill .email-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .resend-block {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 13.5px;
+    color: var(--c-text-muted);
+    line-height: 1.5;
+  }
+
+  .resend-link {
+    color: var(--c-accent);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: 4px;
+    transition: opacity 0.18s ease;
+  }
+  .resend-link:hover { opacity: 0.7; }
+  .resend-link.disabled {
+    color: #94a3b8;
+    cursor: not-allowed;
+    font-weight: 500;
+    pointer-events: none;
+  }
+  .resend-link .countdown {
+    display: inline-block;
+    min-width: 18px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ============ TOAST ============ */
+  .toast {
+    position: absolute;
+    top: 75px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-120%);
+    background: var(--c-text);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    z-index: 1000;
+    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast .check-circle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--c-success);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .toast .check-circle svg { width: 11px; height: 11px; color: #fff; }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 420px) {
+    body { padding: 0; background: #fff; }
+    .device {
+      width: 100%;
+      height: 100vh;
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
+    }
+    .screen-wrapper { border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="device">
+  <div class="screen-wrapper">
+
+    <div class="dynamic-island"></div>
+
+    <div class="toast" id="toast">
+      <span class="check-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg>
+      </span>
+      <span id="toast-text"></span>
+    </div>
+
+    <!-- ==================== SCREEN 1: LOGIN ==================== -->
+    <div class="screen active" id="screen-login">
+
+      <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686 -4.687 12.284 -4.687 16.97 0"/></svg>
+          <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+        </span>
+      </div>
+
+      <div class="back-row"></div>
+
+      <div class="brand-header">
+        <div class="logo" style="font-size:0;">
+          <img src="otoz_connect_logo.png" alt="Otoz Connect" style="height:28px; display:block;">
+        </div>
+        <div class="tagline">
+          Track every car,<br>
+          from <span class="tagline-accent">auction to arrival.</span>
+        </div>
+        <div class="live-indicator">
+          <span class="live-dot-wrapper">
+            <span class="live-dot-ripple"></span>
+            <span class="live-dot-core"></span>
+          </span>
+          <span class="live-text">Live shipment tracking</span>
+        </div>
+      </div>
+
+      <div class="form">
+
+        <div class="field">
+          <label class="field-label" for="login-email">Email</label>
+          <div class="field-input">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"/><path d="M3 7l9 6l9 -6"/></svg>
+            <input type="email" id="login-email" placeholder="email@example.com" value="fahad@otozflow.com">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="login-password">Password</label>
+          <div class="field-input">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M8 11v-4a4 4 0 0 1 8 0v4"/></svg>
+            <input type="password" id="login-password" placeholder="Enter your password" value="password123">
+            <button class="eye-btn" onclick="togglePassword('login-password', 'eye-login')" aria-label="Show password">
+              <svg id="eye-login" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="row-options">
+          <label class="remember">
+            <div class="checkbox" id="remember-box" onclick="toggleRemember()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg>
+            </div>
+            <span class="remember-text">Remember me</span>
+          </label>
+          <button class="forgot" onclick="goTo('screen-forgot')">Forgot password?</button>
+        </div>
+
+        <button class="primary-btn" onclick="handleLogin()">
+          Log in
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l14 0"/><path d="M13 18l6 -6"/><path d="M13 6l6 6"/></svg>
+        </button>
+
+        <div class="need-help">
+          <a href="#">Need help?</a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ==================== SCREEN 2: FORGOT PASSWORD ==================== -->
+    <div class="screen" id="screen-forgot">
+
+      <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686 -4.687 12.284 -4.687 16.97 0"/></svg>
+          <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+        </span>
+      </div>
+
+      <div class="back-row">
+        <button class="back-btn" onclick="goBack('screen-login')" aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+      </div>
+
+      <div class="brand-header">
+        <div class="logo" style="font-size:0;">
+          <img src="otoz_connect_logo.png" alt="Otoz Connect" style="height:28px; display:block;">
+        </div>
+      </div>
+
+      <div class="heading-section">
+        <div class="heading-title">Forgot password?</div>
+        <div class="heading-subtitle">
+          Enter the email address linked to your<br>
+          account. We'll send you a reset link.
+        </div>
+      </div>
+
+      <div class="form">
+        <div class="field">
+          <label class="field-label" for="forgot-email">Email address</label>
+          <div class="field-input">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"/><path d="M3 7l9 6l9 -6"/></svg>
+            <input type="email" id="forgot-email" placeholder="email@example.com" value="sarah.ahmed@otoz.ai">
+          </div>
+        </div>
+
+        <button class="primary-btn" onclick="handleSendReset()">
+          Send reset link
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14l11 -11"/><path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5"/></svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ==================== SCREEN 3: RESET LINK SENT ==================== -->
+    <div class="screen" id="screen-sent">
+
+      <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686 -4.687 12.284 -4.687 16.97 0"/></svg>
+          <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+        </span>
+      </div>
+
+      <div class="back-row">
+        <button class="back-btn" onclick="goBack('screen-forgot')" aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+      </div>
+
+      <div class="brand-header">
+        <div class="logo" style="font-size:0;">
+          <img src="otoz_connect_logo.png" alt="Otoz Connect" style="height:28px; display:block;">
+        </div>
+      </div>
+
+      <!-- Centered content block (status / confirmation pattern) -->
+      <div class="sent-centered-body">
+        <div class="heading-section" style="margin-top: 16px;">
+          <div class="heading-title">Reset link sent</div>
+          <div class="heading-subtitle" style="max-width: 220px; margin-left: auto; margin-right: auto;">
+            A secure password reset link has been sent to your email. It may take a few minutes.
+          </div>
+        </div>
+
+        <div class="email-pill-wrap">
+          <span class="email-pill">
+            <span class="check-icon"><i class="ti ti-check"></i></span>
+            <span class="email-text" id="sent-email-display">sarah.ahmed@otoz.ai</span>
+          </span>
+        </div>
+
+        <div class="sent-actions">
+          <button class="primary-btn" onclick="goTo('screen-reset')" style="margin-top: 0;">
+            Open Email
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1 -2 2H5a2 2 0 0 1 -2 -2V8a2 2 0 0 1 2 -2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </button>
+
+          <div class="resend-block">
+            <span>Didn't receive the email?</span>
+            <a class="resend-link disabled" id="resend-link">
+              Resend in <span class="countdown" id="countdown">30</span>s
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== SCREEN 4: RESET PASSWORD ==================== -->
+    <div class="screen" id="screen-reset">
+
+      <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686 -4.687 12.284 -4.687 16.97 0"/></svg>
+          <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+        </span>
+      </div>
+
+      <div class="back-row">
+        <button class="back-btn" onclick="goBack('screen-sent')" aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+      </div>
+
+      <div class="brand-header">
+        <div class="logo" style="font-size:0;">
+          <img src="otoz_connect_logo.png" alt="Otoz Connect" style="height:28px; display:block;">
+        </div>
+      </div>
+
+      <div class="heading-section">
+        <div class="heading-title">Set new password</div>
+        <div class="heading-subtitle">
+          Your new password must be different<br>
+          from previously used ones.
+        </div>
+      </div>
+
+      <div class="form">
+
+        <div class="field">
+          <label class="field-label" for="new-password">New password</label>
+          <div class="field-input">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M8 11v-4a4 4 0 0 1 8 0v4"/></svg>
+            <input type="password" id="new-password" placeholder="New password" onkeyup="updateStrength()">
+            <button class="eye-btn" onclick="togglePassword('new-password', 'eye-new')" aria-label="Show password">
+              <svg id="eye-new" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"/></svg>
+            </button>
+          </div>
+
+          <div class="strength-meter" id="strength-meter">
+            <div class="strength-bar"></div>
+            <div class="strength-bar"></div>
+            <div class="strength-bar"></div>
+            <div class="strength-bar"></div>
+          </div>
+
+          <div class="strength-hint">Use 8+ characters with letters, numbers &amp; symbols</div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="confirm-password">Confirm password</label>
+          <div class="field-input">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M8 11v-4a4 4 0 0 1 8 0v4"/></svg>
+            <input type="password" id="confirm-password" placeholder="Confirm password">
+            <button class="eye-btn" onclick="togglePassword('confirm-password', 'eye-confirm')" aria-label="Show password">
+              <svg id="eye-confirm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <button class="primary-btn" onclick="handleResetPassword()">
+          Reset password
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg>
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="home-indicator"></div>
+
+  </div>
+</div>
+
+<script>
+  function goTo(screenId) {
+    const screens = document.querySelectorAll('.screen');
+    screens.forEach(s => s.classList.remove('active', 'back-anim'));
+    document.getElementById(screenId).classList.add('active');
+
+    if (screenId === 'screen-sent') {
+      startResendTimer();
+      const email = document.getElementById('forgot-email').value || 'sarah.ahmed@otoz.ai';
+      document.getElementById('sent-email-display').textContent = email;
+    }
+  }
+
+  function goBack(screenId) {
+    const screens = document.querySelectorAll('.screen');
+    screens.forEach(s => s.classList.remove('active', 'back-anim'));
+    document.getElementById(screenId).classList.add('active', 'back-anim');
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-text').textContent = message;
+    toast.classList.add('show');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  function handleLogin() {
+    showToast('Logged in successfully');
+    setTimeout(() => { window.location.href = 'home.html'; }, 1000);
+  }
+
+  function togglePassword(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.innerHTML = '<path d="M10.585 10.587a2 2 0 0 0 2.829 2.828"/><path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-4 0 -7.333 -2.333 -10 -7c1.369 -2.395 2.913 -4.175 4.632 -5.341m3.368 -1.485a9.026 9.026 0 0 1 2 -.174c4 0 7.333 2.333 10 7c-.692 1.21 -1.43 2.256 -2.214 3.14"/><path d="M3 3l18 18"/>';
+    } else {
+      input.type = 'password';
+      icon.innerHTML = '<circle cx="12" cy="12" r="2"/><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"/>';
+    }
+  }
+
+  function toggleRemember() {
+    document.getElementById('remember-box').classList.toggle('unchecked');
+  }
+
+  function handleSendReset() {
+    goTo('screen-sent');
+  }
+
+  let resendInterval = null;
+  function startResendTimer() {
+    if (resendInterval) clearInterval(resendInterval);
+    let seconds = 30;
+    const resendLink = document.getElementById('resend-link');
+    resendLink.classList.add('disabled');
+    resendLink.innerHTML = 'Resend in <span class="countdown" id="countdown">30</span>s';
+    const countdownEl = document.getElementById('countdown');
+
+    resendInterval = setInterval(() => {
+      seconds--;
+      if (seconds > 0) {
+        countdownEl.textContent = seconds;
+      } else {
+        clearInterval(resendInterval);
+        resendLink.classList.remove('disabled');
+        resendLink.innerHTML = 'Resend link';
+      }
+    }, 1000);
+  }
+
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('#resend-link');
+    if (link && !link.classList.contains('disabled')) {
+      showToast('Reset link sent again');
+      startResendTimer();
+    }
+  });
+
+  function updateStrength() {
+    const password = document.getElementById('new-password').value;
+    const bars = document.querySelectorAll('#strength-meter .strength-bar');
+
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password) && /[a-z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+    bars.forEach((bar, i) => {
+      bar.className = 'strength-bar';
+      if (i < strength) {
+        if (strength === 1) bar.classList.add('active-weak');
+        else if (strength === 2) bar.classList.add('active-fair');
+        else if (strength === 3) bar.classList.add('active-good');
+        else bar.classList.add('active-strong');
+      }
+    });
+  }
+
+  function handleResetPassword() {
+    const newPw = document.getElementById('new-password').value;
+    const confirmPw = document.getElementById('confirm-password').value;
+
+    if (!newPw || !confirmPw) {
+      showToast('Please fill both password fields');
+      return;
+    }
+    if (newPw !== confirmPw) {
+      showToast('Passwords do not match');
+      return;
+    }
+
+    showToast('Password reset successfully');
+    setTimeout(() => {
+      window.location.href = 'home.html';
+    }, 1500);
+  }
+</script>
+
+</body>
+</html>
