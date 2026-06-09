@@ -2482,88 +2482,87 @@
   .stg-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 0;
     padding: 0 16px;
     background: transparent;
+    border-top: none;
+    border-bottom: none;
   }
 
-  /* Each row — card style */
+  /* Each row */
   .stg-row {
     background: #fff;
     position: relative;
-    transition: all 0.18s ease;
-    border-radius: 14px;
+    transition: background 0.15s ease;
+    border-radius: 0;
     overflow: hidden;
-    border: 0.5px solid #e8e8ed;
   }
-  .stg-row.completed { border-color: rgba(48,196,109,0.3); }
-  .stg-row.current   { border-color: rgba(0,113,227,0.35); box-shadow: 0 0 0 3px rgba(0,113,227,0.08); }
-  .stg-row.locked    { border-color: #ebebef; background: #fafafa; }
+  .stg-row:first-child { border-radius: 16px 16px 0 0; }
+  .stg-row:last-child  { border-radius: 0 0 16px 16px; }
+  .stg-row + .stg-row  { border-top: 0.5px solid #f0f0f5; }
+
+  /* Left accent bar */
+  .stg-row::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: background 0.25s ease;
+  }
+  /* Left accent bar — web colours */
+  .stg-row.completed::before { background: linear-gradient(180deg, #30c46d, #4adf86); }
+  .stg-row.current::before   { background: linear-gradient(180deg, #0071e3, #00a3ff); }
+  .stg-row.locked::before    { background: transparent; }
 
   /* ── Header row ── */
   .stg-header {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 8px 10px;
-    padding: 12px 14px;
+    gap: 10px;
+    padding: 13px 16px 13px 18px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
   }
-  .stg-header:active { background: #f7f8fa; }
+  .stg-header:active { background: #f7f7f9; }
 
-  /* Top row inside header: num + title + badge + chevron */
-  .stg-header-top {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    min-width: 0;
-  }
-
-  /* Sub text — full width below */
-  .stg-sub-row {
-    width: 100%;
-    padding-left: 38px; /* 28px icon + 10px gap */
-    padding-bottom: 2px;
-  }
-
-  /* Number circle — 28px */
+  /* Number circle */
   .stg-num {
     width: 28px; height: 28px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700;
+    font-size: 13px; font-weight: 700;
     flex-shrink: 0;
     transition: all 0.25s ease;
+
   }
-  /* Completed — green with check */
+  /* Completed — green (web) */
   .stg-row.completed .stg-num {
     background: linear-gradient(135deg, #30c46d 0%, #4adf86 100%);
     color: #fff;
-    box-shadow: 0 2px 8px rgba(48,196,109,0.35);
+    box-shadow: 0 4px 10px -2px rgba(48,196,109,0.4);
   }
-  /* Current — blue pulsing */
+  /* Current — blue (web) */
   .stg-row.current .stg-num {
     background: linear-gradient(135deg, #0071e3 0%, #00a3ff 100%);
     color: #fff;
-    box-shadow: 0 0 0 4px rgba(0,113,227,0.18);
+    box-shadow: 0 0 0 4px rgba(0,113,227,0.2);
     animation: stgPulse 2s ease-in-out infinite;
   }
-  /* Locked — grey */
+  /* Locked — grey (web) */
   .stg-row.locked .stg-num {
-    background: #ebebef;
+    background: #f0f0f2;
     color: #b0b0b5;
   }
   @keyframes stgPulse {
-    0%,100% { box-shadow: 0 0 0 4px rgba(0,113,227,0.18); }
-    50%      { box-shadow: 0 0 0 7px rgba(0,113,227,0.06); }
+    0%,100% { box-shadow: 0 0 0 4px rgba(0,113,227,0.2); }
+    50%      { box-shadow: 0 0 0 8px rgba(0,113,227,0.05); }
   }
-  .stg-num svg { width: 13px; height: 13px; }
+  .stg-num svg { width: 15px; height: 15px; }
 
   /* Text group */
-  .stg-title-group { flex: 1; min-width: 0; display: flex; align-items: center; }
+  .stg-title-group { flex: 1; min-width: 0; }
   .stg-title {
     font-size: 14px; font-weight: 600;
     color: var(--c-text);
@@ -2573,7 +2572,7 @@
   /* Completed title — green (web) */
   .stg-row.completed .stg-title { color: #047857; }
   /* Locked title — grey (web) */
-  .stg-row.locked .stg-title    { color: #a0a0a5; }
+  .stg-row.locked .stg-title    { color: #8b8b8f; }
 
   .stg-sub {
     font-size: 11.5px; color: var(--c-text-muted);
@@ -2584,7 +2583,7 @@
   /* Completed sub — green tint (web) */
   .stg-row.completed .stg-sub { color: #047857; opacity: 0.85; }
   /* Locked sub — grey (web) */
-  .stg-row.locked .stg-sub    { color: #b0b0b5; }
+  .stg-row.locked .stg-sub    { color: #8b8b8f; }
 
   /* Status pill (badge) */
   .stg-badge {
@@ -2633,9 +2632,9 @@
   .stg-row.open .stg-body { max-height: 3000px; }
 
   .stg-body-inner {
-    padding: 12px 14px 16px;
-    background: #f8f8fb;
-    border-top: 0.5px solid #ebebef;
+    padding: 14px 16px 18px 18px;
+    background: #fafafa;
+    border-top: 0.5px solid #f0f0f5;
   }
 
   /* Fields table */
@@ -3447,13 +3446,13 @@
         <span class="nav-label">Home</span>
       </button>
 
-      <button class="nav-item" onclick="navTo('payment',this)">
+      <a class="nav-item" href="payment.html" style="text-decoration:none;">
         <div class="nav-icon">
           <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="5" width="20" height="14" rx="2.5"/><rect x="2" y="9" width="20" height="3.5" fill="rgba(255,255,255,0.25)"/><rect x="5" y="14.5" width="3.5" height="2" rx="0.8" fill="white"/><rect x="10.5" y="14.5" width="5.5" height="2" rx="0.8" fill="white"/></svg>
           <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="5" y1="15" x2="8.5" y2="15"/><line x1="11" y1="15" x2="16" y2="15"/></svg>
         </div>
         <span class="nav-label">Payment</span>
-      </button>
+      </a>
 
       <button class="nav-item" onclick="navTo('allocation',this)">
         <div class="nav-icon">
@@ -6658,18 +6657,14 @@
 
       return `<div class="stg-row ${state}" onclick="toggleStageRow(this)" data-stage="${n}">
         <div class="stg-header">
-          <div class="stg-header-top">
-            <div class="stg-num">${numContent}</div>
-            <div class="stg-title-group">
-              <div class="stg-title">${meta.name}</div>
-            </div>
-            <div class="stg-right-col">
-              ${badge}
-              <div class="stg-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
-            </div>
-          </div>
-          <div class="stg-sub-row">
+          <div class="stg-num">${numContent}</div>
+          <div class="stg-title-group">
+            <div class="stg-title">${meta.name}</div>
             <div class="stg-sub">${sub}</div>
+          </div>
+          <div class="stg-right-col">
+            ${badge}
+            <div class="stg-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
           </div>
         </div>
         <div class="stg-body"><div class="stg-body-inner">${body}</div></div>
