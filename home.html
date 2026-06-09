@@ -7054,7 +7054,15 @@
   function navTo(tab, btn) {
     document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
     btn.classList.add('active');
-    if (tab !== 'dashboard') showToast(`${tab.charAt(0).toUpperCase() + tab.slice(1)} coming soon`);
+
+    if (tab === 'payment') {
+      window.location.href = 'payment.html';
+      return;
+    }
+
+    if (tab === 'dashboard') return;
+
+    showToast(`${tab.charAt(0).toUpperCase() + tab.slice(1)} coming soon`);
   }
 
 
