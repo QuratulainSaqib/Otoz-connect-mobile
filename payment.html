@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otoz Connect · Payment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+  :root {
+    --c-primary: #173559;
+    --c-primary-hover: #122a47;
+    --c-accent: #2BA6FF;
+    --c-text: #1d1d1f;
+    --c-text-muted: #6e6e73;
+    --c-text-subtle: #86868b;
+    --c-text-tertiary: #a1a1a6;
+    --c-bg-app: #f5f5f7;
+    --c-bg-soft: #fafafb;
+    --c-divider: #e8e8ed;
+    --c-divider-soft: #f1f5f9;
+    --c-success: #30c46d;
+    --c-danger: #ff3b30;
+    --c-warning: #f59e0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: #e8e8ed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .device {
+    width: 380px;
+    height: 800px;
+    background: #1d1d1f;
+    border-radius: 54px;
+    padding: 11px;
+    position: relative;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.08);
+  }
+
+  .screen-wrapper {
+    width: 100%;
+    height: 100%;
+    background: var(--c-bg-app);
+    border-radius: 43px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .home-indicator {
+    position: absolute;
+    bottom: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 5px;
+    background: #1d1d1f;
+    border-radius: 3px;
+    opacity: 0.9;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  /* STATUS BAR */
+  .status-bar {
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 32px 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--c-text);
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+    background: var(--c-bg-app);
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; }
+
+  /* TOAST */
+  .toast {
+    position: absolute;
+    top: 75px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-120%);
+    background: var(--c-text);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    z-index: 1000;
+    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    white-space: nowrap;
+    max-width: 90%;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-success); flex-shrink: 0; }
+
+  /* SCROLLABLE CONTENT */
+  .page-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 90px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .page-scroll::-webkit-scrollbar { display: none; }
+
+  /* PAGE HEADER */
+  .page-header {
+    padding: 8px 20px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--c-bg-app);
+    flex-shrink: 0;
+  }
+  .page-title-block {}
+  .page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+  .page-subtitle {
+    font-size: 13px;
+    color: var(--c-text-muted);
+    margin-top: 3px;
+  }
+
+  /* KPI STATS GRID */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 20px 16px;
+  }
+  .kpi-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+    border: 1px solid var(--c-divider);
+    border-radius: 14px;
+    padding: 12px 13px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
+  .kpi-card:active { transform: scale(0.97); }
+  .kpi-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .kpi-icon i { font-size: 18px; color: #fff; }
+  .kpi-icon.green { background: linear-gradient(135deg, #059669 0%, #34d399 100%); box-shadow: 0 4px 12px rgba(5,150,105,0.28); }
+  .kpi-icon.amber { background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%); box-shadow: 0 4px 12px rgba(217,119,6,0.28); }
+  .kpi-icon.blue  { background: linear-gradient(135deg, #0e7490 0%, #22d3ee 100%); box-shadow: 0 4px 12px rgba(14,116,144,0.28); }
+  .kpi-icon.purple{ background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%); box-shadow: 0 4px 12px rgba(124,58,237,0.28); }
+  .kpi-icon.navy  { background: linear-gradient(135deg, #173559 0%, #2BA6FF 100%); box-shadow: 0 4px 12px rgba(23,53,89,0.28); }
+  .kpi-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .kpi-label {
+    font-size: 10px;
+    color: var(--c-text-muted);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+  }
+  .kpi-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    margin-top: 1px;
+  }
+  .kpi-value .cur { font-size: 12px; font-weight: 600; opacity: 0.7; margin-right: 2px; }
+
+  /* TOOLBAR */
+  .toolbar {
+    padding: 0 20px 12px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .search-wrap {
+    flex: 1;
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    min-width: 0;
+  }
+  .search-wrap:focus-within { border-color: var(--c-accent); }
+  .search-wrap i { font-size: 17px; color: var(--c-text-subtle); flex-shrink: 0; }
+  .search-wrap input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 13px;
+    color: var(--c-text);
+    font-family: inherit;
+    min-width: 0;
+  }
+  .search-wrap input::placeholder { color: var(--c-text-subtle); }
+
+  .filter-btn {
+    width: 42px;
+    height: 42px;
+    background: #fff;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .filter-btn:active { transform: scale(0.95); }
+  .filter-btn i { font-size: 20px; color: var(--c-text); }
+  .filter-btn.active { border-color: var(--c-accent); }
+  .filter-btn.active i { color: var(--c-accent); }
+  .filter-badge {
+    position: absolute;
+    top: -3px; right: -3px;
+    min-width: 16px; height: 16px;
+    padding: 0 4px;
+    border-radius: 9px;
+    background: var(--c-accent);
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--c-bg-app);
+  }
+
+  /* ADD PAYMENT BUTTON */
+  .add-payment-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin: 0 20px 14px;
+    height: 46px;
+    background: linear-gradient(135deg, var(--c-primary) 0%, #2a4a73 100%);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(23,53,89,0.28);
+    transition: all 0.18s ease;
+    font-family: inherit;
+  }
+  .add-payment-btn:active { transform: scale(0.98); }
+  .add-payment-btn i { font-size: 20px; }
+
+  /* SECTION LABEL */
+  .section-label {
+    padding: 0 20px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  /* PAYMENT CARDS */
+  .cards-list {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pay-card {
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    transition: all 0.18s ease;
+  }
+  .pay-card:active { transform: scale(0.99); }
+
+  /* Card Header */
+  .pay-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 14px 10px;
+    border-bottom: 1px solid var(--c-divider-soft);
+  }
+  .pay-card-id-row { display: flex; align-items: center; gap: 8px; }
+  .pay-card-id {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--c-primary);
+    letter-spacing: -0.01em;
+  }
+  .pay-card-date {
+    font-size: 11.5px;
+    color: var(--c-text-subtle);
+    font-weight: 500;
+  }
+
+  /* Status Pills */
+  .wal-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px 4px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    border: 1px solid transparent;
+  }
+  .wal-pill::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .wal-pill--pending {
+    color: #b45309;
+    background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+    border-color: rgba(245,158,11,0.35);
+  }
+  .wal-pill--pending::before {
+    background: #f59e0b;
+    animation: pill-pulse 2s ease-in-out infinite;
+  }
+  @keyframes pill-pulse {
+    0%,100% { box-shadow: 0 0 0 2px rgba(245,158,11,0.18); }
+    50%      { box-shadow: 0 0 0 4px rgba(245,158,11,0.06); }
+  }
+  .wal-pill--confirmed {
+    color: #047857;
+    background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+    border-color: rgba(16,185,129,0.35);
+  }
+  .wal-pill--confirmed::before { background: #10b981; }
+  .wal-pill--rejected {
+    color: #b91c1c;
+    background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%);
+    border-color: rgba(239,68,68,0.35);
+  }
+  .wal-pill--rejected::before { background: #ef4444; }
+
+  /* Card Body */
+  .pay-card-body { padding: 12px 14px; }
+
+  .pay-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .pay-row:last-child { margin-bottom: 0; }
+
+  /* Receipt Thumbnail */
+  .receipt-thumb {
+    width: 52px;
+    height: 42px;
+    border-radius: 8px;
+    background: #f0f0f5;
+    border: 1px solid var(--c-divider);
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.18s ease;
+  }
+  .receipt-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .receipt-thumb .thumb-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(23,53,89,0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+  }
+  .receipt-thumb:active .thumb-overlay { opacity: 1; }
+  .receipt-thumb .thumb-overlay i { font-size: 16px; color: #fff; }
+  .receipt-thumb.no-img { background: linear-gradient(135deg, #f0f4fa 0%, #e8eef8 100%); }
+  .receipt-thumb.no-img i { font-size: 22px; color: #b0b8cc; }
+
+  /* Detail grid in card */
+  .pay-details {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 10px;
+  }
+  .pay-detail-cell { min-width: 0; }
+  .pd-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--c-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 2px;
+  }
+  .pd-value {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pd-value.amount { color: var(--c-primary); }
+  .pd-value .cur-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--c-text-muted);
+    background: rgba(0,0,0,0.05);
+    border-radius: 5px;
+    padding: 1px 5px;
+    margin-right: 4px;
+    vertical-align: 1px;
+  }
+
+  /* Card Actions */
+  .pay-card-actions {
+    padding: 0 14px 13px;
+    display: flex;
+    gap: 8px;
+  }
+
+  /* Pending Allocation Button */
+  .btn-alloc {
+    flex: 1;
+    height: 38px;
+    background: linear-gradient(135deg, var(--c-primary) 0%, #2a4a73 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(23,53,89,0.24);
+    transition: all 0.18s ease;
+    font-family: inherit;
+  }
+  .btn-alloc:active { transform: scale(0.97); }
+  .btn-alloc i { font-size: 16px; }
+
+  /* Confirmation Receipt Download */
+  .btn-receipt {
+    flex: 1;
+    height: 38px;
+    background: #fff;
+    color: #047857;
+    border: 1.5px solid rgba(16,185,129,0.4);
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-family: inherit;
+    background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+  }
+  .btn-receipt:active { transform: scale(0.97); }
+  .btn-receipt i { font-size: 16px; }
+
+  /* Rejection Reason Banner */
+  .rejection-banner {
+    margin: 0 14px 13px;
+    background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%);
+    border: 1px solid rgba(239,68,68,0.25);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .rejection-banner i { font-size: 18px; color: #ef4444; flex-shrink: 0; margin-top: 1px; }
+  .rejection-text {}
+  .rejection-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #b91c1c;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 3px;
+  }
+  .rejection-reason {
+    font-size: 12.5px;
+    color: #7f1d1d;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  .empty-state i { font-size: 48px; color: var(--c-divider); margin-bottom: 14px; }
+  .empty-state .es-title { font-size: 15px; font-weight: 700; color: var(--c-text); margin-bottom: 6px; }
+  .empty-state .es-sub { font-size: 13px; color: var(--c-text-muted); }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: #fff;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding: 10px 0 0;
+    z-index: 40;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+  }
+  .nav-icon { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; }
+  .nav-icon svg { width: 24px; height: 24px; display: block; overflow: visible; }
+  .nav-label { font-size: 10px; font-weight: 500; color: #a0a0ab; letter-spacing: 0.01em; line-height: 1; }
+  .nav-item.active .nav-label { color: var(--c-primary); font-weight: 700; }
+  .nav-item.active .nav-icon svg { color: var(--c-primary); }
+  .nav-icon .icon-outline { display: block; color: #a0a0ab; }
+  .nav-icon .icon-filled  { display: none;  color: var(--c-primary); }
+  .nav-item.active .nav-icon .icon-outline { display: none; }
+  .nav-item.active .nav-icon .icon-filled  { display: block; }
+
+  /* BOTTOM SHEET — Add Payment */
+  .sheet-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 200;
+    border-radius: 43px;
+  }
+  .sheet-backdrop.show { opacity: 1; visibility: visible; }
+
+  .bottom-sheet {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    max-height: 78%;
+    transform: translateY(100%);
+    transition: transform 0.38s cubic-bezier(0.32, 0.72, 0, 1);
+    display: flex;
+    flex-direction: column;
+    z-index: 250;
+    overflow: hidden;
+  }
+  .bottom-sheet.show { transform: translateY(0); }
+
+  .sheet-handle {
+    width: 36px; height: 4px;
+    background: #d1d5db;
+    border-radius: 4px;
+    margin: 10px auto;
+    flex-shrink: 0;
+  }
+  .sheet-header {
+    display: grid;
+    grid-template-columns: 44px 1fr 44px;
+    align-items: center;
+    padding: 4px 16px 12px;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--c-divider-soft);
+  }
+  .sheet-title {
+    font-size: 16px; font-weight: 700; color: var(--c-text);
+    letter-spacing: -0.015em; text-align: center;
+  }
+  .sheet-close-btn {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--c-bg-app); border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; justify-self: end;
+  }
+  .sheet-close-btn i { font-size: 18px; color: var(--c-text-muted); }
+
+  .sheet-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Sheet Form Fields */
+  .form-section {
+    background: var(--c-bg-app);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .form-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 12px;
+  }
+
+  .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--c-text-muted);
+    letter-spacing: -0.005em;
+  }
+  .field label .req { color: var(--c-danger); margin-left: 2px; }
+  .field input, .field select {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    background: #fff;
+    border: 1.5px solid var(--c-divider);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--c-text);
+    outline: none;
+    transition: all 0.18s ease;
+    appearance: none;
+  }
+  .field input:focus, .field select:focus {
+    border-color: var(--c-accent);
+    box-shadow: 0 0 0 3px rgba(43,166,255,0.12);
+  }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* Upload area */
+  .upload-area {
+    border: 2px dashed rgba(23,53,89,0.25);
+    border-radius: 12px;
+    padding: 20px 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: rgba(23,53,89,0.02);
+  }
+  .upload-area:active { border-color: var(--c-accent); background: rgba(43,166,255,0.04); }
+  .upload-area i { font-size: 28px; color: var(--c-accent); margin-bottom: 6px; display: block; }
+  .upload-area .ua-text { font-size: 13px; color: var(--c-text-muted); font-weight: 600; }
+  .upload-area .ua-hint { font-size: 11px; color: var(--c-text-subtle); margin-top: 2px; }
+
+  /* Sheet footer */
+  .sheet-footer {
+    padding: 14px 20px 24px;
+    flex-shrink: 0;
+    border-top: 1px solid var(--c-divider-soft);
+  }
+  .btn-submit {
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(135deg, var(--c-primary) 0%, #2a4a73 100%);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(23,53,89,0.28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    transition: all 0.18s ease;
+  }
+  .btn-submit:active { transform: scale(0.98); }
+  .btn-submit i { font-size: 18px; }
+
+  /* STATUS FILTER SHEET */
+  .filter-list { padding: 0 0 8px; }
+  .filter-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--c-divider-soft);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--c-text);
+    transition: background 0.15s;
+  }
+  .filter-option:last-child { border-bottom: none; }
+  .filter-option:active { background: var(--c-bg-app); }
+  .filter-option .fo-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+  .filter-option .fo-left { display: flex; align-items: center; }
+  .filter-option .fo-check { color: var(--c-accent); font-size: 20px; opacity: 0; }
+  .filter-option.selected .fo-check { opacity: 1; }
+  .fo-dot.all    { background: var(--c-primary); }
+  .fo-dot.pend   { background: #f59e0b; }
+  .fo-dot.conf   { background: #10b981; }
+  .fo-dot.rej    { background: #ef4444; }
+</style>
+</head>
+<body>
+
+<div class="device">
+  <div class="screen-wrapper">
+    <div class="home-indicator"></div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 7l4.5 4.5C7.9 9.1 10.8 8 14 8s6.1 1.1 8.5 3.5L24 10C21.1 6.9 17.3 5 13 5S4.9 6.9 2 10l-1-3z M14 12c-1.8 0-3.4.7-4.6 1.9L14 19l4.6-5.1c-1.2-1.2-2.8-1.9-4.6-1.9z M14 0C8.5 0 3.5 2.2 0 5.8l1.4 1.4C4.5 3.9 9 1.7 14 1.7s9.5 2.2 12.6 5.5L28 5.8C24.5 2.2 19.5 0 14 0z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+      <div class="dot"></div>
+      <span id="toast-msg">Payment submitted!</span>
+    </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-title-block">
+        <div class="page-title">Payments</div>
+        <div class="page-subtitle">Track all transactions</div>
+      </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="page-scroll">
+
+      <!-- KPI Stats Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon green"><i class="ti ti-circle-check-filled"></i></div>
+          <div class="kpi-text">
+            <div class="kpi-label">Confirmed</div>
+            <div class="kpi-value"><span class="cur">$</span>12,450</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon amber"><i class="ti ti-clock"></i></div>
+          <div class="kpi-text">
+            <div class="kpi-label">Pending</div>
+            <div class="kpi-value"><span class="cur">$</span>3,200</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon blue"><i class="ti ti-currency-dollar"></i></div>
+          <div class="kpi-text">
+            <div class="kpi-label">Receivable</div>
+            <div class="kpi-value"><span class="cur">$</span>15,650</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon purple"><i class="ti ti-chart-pie-filled"></i></div>
+          <div class="kpi-text">
+            <div class="kpi-label">Allocated</div>
+            <div class="kpi-value"><span class="cur">$</span>12,100</div>
+          </div>
+        </div>
+        <div class="kpi-card" style="grid-column: 1 / -1;">
+          <div class="kpi-icon navy"><i class="ti ti-wallet"></i></div>
+          <div class="kpi-text">
+            <div class="kpi-label">Unallocated Balance</div>
+            <div class="kpi-value"><span class="cur">$</span>350</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Payment Button -->
+      <button class="add-payment-btn" onclick="openAddSheet()">
+        <i class="ti ti-plus"></i>
+        Add Payment
+      </button>
+
+      <!-- Toolbar: Search + Filter -->
+      <div class="toolbar">
+        <div class="search-wrap">
+          <i class="ti ti-search"></i>
+          <input type="text" id="search-input" placeholder="Search by Transaction ID" oninput="filterCards()">
+        </div>
+        <button class="filter-btn" id="filter-btn" onclick="openFilterSheet()">
+          <i class="ti ti-adjustments-horizontal"></i>
+        </button>
+      </div>
+
+      <!-- Section Label -->
+      <div class="section-label" id="section-label">All Transactions (5)</div>
+
+      <!-- Payment Cards -->
+      <div class="cards-list" id="cards-list"></div>
+
+    </div><!-- end page-scroll -->
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a class="nav-item" href="home.html">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5L3 9.8V20a1 1 0 0 0 1 1h5.5v-5h5v5H20a1 1 0 0 0 1-1V9.8L12 2.5z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.8L12 2.5l9 7.3V20a1 1 0 0 1-1 1h-5.5v-5h-5v5H4a1 1 0 0 1-1-1V9.8z"/></svg>
+        </div>
+        <span class="nav-label">Home</span>
+      </a>
+      <button class="nav-item active">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="5" width="20" height="14" rx="2.5"/><rect x="2" y="9" width="20" height="3.5" fill="rgba(255,255,255,0.25)"/><rect x="5" y="14.5" width="3.5" height="2" rx="0.8" fill="white"/><rect x="10.5" y="14.5" width="5.5" height="2" rx="0.8" fill="white"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="5" y1="15" x2="8.5" y2="15"/><line x1="11" y1="15" x2="16" y2="15"/></svg>
+        </div>
+        <span class="nav-label">Payment</span>
+      </button>
+      <button class="nav-item">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><rect x="2.5" y="2.5" width="8" height="8" rx="1.5"/><rect x="13.5" y="2.5" width="8" height="8" rx="1.5"/><rect x="2.5" y="13.5" width="8" height="8" rx="1.5"/><rect x="13.5" y="13.5" width="8" height="8" rx="1.5"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="8" height="8" rx="1.5"/><rect x="13.5" y="2.5" width="8" height="8" rx="1.5"/><rect x="2.5" y="13.5" width="8" height="8" rx="1.5"/><rect x="13.5" y="13.5" width="8" height="8" rx="1.5"/></svg>
+        </div>
+        <span class="nav-label">Allocation</span>
+      </button>
+      <button class="nav-item">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7v3.59l-1.7 1.7A1 1 0 0 0 4 16h16a1 1 0 0 0 .7-1.71L19 12.59V9a7 7 0 0 0-7-7zm0 20a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0v4l-2 2v1h16v-1l-2-2V8"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+        </div>
+        <span class="nav-label">Notifications</span>
+      </button>
+      <button class="nav-item">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
+        </div>
+        <span class="nav-label">More</span>
+      </button>
+    </nav>
+
+    <!-- ===== ADD PAYMENT BOTTOM SHEET ===== -->
+    <div class="sheet-backdrop" id="add-backdrop" onclick="closeAddSheet()"></div>
+    <div class="bottom-sheet" id="add-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <span></span>
+        <span class="sheet-title">Add Payment</span>
+        <button class="sheet-close-btn" onclick="closeAddSheet()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="sheet-body">
+        <div class="form-section">
+          <div class="form-section-title">Payment Details</div>
+
+          <div class="field">
+            <label>Upload Bank Receipt <span class="req">*</span></label>
+            <div class="upload-area" onclick="showToast('File picker opened')">
+              <i class="ti ti-cloud-upload"></i>
+              <div class="ua-text">Tap to upload receipt</div>
+              <div class="ua-hint">PNG, JPG or PDF · max 5MB</div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field" style="margin-bottom:0">
+              <label>Currency <span class="req">*</span></label>
+              <select>
+                <option>USD</option>
+                <option>JPY</option>
+                <option>EUR</option>
+                <option>GBP</option>
+                <option>AED</option>
+              </select>
+            </div>
+            <div class="field" style="margin-bottom:0">
+              <label>Amount <span class="req">*</span></label>
+              <input type="number" placeholder="0.00">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sheet-footer">
+        <button class="btn-submit" onclick="submitPayment()">
+          <i class="ti ti-send"></i>
+          Submit Payment
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== FILTER BOTTOM SHEET ===== -->
+    <div class="sheet-backdrop" id="filter-backdrop" onclick="closeFilterSheet()"></div>
+    <div class="bottom-sheet" id="filter-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <span></span>
+        <span class="sheet-title">Filter by Status</span>
+        <button class="sheet-close-btn" onclick="closeFilterSheet()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="filter-list" id="filter-list">
+        <div class="filter-option selected" onclick="selectFilter('all',this)">
+          <div class="fo-left"><div class="fo-dot all"></div>All Statuses</div>
+          <i class="ti ti-check fo-check"></i>
+        </div>
+        <div class="filter-option" onclick="selectFilter('pending',this)">
+          <div class="fo-left"><div class="fo-dot pend"></div>Pending</div>
+          <i class="ti ti-check fo-check"></i>
+        </div>
+        <div class="filter-option" onclick="selectFilter('confirmed',this)">
+          <div class="fo-left"><div class="fo-dot conf"></div>Confirmed</div>
+          <i class="ti ti-check fo-check"></i>
+        </div>
+        <div class="filter-option" onclick="selectFilter('rejected',this)">
+          <div class="fo-left"><div class="fo-dot rej"></div>Rejected</div>
+          <i class="ti ti-check fo-check"></i>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- screen-wrapper -->
+</div><!-- device -->
+
+<script>
+  // ── Sample Data ──
+  const PAYMENTS = [
+    {
+      id: 'PAY-001',
+      txnId: 'TXN-2024-00183',
+      uploadDate: '12 Jan 2025',
+      currency: 'USD',
+      amount: '5,500',
+      status: 'confirmed',
+      receiptImg: null,
+      hasAllocation: false,
+      hasConfirmReceipt: true,
+      confirmReceiptName: 'receipt_001.pdf',
+      rejectionReason: null
+    },
+    {
+      id: 'PAY-002',
+      txnId: 'TXN-2024-00247',
+      uploadDate: '18 Jan 2025',
+      currency: 'USD',
+      amount: '2,800',
+      status: 'pending',
+      receiptImg: null,
+      hasAllocation: false,
+      hasConfirmReceipt: false,
+      confirmReceiptName: null,
+      rejectionReason: null
+    },
+    {
+      id: 'PAY-003',
+      txnId: 'TXN-2024-00312',
+      uploadDate: '25 Jan 2025',
+      currency: 'JPY',
+      amount: '850,000',
+      status: 'confirmed',
+      receiptImg: null,
+      hasAllocation: true,
+      hasConfirmReceipt: true,
+      confirmReceiptName: 'receipt_003.pdf',
+      rejectionReason: null
+    },
+    {
+      id: 'PAY-004',
+      txnId: 'TXN-2024-00405',
+      uploadDate: '02 Feb 2025',
+      currency: 'USD',
+      amount: '3,200',
+      status: 'rejected',
+      receiptImg: null,
+      hasAllocation: false,
+      hasConfirmReceipt: false,
+      confirmReceiptName: null,
+      rejectionReason: 'Receipt image is blurry and unreadable. Please re-upload a clear copy of the bank transfer receipt.'
+    },
+    {
+      id: 'PAY-005',
+      txnId: 'TXN-2024-00498',
+      uploadDate: '09 Feb 2025',
+      currency: 'USD',
+      amount: '6,950',
+      status: 'confirmed',
+      receiptImg: null,
+      hasAllocation: false,
+      hasConfirmReceipt: true,
+      confirmReceiptName: 'receipt_005.pdf',
+      rejectionReason: null
+    }
+  ];
+
+  let currentFilter = 'all';
+
+  function renderCards(data) {
+    const list = document.getElementById('cards-list');
+    const label = document.getElementById('section-label');
+
+    if (!data.length) {
+      list.innerHTML = `<div class="empty-state">
+        <i class="ti ti-credit-card-off"></i>
+        <div class="es-title">No transactions found</div>
+        <div class="es-sub">Try a different search or filter</div>
+      </div>`;
+      label.textContent = '0 Transactions';
+      return;
+    }
+
+    const filterText = currentFilter === 'all' ? 'All Transactions' :
+                       currentFilter === 'confirmed' ? 'Confirmed' :
+                       currentFilter === 'pending'   ? 'Pending'   : 'Rejected';
+    label.textContent = `${filterText} (${data.length})`;
+
+    list.innerHTML = data.map(p => {
+      const pillClass = p.status === 'confirmed' ? 'wal-pill--confirmed' :
+                        p.status === 'rejected'  ? 'wal-pill--rejected'  : 'wal-pill--pending';
+      const pillText = p.status === 'confirmed' ? 'Confirmed' :
+                       p.status === 'rejected'  ? 'Rejected'  : 'Pending';
+
+      // Receipt thumbnail
+      const thumbHtml = `<div class="receipt-thumb no-img" onclick="showToast('Opening receipt image…')">
+        <i class="ti ti-file-invoice"></i>
+        <div class="thumb-overlay"><i class="ti ti-eye"></i></div>
+      </div>`;
+
+      // Conditional: Pending Allocation button (only if confirmed)
+      const allocBtn = (p.status === 'confirmed' && p.hasAllocation)
+        ? `<button class="btn-alloc" onclick="showToast('Pending Allocation opened')">
+            <i class="ti ti-arrows-split-2"></i> Pending Allocation
+           </button>`
+        : '';
+
+      // Conditional: Confirmation Receipt button (only if confirmed)
+      const receiptBtn = (p.status === 'confirmed' && p.hasConfirmReceipt)
+        ? `<button class="btn-receipt" onclick="showToast('Downloading ${p.confirmReceiptName}…')">
+            <i class="ti ti-download"></i> Conf. Receipt
+           </button>`
+        : '';
+
+      // Conditional: Rejection Reason (only if rejected)
+      const rejectBanner = (p.status === 'rejected' && p.rejectionReason)
+        ? `<div class="rejection-banner">
+            <i class="ti ti-alert-circle-filled"></i>
+            <div class="rejection-text">
+              <div class="rejection-label">Rejection Reason</div>
+              <div class="rejection-reason">${p.rejectionReason}</div>
+            </div>
+           </div>`
+        : '';
+
+      const hasActions = allocBtn || receiptBtn;
+
+      return `<div class="pay-card">
+        <div class="pay-card-head">
+          <div class="pay-card-id-row">
+            <div class="pay-card-id">${p.id}</div>
+            <div class="pay-card-date">${p.uploadDate}</div>
+          </div>
+          <span class="wal-pill ${pillClass}">${pillText}</span>
+        </div>
+
+        <div class="pay-card-body">
+          <div class="pay-row">
+            ${thumbHtml}
+            <div class="pay-details">
+              <div class="pay-detail-cell">
+                <div class="pd-label">Transaction ID</div>
+                <div class="pd-value">${p.txnId}</div>
+              </div>
+              <div class="pay-detail-cell">
+                <div class="pd-label">Currency</div>
+                <div class="pd-value">${p.currency}</div>
+              </div>
+              <div class="pay-detail-cell" style="grid-column:1/-1">
+                <div class="pd-label">Amount</div>
+                <div class="pd-value amount"><span class="cur-tag">${p.currency}</span>${p.amount}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        ${rejectBanner}
+
+        ${hasActions ? `<div class="pay-card-actions">${allocBtn}${receiptBtn}</div>` : ''}
+      </div>`;
+    }).join('');
+  }
+
+  function filterCards() {
+    const q = document.getElementById('search-input').value.toLowerCase();
+    let data = PAYMENTS;
+    if (currentFilter !== 'all') data = data.filter(p => p.status === currentFilter);
+    if (q) data = data.filter(p => p.txnId.toLowerCase().includes(q) || p.id.toLowerCase().includes(q));
+    renderCards(data);
+  }
+
+  // ── Filter Sheet ──
+  function openFilterSheet() {
+    document.getElementById('filter-backdrop').classList.add('show');
+    document.getElementById('filter-sheet').classList.add('show');
+  }
+  function closeFilterSheet() {
+    document.getElementById('filter-backdrop').classList.remove('show');
+    document.getElementById('filter-sheet').classList.remove('show');
+  }
+  function selectFilter(val, el) {
+    currentFilter = val;
+    document.querySelectorAll('.filter-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    const btn = document.getElementById('filter-btn');
+    if (val !== 'all') {
+      btn.classList.add('active');
+      btn.innerHTML = `<i class="ti ti-adjustments-horizontal"></i><div class="filter-badge">1</div>`;
+    } else {
+      btn.classList.remove('active');
+      btn.innerHTML = `<i class="ti ti-adjustments-horizontal"></i>`;
+    }
+    filterCards();
+    setTimeout(closeFilterSheet, 220);
+  }
+
+  // ── Add Sheet ──
+  function openAddSheet() {
+    document.getElementById('add-backdrop').classList.add('show');
+    document.getElementById('add-sheet').classList.add('show');
+  }
+  function closeAddSheet() {
+    document.getElementById('add-backdrop').classList.remove('show');
+    document.getElementById('add-sheet').classList.remove('show');
+  }
+  function submitPayment() {
+    closeAddSheet();
+    showToast('Payment submitted successfully!');
+  }
+
+  // ── Toast ──
+  let _toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  // ── Init ──
+  renderCards(PAYMENTS);
+</script>
+</body>
+</html>
