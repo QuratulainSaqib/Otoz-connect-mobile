@@ -2182,7 +2182,11 @@
     text-align: center;
     color: var(--c-text-muted);
   }
-  .empty-state i { font-size: 48px; color: #d1d5db; margin-bottom: 8px; display: block; }
+  .empty-state i { font-size: 48px; color: #d1d5db; margin-bottom: 8px; display: block; animation: empty-car-bounce 1.8s ease-in-out infinite; }
+  @keyframes empty-car-bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(-8px) scale(1.05); }
+  }
   .empty-state .title { font-size: 15px; font-weight: 600; color: var(--c-text); margin-bottom: 4px; }
   .empty-state .desc { font-size: 13px; }
 

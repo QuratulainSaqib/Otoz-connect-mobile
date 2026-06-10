@@ -562,7 +562,11 @@
     padding: 40px 24px;
     text-align: center;
   }
-  .empty-state i { font-size: 48px; color: var(--c-divider); margin-bottom: 14px; }
+  .empty-state i { font-size: 48px; color: #d1d5db; margin-bottom: 14px; display: block; animation: empty-car-bounce 1.8s ease-in-out infinite; }
+  @keyframes empty-car-bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(-8px) scale(1.05); }
+  }
   .empty-state .es-title { font-size: 15px; font-weight: 700; color: var(--c-text); margin-bottom: 6px; }
   .empty-state .es-sub { font-size: 13px; color: var(--c-text-muted); }
 
