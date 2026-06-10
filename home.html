@@ -7733,5 +7733,46 @@
 
 </script>
 
+<script>
+  (function () {
+    const blockShortcut = function (e) {
+      const key = e.key ? e.key.toLowerCase() : '';
+      const ctrl = e.ctrlKey || e.metaKey;
+
+      if (e.key === 'F12' || (e.altKey && e.key === 'F12')) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+
+      if (ctrl && e.shiftKey && ['i', 'c', 'j', 'k', 'u'].includes(key)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+
+      if (ctrl && key === 'u') {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+
+      if (e.key === 'ContextMenu') {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    };
+
+    document.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }, false);
+
+    document.addEventListener('keydown', blockShortcut, true);
+    document.addEventListener('keyup', blockShortcut, true);
+  })();
+</script>
+
 </body>
 </html>
