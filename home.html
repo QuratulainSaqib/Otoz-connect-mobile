@@ -1027,6 +1027,8 @@
     -webkit-overflow-scrolling: touch;
   }
   #model-list::-webkit-scrollbar { display: none; }
+
+  #model-sheet .sheet-body {
     flex: 1;
     display: flex;
     overflow: hidden;
@@ -1381,6 +1383,7 @@
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s;
     box-sizing: border-box;
+    appearance: none;
     -webkit-appearance: none;
     -webkit-user-select: text;
     user-select: text;
@@ -1430,7 +1433,7 @@
   .con-input::-webkit-credentials-auto-fill-button,
   .con-input::-webkit-caps-lock-indicator,
   .con-input::-webkit-textfield-decoration-container { display: none !important; }
-  .con-input { -webkit-appearance: none; }
+  .con-input { appearance: none; -webkit-appearance: none; }
   .con-phone-wrap {
     display: flex; align-items: center;
     border: 1px solid var(--c-divider);
@@ -1627,7 +1630,6 @@
     gap: 12px;
     margin-top: 16px;
   }
-  .adj-total-left {}
   .adj-total-label {
     font-size: 16px;
     font-weight: 700;
