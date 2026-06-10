@@ -102,14 +102,16 @@
     font-size: 13.5px;
     font-weight: 500;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     z-index: 1000;
     transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
-    white-space: nowrap;
-    max-width: 90%;
+    white-space: normal;
+    width: 90%;
+    line-height: 1.4;
   }
+  .toast .dot { margin-top: 4px; }
   .toast.show { transform: translateX(-50%) translateY(0); }
   .toast .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-success); flex-shrink: 0; }
 
@@ -131,13 +133,16 @@
     flex-shrink: 0;
     gap: 12px;
   }
-  .dash-greeting-block { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .dash-greeting-block { display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; overflow: hidden; }
   .dash-greeting {
     font-size: 22px;
     font-weight: 700;
     color: var(--c-text);
     letter-spacing: -0.025em;
     line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .dash-greeting .name { color: var(--c-primary); }
   .dash-subtitle {
@@ -146,14 +151,45 @@
     margin-top: 3px;
   }
 
+  .total-cars-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+    border: 1px solid var(--c-divider);
+    border-radius: 12px;
+    padding: 6px 10px;
+    flex-shrink: 0;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: all 0.18s ease;
+  }
+  .total-cars-badge:active { transform: scale(0.97); }
+  .total-cars-badge i {
+    font-size: 15px;
+    color: #fff;
+    background: linear-gradient(135deg, #2BA6FF 0%, #00a3ff 100%);
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(43,166,255, 0.28);
+  }
+  .tcb-text { display: flex; flex-direction: column; line-height: 1.15; }
+  .tcb-value { font-size: 14px; font-weight: 700; color: var(--c-text); letter-spacing: -0.02em; }
+  .tcb-label { font-size: 9px; color: var(--c-text-muted); font-weight: 500; white-space: nowrap; }
+
 
 
   /* Stats grid — 2 compact horizontal cards (matches web style) */
   .stats-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 10px;
-    margin: 0 20px 16px;
+    margin: 0 20px 8px;
   }
   .stat-card {
     background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
@@ -285,6 +321,9 @@
     gap: 8px;
     padding: 0 20px 12px;
     background: var(--c-bg-app);
+    position: sticky;
+    top: 49px;
+    z-index: 5;
   }
 
   .search-wrap {
@@ -2263,7 +2302,7 @@
 
   /* ============ REQUEST CONSIGNEE CHANGE PAGE ============ */
   #request-change-page { z-index: 460; }
-  #request-change-page .full-page-body { background: #fff; padding-bottom: 100px; }
+  #request-change-page .full-page-body { background: #fff; padding-bottom: 180px; }
 
   .rcc-pending-banner {
     background: linear-gradient(180deg, #fff8e6 0%, #fff3cf 100%);
@@ -3059,6 +3098,9 @@
   }
   .yi-zip-btn:active { transform: scale(0.98); }
   .yi-zip-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .yi-action-row { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .yi-action-row .yi-zip-btn { margin-top: 0; }
+  .yi-action-row .yi-zip-btn.share-wa { background: #25D366; box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 2px 8px rgba(37,211,102,0.32); }
 
   /* ===== LIGHTBOX — Full-screen mobile slider ===== */
   #yi-lightbox {
@@ -3382,23 +3424,13 @@
           <div class="dash-greeting">Welcome back, <span class="name">Fahad</span></div>
           <div class="dash-subtitle">Track your vehicles and shipments</div>
         </div>
-
       </div>
 
       <div class="stats-grid">
         <div class="stat-card" onclick="showToast('View all vehicles')">
           <div class="sc-icon blue"><i class="ti ti-car"></i></div>
-          <div class="sc-text">
-            <div class="sc-label">Total Cars</div>
-            <div class="sc-value">350</div>
-          </div>
-        </div>
-        <div class="stat-card" onclick="showToast('View delivered vehicles')">
-          <div class="sc-icon green"><i class="ti ti-circle-check"></i></div>
-          <div class="sc-text">
-            <div class="sc-label">Total Delivered</div>
-            <div class="sc-value">128</div>
-          </div>
+          <div class="sc-label" style="font-size:14px;">Total Cars</div>
+          <div class="sc-value" style="margin-left:auto;">350</div>
         </div>
       </div>
 
@@ -3419,7 +3451,7 @@
       <div class="controls-row">
         <div class="search-wrap">
           <i class="ti ti-search"></i>
-          <input type="text" id="dash-search" placeholder="Search by chassis no..." oninput="applySearch()">
+          <input type="text" id="dash-search" placeholder="Search vehicles..." oninput="applySearch()">
         </div>
         <button class="icon-btn" id="filter-icon-btn" onclick="openFilterSheet()" aria-label="Filters">
           <i class="ti ti-adjustments-horizontal"></i>
@@ -4345,7 +4377,7 @@
         <span style="width:32px;"></span>
       </div>
 
-      <div class="full-page-body" style="background:#fff;padding-bottom:100px;">
+      <div class="full-page-body" style="background:#fff;padding-bottom:130px;">
 
         <!-- Vehicle card -->
         <div class="vc-card" id="rcc-vehicle-card"></div>
@@ -4521,7 +4553,7 @@
 
         <!-- Confirm checkbox -->
         <label class="cf-agree-card" id="rcc-agree-card" style="margin-bottom:0;">
-          <input type="checkbox" id="rcc-agree">
+          <input type="checkbox" id="rcc-agree" onchange="if(this.checked) document.getElementById('rcc-error-msg').style.display='none';">
           <span class="cf-check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
           <span class="cf-agree-text" style="font-size:12.5px;">I confirm the new details are accurate as per the buyer's official document, and understand that amendment charges from the shipping line may apply.</span>
         </label>
@@ -4618,15 +4650,6 @@
           </div>
         </div>
 
-        <!-- Old Details Card -->
-        <div class="crv-stack-card" id="crv-old-card">
-          <div class="crv-stack-banner old">
-            <span>Old Consignee Details</span>
-            <span class="crv-badge-date" id="crv-old-date">Created 02 Aug 2026</span>
-          </div>
-          <div id="crv-old-body"></div>
-        </div>
-
         <!-- Requested Details Card -->
         <div class="crv-stack-card requested-tint" id="crv-new-card">
           <div class="crv-stack-banner requested">
@@ -4634,6 +4657,15 @@
             <span class="crv-badge-date" id="crv-new-date">Requested Today</span>
           </div>
           <div id="crv-new-body"></div>
+        </div>
+
+        <!-- Old Details Card -->
+        <div class="crv-stack-card" id="crv-old-card">
+          <div class="crv-stack-banner old">
+            <span>Old Consignee Details</span>
+            <span class="crv-badge-date" id="crv-old-date">Created 02 Aug 2026</span>
+          </div>
+          <div id="crv-old-body"></div>
         </div>
 
       </div>
@@ -5027,7 +5059,16 @@
     if (state.filters.stage) list = list.filter(v => v.stage === parseInt(state.filters.stage));
     if (state.search) {
       const q = state.search.toLowerCase();
-      list = list.filter(v => v.chassis.toLowerCase().includes(q));
+      list = list.filter(v =>
+        (v.chassis && v.chassis.toLowerCase().includes(q)) ||
+        (v.make && v.make.toLowerCase().includes(q)) ||
+        (v.model && v.model.toLowerCase().includes(q)) ||
+        (v.code && v.code.toLowerCase().includes(q)) ||
+        (v.port && v.port.toLowerCase().includes(q)) ||
+        (v.bcn && v.bcn.toLowerCase().includes(q)) ||
+        (v.year && String(v.year).includes(q)) ||
+        (v.purchaseDate && v.purchaseDate.toLowerCase().includes(q))
+      );
     }
     if (state.filters.make) list = list.filter(v => v.make === state.filters.make);
     if (state.filters.model) list = list.filter(v => v.model === state.filters.model);
@@ -5186,18 +5227,30 @@
 
   // Sample consignee data for demo vehicles that already have BCN
   const SAMPLE_CONSIGNEE = {
-    1: { consignee: [['Consignee Name','Charles Taurai Matshongwe'],['Address','27475 Unit O Examination, Chitungwiza'],['Country','Zimbabwe'],['City','Harare'],['Postal Code','00263'],['Email','pdupstyles@gmail.com'],['Phone','+263 77 304 6898']], notifySame: true, notify: null, buyerSame: true, buyer: null },
-    3: { consignee: [['Consignee Name','Ahmed Al-Rashidi'],['Address','Plot 45, Mombasa Road'],['Country','Kenya'],['City','Mombasa'],['Postal Code','80100'],['Email','ahmed.alrashidi@gmail.com'],['Phone','+254 712 345678']], notifySame: false, notify: [['Notify Name','Salim Hassan'],['Address','Plot 45, Mombasa Road'],['Country','Kenya'],['City','Mombasa'],['Postal Code','80100'],['Email','salim.h@gmail.com'],['Phone','+254 722 111222']], buyerSame: false, buyer: [['Buyer Name','Fatima Al-Rashidi'],['Address','Plot 12, Nairobi West'],['Country','Kenya'],['City','Nairobi'],['Postal Code','00100'],['Email','fatima.r@gmail.com'],['Phone','+254 701 998877']] },
-    4: { consignee: [['Consignee Name','David Okonkwo'],['Address','15 Victoria Island, Eti-Osa'],['Country','Nigeria'],['City','Lagos'],['Postal Code','101241'],['Email','david.okonkwo@mail.ng'],['Phone','+234 802 123 4567']], notifySame: true, notify: null, buyerSame: false, buyer: [['Buyer Name','Grace Okonkwo'],['Address','15 Victoria Island, Eti-Osa'],['Country','Nigeria'],['City','Lagos'],['Postal Code','101241'],['Email','grace.ok@mail.ng'],['Phone','+234 803 987 6543']] },
-    6: { consignee: [['Consignee Name','Sipho Ndlovu'],['Address','23 Berea Road, Musgrave'],['Country','South Africa'],['City','Durban'],['Postal Code','4001'],['Email','sipho.ndlovu@webmail.co.za'],['Phone','+27 82 123 4567']], notifySame: true, notify: null, buyerSame: true, buyer: null },
-    7: { consignee: [['Consignee Name','James Kariuki'],['Address','Westlands, Chiromo Lane'],['Country','Kenya'],['City','Nairobi'],['Postal Code','00800'],['Email','james.k@gmail.com'],['Phone','+254 701 234567']], notifySame: true, notify: null, buyerSame: true, buyer: null },
-    8: { consignee: [['Consignee Name','Robert Mugani'],['Address','Borrowdale, Harare North'],['Country','Zimbabwe'],['City','Harare'],['Postal Code','00263'],['Email','r.mugani@zol.co.zw'],['Phone','+263 71 234 5678']], notifySame: false, notify: [['Notify Name','Mary Mugani'],['Address','Borrowdale, Harare North'],['Country','Zimbabwe'],['City','Harare'],['Postal Code','00263'],['Email','mary.m@zol.co.zw'],['Phone','+263 77 987 6543']], buyerSame: false, buyer: [['Buyer Name','TarisaiLogistics Ltd'],['Address','Msasa Industrial Area'],['Country','Zimbabwe'],['City','Harare'],['Postal Code','00263'],['Email','ops@tarisai.co.zw'],['Phone','+263 4 662 0011']] },
+    1: { consignee: [['Consignee Name','Charles Taurai Matshongwe'],['Address','27475 Unit O Examination, Chitungwiza'],['Country','Zimbabwe'],['City','Harare'],['Postal Code','00263'],['Email','pdupstyles@gmail.com'],['Phone','+263 77 304 6898'],['Passport Copy','PASSPORT_CHARLES.JPG']], notifySame: true, notify: null, buyerSame: true, buyer: null },
+    3: { consignee: [['Consignee Name','Ahmed Al-Rashidi'],['Address','Plot 45, Mombasa Road'],['Country','Kenya'],['City','Mombasa'],['Postal Code','80100'],['Email','ahmed.alrashidi@gmail.com'],['Phone','+254 712 345678'],['Passport Copy','PASSPORT_AHMED.PDF']], notifySame: false, notify: [['Notify Name','Salim Hassan'],['Address','Plot 45, Mombasa Road'],['Country','Kenya'],['City','Mombasa'],['Postal Code','80100'],['Email','salim.h@gmail.com'],['Phone','+254 722 111222']], buyerSame: false, buyer: [['Buyer Name','Fatima Al-Rashidi'],['Address','Plot 12, Nairobi West'],['Country','Kenya'],['City','Nairobi'],['Postal Code','00100'],['Email','fatima.r@gmail.com'],['Phone','+254 701 998877']] },
+    4: { consignee: [['Consignee Name','David Okonkwo'],['Address','15 Victoria Island, Eti-Osa'],['Country','Nigeria'],['City','Lagos'],['Postal Code','101241'],['Email','david.okonkwo@mail.ng'],['Phone','+234 802 123 4567'],['Passport Copy','PASSPORT_DAVID.JPG']], notifySame: true, notify: null, buyerSame: false, buyer: [['Buyer Name','Grace Okonkwo'],['Address','15 Victoria Island, Eti-Osa'],['Country','Nigeria'],['City','Lagos'],['Postal Code','101241'],['Email','grace.ok@mail.ng'],['Phone','+234 803 987 6543']] },
+    6: { consignee: [['Consignee Name','Sipho Ndlovu'],['Address','23 Berea Road, Musgrave'],['Country','South Africa'],['City','Durban'],['Postal Code','4001'],['Email','sipho.ndlovu@webmail.co.za'],['Phone','+27 82 123 4567'],['Passport Copy','PASSPORT_SIPHO.PNG']], notifySame: true, notify: null, buyerSame: true, buyer: null },
+    7: { consignee: [['Consignee Name','James Kariuki'],['Address','Westlands, Chiromo Lane'],['Country','Kenya'],['City','Nairobi'],['Postal Code','00800'],['Email','james.k@gmail.com'],['Phone','+254 701 234567'],['Passport Copy','PASSPORT_JAMES.JPG']], notifySame: true, notify: null, buyerSame: true, buyer: null },
+    8: { consignee: [['Consignee Name','Robert Mugani'],['Address','Borrowdale, Harare North'],['Country','Zimbabwe'],['City','Harare'],['Postal Code','00263'],['Email','r.mugani@zol.co.zw'],['Phone','+263 71 234 5678'],['Passport Copy','PASSPORT_ROBERT.PDF']], notifySame: false, notify: [['Notify Name','Mary Mugani'],['Address','Borrowdale, Harare North'],['Country','Zimbabwe'],['City','Harare'],['Postal Code','00263'],['Email','mary.m@zol.co.zw'],['Phone','+263 77 987 6543']], buyerSame: false, buyer: [['Buyer Name','TarisaiLogistics Ltd'],['Address','Msasa Industrial Area'],['Country','Zimbabwe'],['City','Harare'],['Postal Code','00263'],['Email','ops@tarisai.co.zw'],['Phone','+263 4 662 0011']] },
   };
 
   function buildVwRows(rows) {
-    return rows.map(([k, v]) =>
-      `<div class="vw-row"><span class="vw-key">${k}</span><span class="vw-val">${v}</span></div>`
-    ).join('');
+    return rows.map(([k, v]) => {
+      if (k === 'Passport Copy' && v && v !== '—') {
+        const ext = (v.split('.').pop() || '').toUpperCase();
+        const iconCls = ext === 'PDF' ? 'ti-file-type-pdf' : 'ti-photo';
+        return `<div class="vw-row"><span class="vw-key">${k}</span>
+          <span class="vw-val" style="display:flex;align-items:center;gap:6px;color:var(--c-accent);cursor:pointer;" onclick="viewPassportFile('${v}')">
+            <i class="ti ${iconCls}"></i> ${v}
+          </span></div>`;
+      }
+      return `<div class="vw-row"><span class="vw-key">${k}</span><span class="vw-val">${v}</span></div>`;
+    }).join('');
+  }
+
+  function viewPassportFile(filename) {
+    showToast(`Opening ${filename}...`);
   }
 
   function openViewConsignee(id) {
@@ -5212,7 +5265,7 @@
     // Get saved data or fall back to sample
     const saved = (window._consigneeData && window._consigneeData[numId]);
     const data = saved || SAMPLE_CONSIGNEE[numId] || {
-      consignee: [['Consignee Name','—'],['Address','—'],['Country','—'],['City','—'],['Postal Code','—'],['Email','—'],['Phone','—']],
+      consignee: [['Consignee Name','—'],['Address','—'],['Country','—'],['City','—'],['Postal Code','—'],['Email','—'],['Phone','—'],['Passport Copy','—']],
       notifySame: true, notify: null, buyerSame: true, buyer: null
     };
 
@@ -6475,10 +6528,10 @@
       fields: [
         ['Make',              'Toyota'],
         ['Model',             'Raize'],
-        ['Code',              '5BA-A200A'],
+        ['Model Code',        '5BA-A200A'],
         ['Chassis No.',       'WDC2539052F422655'],
         ['Reg. Year',         '2022'],
-        ['Currency',          'USD'],
+        ['PURCH. CURR.',      'USD'],
         ['Purchase Price',    '$24,205'],
         ['Purchase Date',     '02 / 08 / 2026'],
         ['Auction Site',      'i-Auc'],
@@ -6908,10 +6961,16 @@
         <div class="yi-gallery${useHero ? ' hero' : ''}">
           ${thumbsHtml}
         </div>
-        <button class="yi-zip-btn" onclick="event.stopPropagation(); yiLbDownloadAll()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download All as ZIP
-        </button>
+        <div class="yi-action-row">
+          <button class="yi-zip-btn" onclick="event.stopPropagation(); yiLbDownloadAll()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download All as ZIP
+          </button>
+          <button class="yi-zip-btn share-wa" onclick="event.stopPropagation(); yiLbShareWhatsApp()">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475 0 1.455 1.07 2.865 1.219 3.075.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016a9.87 9.87 0 0 1-5.031-1.378l-.36-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.002-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.884 9.884m8.413-18.297A11.815 11.815 0 0 0 11.987 0C5.452 0 .144 5.307.142 11.832c0 2.085.544 4.118 1.578 5.913L.057 24l6.305-1.654a11.86 11.86 0 0 0 5.622 1.432h.005c6.535 0 11.842-5.307 11.845-11.833a11.77 11.77 0 0 0-3.46-8.371"/></svg>
+            Share on WhatsApp
+          </button>
+        </div>
       `;
       return html;
     }
@@ -7265,6 +7324,18 @@
     const errMsg = document.getElementById('rcc-error-msg');
     if (!document.getElementById('rcc-agree').checked) {
       errMsg.style.display = 'flex';
+      const agreeCard = document.getElementById('rcc-agree-card');
+      const scrollBody = document.querySelector('#request-change-page .full-page-body');
+      if (agreeCard && scrollBody) {
+        const cardRect = agreeCard.getBoundingClientRect();
+        const bodyRect = scrollBody.getBoundingClientRect();
+        const footerHeight = 150; // approx height of footer with error msg + button
+        const visibleBottom = bodyRect.bottom - footerHeight;
+        if (cardRect.bottom > visibleBottom) {
+          const offset = cardRect.bottom - visibleBottom;
+          scrollBody.scrollTop += offset + 16;
+        }
+      }
       return;
     }
     errMsg.style.display = 'none';
@@ -7444,16 +7515,11 @@
       }
     });
 
-    // Show dots or counter
+    // Always use counter badge instead of dots (better for large photo sets)
     const dotsWrap    = document.getElementById('yi-lb-dots');
     const bigCounter  = document.getElementById('yi-lb-bigcounter');
-    if (total > 15) {
-      dotsWrap.classList.add('hidden');
-      bigCounter.classList.remove('hidden');
-    } else {
-      dotsWrap.classList.remove('hidden');
-      bigCounter.classList.add('hidden');
-    }
+    dotsWrap.classList.add('hidden');
+    bigCounter.classList.remove('hidden');
 
     // Attach touch events to stage
     const stage = document.getElementById('yi-lb-stage');
@@ -7566,6 +7632,11 @@
   function yiLbDownloadAll() {
     const total = _yiPhotos.length || STAGE_DATA[2]?.yardPhotos?.length || 0;
     showToast(`Downloading all ${total} photos as ZIP…`);
+  }
+
+  function yiLbShareWhatsApp() {
+    const total = _yiPhotos.length || STAGE_DATA[2]?.yardPhotos?.length || 0;
+    showToast(`Sharing all ${total} photos as ZIP on WhatsApp…`);
   }
 
   // Keyboard nav
