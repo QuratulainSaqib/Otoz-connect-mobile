@@ -2963,6 +2963,100 @@
   .stg-highlight--danger  { color: #b91c1c; }
   .stg-highlight--info    { color: #0058c7; }
 
+  /* ====== Stage 4 — Inspection Fail extras ====== */
+  .stg-fail-reason-card {
+    background: #fef2f2; border: 1px solid #fecaca; border-left: 3px solid #dc2626;
+    border-radius: 10px; padding: 12px 14px; margin-top: 10px;
+  }
+  .stg-fail-reason-card .stg-frc-title {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 700; color: #991b1b;
+    text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px;
+  }
+  .stg-fail-reason-card .stg-frc-title svg { width: 13px; height: 13px; stroke: #dc2626; }
+  .stg-fail-reason-card .stg-frc-body { font-size: 13px; line-height: 1.55; color: #7f1d1d; font-weight: 500; }
+
+  .stg-quotation-btn, .stg-proceed-btn {
+    margin-top: 12px; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 11px 18px; background: linear-gradient(180deg, #173559 0%, #122a47 100%); color: #fff;
+    font-family: inherit; font-size: 13.5px; font-weight: 600; border: none; border-radius: 10px;
+    cursor: pointer; transition: all 0.18s ease;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 2px 8px rgba(23,53,89,0.28); letter-spacing: -0.01em;
+  }
+  .stg-quotation-btn svg, .stg-proceed-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .stg-quotation-btn.sent, .stg-proceed-btn.sent {
+    background: #f1f5f7; color: #475569; cursor: not-allowed; box-shadow: none; border: 1px solid #e2e8f0;
+  }
+  .stg-quotation-btn.sent svg, .stg-proceed-btn.sent svg { stroke: #22c55e; }
+
+  .stg-success-msg {
+    margin-top: 10px; padding: 12px 14px; background: #f0fdf4; border: 1px solid #bbf7d0;
+    border-left: 3px solid #22c55e; border-radius: 10px; display: none; align-items: flex-start; gap: 10px;
+  }
+  .stg-success-msg.show { display: flex; animation: stg-fade-in 0.28s ease both; }
+  @keyframes stg-fade-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+  .stg-success-msg svg { width: 18px; height: 18px; flex-shrink: 0; color: #16a34a; margin-top: 1px; }
+  .stg-success-text { flex: 1; font-size: 13px; line-height: 1.5; color: #14532d; }
+  .stg-success-text strong { display: block; font-weight: 600; color: #14532d; margin-bottom: 2px; }
+  .stg-success-text span { color: #15803d; font-weight: 500; }
+  .stg-success-sep { height: 1px; background: #bbf7d0; margin: 10px 0; }
+  .stg-success-date { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #15803d; font-weight: 500; }
+  .stg-success-date svg { width: 13px; height: 13px; stroke: #16a34a; flex-shrink: 0; }
+  .stg-success-date b { color: #14532d; font-weight: 600; }
+
+  .stg-quotation-details, .stg-repair-details, .stg-reinspection-details {
+    margin-top: 12px; background: #fff; border: 1px solid var(--c-border, #eee); border-radius: 12px;
+    padding: 14px; display: none;
+  }
+  .stg-quotation-details.show, .stg-repair-details.show, .stg-reinspection-details.show {
+    display: block; animation: stg-fade-in 0.32s ease both;
+  }
+  .stg-qd-title, .stg-repair-title, .stg-reinsp-title {
+    font-size: 12px; font-weight: 700; color: var(--c-text-light, #888);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: space-between; gap: 6px;
+  }
+  .stg-qd-title-left { display: inline-flex; align-items: center; gap: 6px; }
+  .stg-qd-title svg, .stg-repair-title svg, .stg-reinsp-title svg { width: 13px; height: 13px; flex-shrink: 0; display: block; }
+  .stg-date-pill {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #475569;
+    background: #f1f5f9; padding: 3px 8px; border-radius: 5px; text-transform: none;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .stg-date-pill svg { width: 11px; height: 11px; }
+  .stg-qd-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 10px 0;
+    border-bottom: 1px dashed var(--c-border, #eee);
+  }
+  .stg-qd-row:last-child { border-bottom: none; padding-bottom: 2px; }
+  .stg-qd-row:first-of-type { padding-top: 2px; }
+  .stg-qd-label { font-size: 13px; color: var(--c-text, #333); font-weight: 500; line-height: 1.4; }
+  .stg-qd-amount { display: inline-flex; align-items: baseline; gap: 6px; }
+  .stg-qd-curr {
+    font-size: 11px; font-weight: 600; color: #64748b; background: #f1f5f9;
+    padding: 2px 7px; border-radius: 5px;
+  }
+  .stg-qd-price { font-size: 14.5px; font-weight: 700; color: var(--c-text, #333); letter-spacing: -0.01em; }
+  .stg-qd-row.total { margin-top: 2px; padding-top: 12px; border-top: 1.5px solid var(--c-border, #eee); border-bottom: none; }
+  .stg-qd-row.total .stg-qd-label { font-weight: 600; }
+  .stg-qd-row.total .stg-qd-price { font-size: 16px; color: #173559; }
+
+  .stg-repair-comments {
+    background: #fafafa; border: 1px solid var(--c-border, #eee); border-radius: 9px; padding: 11px 13px;
+    font-size: 13px; line-height: 1.55; color: var(--c-text, #333); margin-bottom: 14px;
+  }
+  .stg-repair-block-label { font-size: 12px; font-weight: 600; color: var(--c-text-light, #888); margin-bottom: 6px; letter-spacing: 0.01em; }
+
+  .stg-agent-notice {
+    margin-top: 14px; display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px;
+    background: #fefce8; border: 1px solid #fde68a; border-left: 3px solid #eab308; border-radius: 10px;
+  }
+  .stg-agent-notice svg { width: 18px; height: 18px; flex-shrink: 0; color: #ca8a04; margin-top: 1px; }
+  .stg-agent-notice-text { flex: 1; font-size: 13px; line-height: 1.55; }
+  .stg-agent-notice-text strong { display: block; font-weight: 600; color: #713f12; margin-bottom: 2px; }
+  .stg-agent-notice-text span { color: #854d0e; font-weight: 500; }
+
+
   .stg-payment-summary {
     display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
   }
@@ -4923,6 +5017,7 @@
         { title: 'Port Handling Revision', amount: 850,  date: '10 / 06 / 2026', note: 'Revised port handling and documentation fees at Lagos destination port.' },
       ]
     },
+    { id: 9, stage: 4, make: 'Subaru',     model: 'Forester',  code: 'SK9',       year: 2021, chassis: 'SBFR2021SK9001234',  port: 'Mombasa Port',  purchaseDate: '03/02/2026', purchCurr: 'USD', purchPrice: 17500,   saleCurr: 'USD', salePrice: 20500,   bcn: 'BC',  updated: false, inspectionResult: 'Fail' },
     { id: 5, stage: 5, make: 'Toyota',     model: 'Aqua',      code: 'NHP10',     year: 2022, chassis: 'AQUA2022NHP10567',  port: 'Zimbabwe',      purchaseDate: '01/26/2026', purchCurr: 'USD', purchPrice: 20000,   saleCurr: 'USD', salePrice: 23500,   bcn: null,                             updated: false },
     { id: 6, stage: 6, make: 'Toyota',     model: 'Raize',     code: '5BA-A200A', year: 2022, chassis: 'JHMGE8H56DC123987', port: 'Mombasa Port',  purchaseDate: '02/08/2026', purchCurr: 'USD', purchPrice: 24205,   saleCurr: 'EUR', salePrice: 25300,   bcn: 'BC',                             updated: false },
     { id: 7, stage: 7, make: 'Honda',      model: 'Civic',     code: 'FK7',       year: 2022, chassis: 'CIVIC2022FK700890', port: 'Durban',        purchaseDate: '01/14/2026', purchCurr: 'USD', purchPrice: 25500,   saleCurr: 'USD', salePrice: 28500,   bcn: 'C',  updated: true,
@@ -6675,7 +6770,7 @@
     document.getElementById('stg-vc-card').innerHTML = buildVcCard(v);
 
     // Build accordion
-    document.getElementById('stg-list').innerHTML = buildStageList(v.stage);
+    document.getElementById('stg-list').innerHTML = buildStageList(v.stage, v);
 
     // Auto-open current stage
     const curRow = document.querySelector('.stg-row.current');
@@ -6688,12 +6783,34 @@
     document.getElementById('stage-screen').classList.remove('show');
   }
 
-  function buildStageList(currentStage) {
+  function buildStageList(currentStage, v) {
     return Array.from({length: 8}, (_, i) => {
       const n = i + 1;
       const meta  = STAGE_META[n];
-      const data  = STAGE_DATA[n] || {};
+      let data  = STAGE_DATA[n] || {};
       const color = STAGE_COLORS[n];
+
+      if (n === 4 && v && v.inspectionResult === 'Fail') {
+        data = {
+          ...data,
+          sub: 'Inspection completed · result: <b>Fail</b>',
+          doneSub: 'Final inspection certificate and verification status updated.',
+          fields: [
+            ['Inspection Date',   '02 / 09 / 2026'],
+            ['Inspection Status', { kind: 'status-pill', value: 'Fail', tone: 'danger' }],
+          ],
+          inspectionDoc: { name: 'Inspection_Certificate_A00210.pdf' },
+          docTitle: 'Inspection Certificate',
+          failPhotos: [
+            { angle: 'Front-left damage' },
+            { angle: 'Underbody corrosion' }
+          ],
+          failReason: 'Front-left bumper damage and significant underbody corrosion exceeding acceptable limits. Frame integrity compromised — repair estimate required.',
+          showQuotationBtn: true,
+        };
+        STAGE_DATA[4] = data;
+      }
+
 
       let state, badge, numContent;
       if (n < currentStage) {
@@ -7038,7 +7155,126 @@
       </div>`;
     }
 
-    // Document (Stage 1 — Auction Sheet)
+    // Inspection-fail extras: damage photos, reason, quotation/repair/re-inspection flow
+    if (data.failPhotos && data.failPhotos.length) {
+      const CAR_IMG = document.querySelector('.car-image img')?.src || '';
+      html += `<div class="stg-body-section" style="margin-top:16px;">Damage Photos · ${data.failPhotos.length}</div>`;
+      html += `<div class="yi-gallery">`;
+      data.failPhotos.forEach((p, idx) => {
+        html += `<div class="yi-thumb" onclick="openFailLightbox(${idx})" role="button">
+          <img src="${CAR_IMG}" alt="${p.angle || ''}" loading="lazy">
+        </div>`;
+      });
+      html += `</div>`;
+    }
+
+    if (data.failReason) {
+      html += `<div class="stg-fail-reason-card">
+        <div class="stg-frc-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Reason for Failure
+        </div>
+        <div class="stg-frc-body">${data.failReason}</div>
+      </div>`;
+    }
+
+    if (data.showQuotationBtn) {
+      html += `
+      <button class="stg-quotation-btn" id="stg-quotation-btn" onclick="event.stopPropagation(); sendQuotationRequest()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        <span id="stg-quotation-btn-label">Send me Quotation</span>
+      </button>
+      <div class="stg-success-msg" id="stg-quotation-success">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div class="stg-success-text">
+          <strong>Quotation request sent to sales team</strong>
+          <span>You will receive a repair estimate shortly.</span>
+          <div class="stg-success-sep"></div>
+          <div class="stg-success-date">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Sent on <b id="stg-quotation-sent-date">—</b>
+          </div>
+        </div>
+      </div>
+      <div class="stg-quotation-details" id="stg-quotation-details">
+        <div class="stg-qd-title">
+          <span class="stg-qd-title-left">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+            Quotation Details
+          </span>
+          <span class="stg-date-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="stg-quotation-details-date">—</span>
+          </span>
+        </div>
+        <div class="stg-qd-row">
+          <div class="stg-qd-label">Repair charges<br>(without tax)</div>
+          <div class="stg-qd-amount"><span class="stg-qd-curr">JPY</span><span class="stg-qd-price">185,000</span></div>
+        </div>
+        <div class="stg-qd-row total">
+          <div class="stg-qd-label">Repair charges<br>(with tax)</div>
+          <div class="stg-qd-amount"><span class="stg-qd-curr">JPY</span><span class="stg-qd-price">203,500</span></div>
+        </div>
+        <button class="stg-proceed-btn" id="stg-proceed-btn" onclick="event.stopPropagation(); goToProceed()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          <span id="stg-proceed-btn-label">Confirm</span>
+        </button>
+        <div class="stg-success-msg" id="stg-proceed-success">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <div class="stg-success-text">
+            <strong>Car repair request forwarded to sales team</strong>
+            <span>You will receive update repair status shortly.</span>
+          </div>
+        </div>
+      </div>
+      <div class="stg-repair-details" id="stg-repair-details">
+        <div class="stg-repair-title">
+          <span class="stg-qd-title-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          Repair Details
+          </span>
+        </div>
+        <div class="stg-repair-block-label">Repair Comments</div>
+        <div class="stg-repair-comments">Bumper replaced with OEM part. Underbody corrosion treated and frame sections welded. Vehicle ready for re-inspection.</div>
+        <div class="stg-repair-block-label">After Repair Photos · 2</div>
+        <div class="yi-gallery">
+          <div class="yi-thumb" onclick="openRepairLightbox(0)" role="button"><img src="${document.querySelector('.car-image img')?.src || ''}" alt="Front-left repaired" loading="lazy"></div>
+          <div class="yi-thumb" onclick="openRepairLightbox(1)" role="button"><img src="${document.querySelector('.car-image img')?.src || ''}" alt="Underbody restored" loading="lazy"></div>
+        </div>
+        <div class="stg-agent-notice">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div class="stg-agent-notice-text">
+            <strong>Inspection certificate will be uploaded in 4 to 5 working days</strong>
+            <span>Vehicle is scheduled for re-inspection. The updated inspection certificate will be available here once completed.</span>
+          </div>
+        </div>
+      </div>
+      <div class="stg-reinspection-details" id="stg-reinspection-details">
+        <div class="stg-reinsp-title">
+          <span class="stg-qd-title-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Re-Inspection Details
+          </span>
+        </div>
+        <div class="stg-fields">
+          <div class="stg-field-row"><span class="stg-field-key">Inspection Date</span><span class="stg-field-val">23 / 05 / 2026</span></div>
+          <div class="stg-field-row"><span class="stg-field-key">Inspection Status</span><span class="stg-field-val"><span class="stg-status-pill stg-status-pill--success"><span class="stg-status-dot"></span>Pass</span></span></div>
+        </div>
+        <div class="stg-body-section" style="margin-top:14px;">Inspection Certificate</div>
+        <div class="stg-doc-row" onclick="event.stopPropagation(); showToast('Downloading Inspection_Certificate_A00210.pdf...')">
+          <div class="stg-doc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div class="stg-doc-info">
+            <div class="stg-doc-name">Inspection_Certificate_A00210.pdf</div>
+          </div>
+          <div class="stg-doc-dl" onclick="event.stopPropagation(); showToast('Downloading...')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </div>
+        </div>
+      </div>
+      `;
+    }
     if (data.doc) {
       html += `<div class="stg-body-section" style="margin-top:16px;">${n === 1 ? 'Auction sheet' : 'Document'}</div>`;
       html += `<div class="stg-doc-row" onclick="event.stopPropagation(); showToast('Downloading ${data.doc.name}')">
@@ -7473,10 +7709,14 @@
   let _yiDragging = false;
   let _yiDragX = 0;
 
-  function openYiLightbox(startIdx) {
-    const data = STAGE_DATA[2];
-    if (!data || !data.yardPhotos) return;
-    _yiPhotos = data.yardPhotos;
+  function openYiLightbox(startIdx, photosOverride) {
+    let _photos = photosOverride;
+    if (!_photos) {
+      const data = STAGE_DATA[2];
+      if (!data || !data.yardPhotos) return;
+      _photos = data.yardPhotos;
+    }
+    _yiPhotos = _photos;
     _yiCurrent = startIdx;
     _yiCarImg = document.querySelector('.car-image img')?.src || '';
 
@@ -7548,6 +7788,61 @@
       _yiSlideW = w;
       _yiRender(false);
     });
+  }
+
+  // Inspection-fail damage photo viewer (reuses yard lightbox)
+  function openFailLightbox(idx) {
+    const data = STAGE_DATA[4];
+    if (!data || !data.failPhotos) return;
+    openYiLightbox(idx, data.failPhotos);
+  }
+
+  // After-repair photo viewer (reuses yard lightbox)
+  function openRepairLightbox(idx) {
+    openYiLightbox(idx, [
+      { angle: 'Front-left repaired' },
+      { angle: 'Underbody restored' }
+    ]);
+  }
+
+  // Send quotation request — agent action when inspection fails
+  function sendQuotationRequest() {
+    const btn = document.getElementById('stg-quotation-btn');
+    const msg = document.getElementById('stg-quotation-success');
+    if (!btn || btn.classList.contains('sent')) return;
+
+    btn.classList.add('sent');
+    btn.disabled = true;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Request Sent</span>`;
+
+    const now = new Date();
+    const dateStr = `${String(now.getDate()).padStart(2,'0')} / ${String(now.getMonth()+1).padStart(2,'0')} / ${now.getFullYear()}`;
+    const sentDateEl = document.getElementById('stg-quotation-sent-date');
+    const detailsDateEl = document.getElementById('stg-quotation-details-date');
+    if (sentDateEl) sentDateEl.textContent = dateStr;
+    if (detailsDateEl) detailsDateEl.textContent = dateStr;
+
+    if (msg) msg.classList.add('show');
+    const details = document.getElementById('stg-quotation-details');
+    if (details) details.classList.add('show');
+  }
+
+  // Go to Proceed — agent confirms quotation and forwards repair request
+  function goToProceed() {
+    const btn = document.getElementById('stg-proceed-btn');
+    const msg = document.getElementById('stg-proceed-success');
+    if (!btn || btn.classList.contains('sent')) return;
+
+    btn.classList.add('sent');
+    btn.disabled = true;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Forwarded</span>`;
+    if (msg) msg.classList.add('show');
+
+    const repair = document.getElementById('stg-repair-details');
+    if (repair) repair.classList.add('show');
+
+    const reinsp = document.getElementById('stg-reinspection-details');
+    if (reinsp) reinsp.classList.add('show');
   }
 
   function closeYiLightbox() {
