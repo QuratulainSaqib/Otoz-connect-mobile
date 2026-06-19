@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otoz Connect · Payment Allocation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+  :root {
+    --c-primary: #173559;
+    --c-primary-hover: #122a47;
+    --c-accent: #2BA6FF;
+    --c-text: #1d1d1f;
+    --c-text-muted: #6e6e73;
+    --c-text-subtle: #86868b;
+    --c-text-tertiary: #a1a1a6;
+    --c-bg-app: #f5f5f7;
+    --c-bg-soft: #fafafb;
+    --c-divider: #e8e8ed;
+    --c-divider-soft: #f1f5f9;
+    --c-success: #30c46d;
+    --c-danger: #ff3b30;
+    --c-warning: #f59e0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: #e8e8ed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .device {
+    width: 380px;
+    height: 800px;
+    background: #1d1d1f;
+    border-radius: 54px;
+    padding: 11px;
+    position: relative;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.08);
+  }
+
+  .screen-wrapper {
+    width: 100%;
+    height: 100%;
+    background: var(--c-bg-app);
+    border-radius: 43px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .home-indicator {
+    position: absolute;
+    bottom: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 5px;
+    background: #1d1d1f;
+    border-radius: 3px;
+    opacity: 0.9;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  /* STATUS BAR */
+  .status-bar {
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 32px 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--c-text);
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+    background: #fff;
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; }
+
+  /* TOAST */
+  .toast {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    background: var(--c-text);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    z-index: 1000;
+    transition: top 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    white-space: nowrap;
+    max-width: 90%;
+  }
+  .toast.show { top: 75px; }
+  .toast .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-success); flex-shrink: 0; }
+
+  .search-wrap {
+    flex: 1;
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    min-width: 0;
+  }
+  .search-wrap:focus-within { border-color: var(--c-accent); }
+  .search-wrap i { font-size: 17px; color: var(--c-text-subtle); flex-shrink: 0; }
+  .search-wrap input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 13px;
+    color: var(--c-text);
+    font-family: inherit;
+    min-width: 0;
+  }
+  .search-wrap input::placeholder { color: var(--c-text-subtle); }
+
+  /* EMPTY STATE */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  .empty-state i { font-size: 48px; color: #d1d5db; margin-bottom: 14px; display: block; animation: empty-car-bounce 1.8s ease-in-out infinite; }
+  @keyframes empty-car-bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(-8px) scale(1.05); }
+  }
+  .empty-state .es-title { font-size: 15px; font-weight: 700; color: var(--c-text); margin-bottom: 6px; }
+  .empty-state .es-sub { font-size: 13px; color: var(--c-text-muted); }
+
+  .btn-submit {
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(135deg, var(--c-primary) 0%, #2a4a73 100%);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(23,53,89,0.28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    transition: all 0.18s ease;
+  }
+  .btn-submit:active { transform: scale(0.98); }
+  .btn-submit i { font-size: 18px; }
+  .btn-submit:disabled {
+    background: #d1d5db;
+    box-shadow: none;
+    cursor: default;
+  }
+
+  /* Top nav — back button + centered title */
+  .addpay-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 16px 10px;
+    flex-shrink: 0;
+    border-bottom: 0.5px solid var(--c-divider-soft);
+    background: #fff;
+  }
+  .addpay-back-btn {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: var(--c-bg-app);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .addpay-back-btn i { font-size: 19px; color: var(--c-text); }
+  .addpay-nav-title { font-size: 16px; font-weight: 700; color: var(--c-text); letter-spacing: -0.015em; }
+  .addpay-nav-spacer { width: 32px; flex-shrink: 0; }
+
+  .addpay-footer {
+    padding: 14px 16px 24px;
+    flex-shrink: 0;
+    border-top: 1px solid var(--c-divider-soft);
+    background: #fff;
+  }
+
+  /* ===== PAYMENT ALLOCATION — SELECTION SCREEN (base screen, fills device) ===== */
+  .alloc-screen {
+    flex: 1;
+    min-height: 0;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Confirmation step — sits above the selection screen, slides in on top */
+  .alloc-confirm-screen {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    border-radius: 43px;
+    z-index: 310;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.38s cubic-bezier(0.32, 0.72, 0, 1);
+    overflow: hidden;
+  }
+  .alloc-confirm-screen.open { transform: translateX(0); }
+  .alloc-confirm-screen .status-bar { background: #fff; flex-shrink: 0; }
+
+  .alloc-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 0 90px;
+  }
+
+  /* Top context KPI row inside allocation screen */
+  .alloc-kpi-grid {
+    display: flex;
+    gap: 10px;
+    padding: 2px 16px 4px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-bottom: 16px;
+  }
+  .alloc-kpi-grid::-webkit-scrollbar { display: none; }
+  .alloc-kpi-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+    border: 1px solid var(--c-divider);
+    border-radius: 14px;
+    padding: 13px 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    flex: 0 0 128px;
+    width: 128px;
+    scroll-snap-align: start;
+    transition: all 0.18s ease;
+  }
+  .alloc-kpi-icon {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .alloc-kpi-icon i { font-size: 15px; color: #fff; }
+  .alloc-kpi-icon svg { width: 18px; height: 18px; }
+  .alloc-kpi-icon.blue   { background: linear-gradient(135deg, #0071e3 0%, #00a3ff 100%); box-shadow: 0 4px 10px rgba(0,113,227,0.28); }
+  .alloc-kpi-icon.indigo { background: linear-gradient(135deg, #4f46e5 0%, #818cf8 100%); box-shadow: 0 4px 10px rgba(79,70,229,0.28); }
+  .alloc-kpi-icon.green  { background: linear-gradient(135deg, #059669 0%, #34d399 100%); box-shadow: 0 4px 10px rgba(5,150,105,0.28); }
+  .alloc-kpi-label {
+    font-size: 11px; font-weight: 500; color: var(--c-text-muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .alloc-kpi-value {
+    font-size: 16.5px; font-weight: 700; color: var(--c-text);
+    letter-spacing: -0.02em; line-height: 1.15; white-space: nowrap;
+  }
+  .alloc-kpi-value .cur { font-size: 11px; font-weight: 600; opacity: 0.7; margin-right: 1px; }
+
+  /* Payment details recap card */
+  .alloc-details-card {
+    margin: 0 16px 16px;
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .alloc-details-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 14px;
+    background: linear-gradient(180deg, #fafbfd 0%, #f5f6f9 100%);
+    border-bottom: 1px solid var(--c-divider);
+  }
+  .alloc-details-icon {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #0071e3 0%, #00a3ff 100%);
+    color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 3px 8px rgba(0,113,227,0.3);
+    flex-shrink: 0;
+  }
+  .alloc-details-icon i { font-size: 15px; }
+  .alloc-details-title { font-size: 14.5px; font-weight: 700; color: var(--c-text); letter-spacing: -0.01em; }
+  .alloc-details-body {
+    padding: 12px 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 14px;
+  }
+  .alloc-dd-item { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .alloc-dd-label {
+    font-size: 10px; font-weight: 600; color: var(--c-text-tertiary);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .alloc-dd-value {
+    font-size: 13.5px; font-weight: 700; color: var(--c-text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .alloc-dd-value.amt { color: var(--c-primary); font-size: 15px; }
+
+  /* Search row (no filter icon, just search) */
+  .alloc-search-row { padding: 0 16px 12px; }
+
+  .alloc-section-label {
+    padding: 0 16px 8px;
+    font-size: 11px; font-weight: 700; color: var(--c-text-muted);
+    text-transform: uppercase; letter-spacing: 0.07em;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .alloc-section-label .clear-sel {
+    font-size: 11px; font-weight: 700; color: var(--c-accent); text-transform: none; letter-spacing: 0;
+    cursor: pointer;
+  }
+
+  .alloc-vehicle-list {
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .alloc-veh-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    border: 1.5px solid var(--c-divider);
+    border-radius: 14px;
+    padding: 12px 13px;
+    cursor: pointer;
+    transition: all 0.16s ease;
+  }
+  .alloc-veh-card:active { transform: scale(0.99); }
+  .alloc-veh-card.selected {
+    border-color: var(--c-accent);
+    background: rgba(43,166,255,0.05);
+    box-shadow: 0 0 0 3px rgba(43,166,255,0.1);
+  }
+  .alloc-veh-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f0f4fa 0%, #e8eef8 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .alloc-veh-icon i { font-size: 20px; color: #5b7299; }
+  .alloc-veh-info { flex: 1; min-width: 0; }
+  .alloc-veh-name {
+    font-size: 14px; font-weight: 700; color: var(--c-text);
+    letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .alloc-veh-chassis {
+    font-size: 11px; color: var(--c-text-subtle); margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .alloc-veh-balance {
+    font-size: 11px; color: var(--c-text-muted); margin-top: 4px; font-weight: 500;
+  }
+  .alloc-veh-balance b { color: var(--c-primary); font-weight: 700; }
+  .alloc-veh-check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--c-divider);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.16s ease;
+  }
+  .alloc-veh-check i { font-size: 12px; color: #fff; opacity: 0; transform: scale(0.5); transition: all 0.16s ease; }
+  .alloc-veh-card.selected .alloc-veh-check {
+    background: var(--c-accent);
+    border-color: var(--c-accent);
+  }
+  .alloc-veh-card.selected .alloc-veh-check i { opacity: 1; transform: scale(1); }
+
+  .alloc-footer-sub {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--c-text-muted);
+    margin-bottom: 8px;
+  }
+
+  /* Allocation amount input rows (confirmation step) */
+  .alloc-amt-card {
+    margin: 0 16px 10px;
+    background: #fff;
+    border: 1.5px solid var(--c-divider);
+    border-radius: 14px;
+    padding: 12px 13px;
+  }
+  .alloc-amt-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .alloc-amt-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--c-bg-app);
+    border: 1.5px solid var(--c-divider);
+    border-radius: 10px;
+    padding: 0 12px;
+  }
+  .alloc-amt-input-row .cur-tag {
+    font-size: 12px; font-weight: 700; color: var(--c-text-muted); flex-shrink: 0;
+  }
+  .alloc-amt-input-row input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    height: 40px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--c-text);
+    font-family: inherit;
+    min-width: 0;
+  }
+
+  .alloc-summary-card {
+    margin: 4px 16px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(43,166,255,0.25);
+    background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .alloc-summary-row { display: flex; justify-content: space-between; align-items: center; }
+  .alloc-summary-row .lbl { font-size: 12.5px; font-weight: 600; color: #1e3a5f; }
+  .alloc-summary-row .val { font-size: 14px; font-weight: 700; color: var(--c-text); }
+  .alloc-summary-row.total .val { font-size: 16px; color: #0058c7; }
+  .alloc-summary-divider { height: 1px; background: rgba(0,113,227,0.18); }
+  .alloc-summary-row.remaining .val.ok   { color: #047857; }
+  .alloc-summary-row.remaining .val.over { color: #b91c1c; }
+</style>
+</head>
+<body>
+
+<div class="device">
+  <div class="screen-wrapper">
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+      <div class="dot"></div>
+      <span id="toast-msg">Payment allocated successfully!</span>
+    </div>
+
+    <!-- ===== PAYMENT ALLOCATION — SELECTION SCREEN ===== -->
+    <div class="alloc-screen" id="alloc-screen">
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 7l4.5 4.5C7.9 9.1 10.8 8 14 8s6.1 1.1 8.5 3.5L24 10C21.1 6.9 17.3 5 13 5S4.9 6.9 2 10l-1-3z M14 12c-1.8 0-3.4.7-4.6 1.9L14 19l4.6-5.1c-1.2-1.2-2.8-1.9-4.6-1.9z M14 0C8.5 0 3.5 2.2 0 5.8l1.4 1.4C4.5 3.9 9 1.7 14 1.7s9.5 2.2 12.6 5.5L28 5.8C24.5 2.2 19.5 0 14 0z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+        </div>
+      </div>
+      <div class="addpay-nav">
+        <button class="addpay-back-btn" onclick="goBackToPayments()"><i class="ti ti-chevron-left"></i></button>
+        <div class="addpay-nav-title">Payment Allocation</div>
+        <span class="addpay-nav-spacer"></span>
+      </div>
+
+      <div class="alloc-scroll">
+
+        <!-- Top context cards -->
+        <div class="alloc-kpi-grid" id="alloc-kpi-grid"></div>
+
+        <!-- Allocation Payment Details -->
+        <div class="alloc-details-card">
+          <div class="alloc-details-head">
+            <span class="alloc-details-icon"><i class="ti ti-receipt"></i></span>
+            <span class="alloc-details-title">Allocation Payment Details</span>
+          </div>
+          <div class="alloc-details-body" id="alloc-payment-details"></div>
+        </div>
+
+        <!-- Search -->
+        <div class="alloc-search-row">
+          <div class="search-wrap">
+            <i class="ti ti-search"></i>
+            <input type="text" id="alloc-search-input" placeholder="Search vehicles..." oninput="filterAllocVehicles()">
+          </div>
+        </div>
+
+        <div class="alloc-section-label">
+          <span id="alloc-section-label">Select Vehicles</span>
+          <span class="clear-sel" id="alloc-clear-sel" style="display:none;" onclick="clearAllocSelection()">Clear</span>
+        </div>
+
+        <div class="alloc-vehicle-list" id="alloc-vehicle-list"></div>
+
+      </div>
+
+      <div class="addpay-footer">
+        <div class="alloc-footer-sub" id="alloc-footer-sub" style="display:none;"></div>
+        <button class="btn-submit" id="alloc-submit-btn" disabled onclick="openAllocConfirmScreen()">
+          <i class="ti ti-arrow-right"></i>
+          Payment Allocation
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== PAYMENT ALLOCATION — CONFIRMATION SCREEN ===== -->
+    <div class="alloc-confirm-screen" id="alloc-confirm-screen">
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 7l4.5 4.5C7.9 9.1 10.8 8 14 8s6.1 1.1 8.5 3.5L24 10C21.1 6.9 17.3 5 13 5S4.9 6.9 2 10l-1-3z M14 12c-1.8 0-3.4.7-4.6 1.9L14 19l4.6-5.1c-1.2-1.2-2.8-1.9-4.6-1.9z M14 0C8.5 0 3.5 2.2 0 5.8l1.4 1.4C4.5 3.9 9 1.7 14 1.7s9.5 2.2 12.6 5.5L28 5.8C24.5 2.2 19.5 0 14 0z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+        </div>
+      </div>
+      <div class="addpay-nav">
+        <button class="addpay-back-btn" onclick="closeAllocConfirmScreen()"><i class="ti ti-chevron-left"></i></button>
+        <div class="addpay-nav-title">Allocation Summary</div>
+        <span class="addpay-nav-spacer"></span>
+      </div>
+
+      <div class="alloc-scroll">
+
+        <!-- Payment Details recap -->
+        <div class="alloc-details-card" style="margin-top:14px;">
+          <div class="alloc-details-head">
+            <span class="alloc-details-icon"><i class="ti ti-receipt"></i></span>
+            <span class="alloc-details-title">Payment Details</span>
+          </div>
+          <div class="alloc-details-body" id="alloc-confirm-payment-details"></div>
+        </div>
+
+        <div class="alloc-section-label"><span>Allocated To</span></div>
+
+        <div id="alloc-confirm-list"></div>
+
+        <div class="alloc-summary-card" id="alloc-summary-card"></div>
+
+      </div>
+
+      <div class="addpay-footer">
+        <button class="btn-submit" onclick="submitAllocation()">
+          <i class="ti ti-circle-check"></i>
+          Confirm Allocation
+        </button>
+      </div>
+    </div>
+
+  </div><!-- screen-wrapper -->
+  <div class="home-indicator"></div>
+</div><!-- device -->
+
+<script>
+  // Vehicles / purchase orders available to allocate this payment against
+  const ALLOC_VEHICLES = [
+    { id: 'VEH-201', name: 'Toyota Raize',   chassis: 'WDC2539052F422655', currency: 'USD', balanceDue: 5500 },
+    { id: 'VEH-202', name: 'Honda Vezel',    chassis: 'JHLRD78423C123456', currency: 'USD', balanceDue: 4200 },
+    { id: 'VEH-203', name: 'Nissan X-Trail', chassis: 'JN1TANT32Z0123789', currency: 'USD', balanceDue: 8900 },
+    { id: 'VEH-204', name: 'Suzuki Swift',   chassis: 'JSAFB31S00012345',  currency: 'USD', balanceDue: 1500 },
+    { id: 'VEH-205', name: 'Mazda CX-5',     chassis: 'JM3KFBDM5K0456789', currency: 'USD', balanceDue: 9400 }
+  ];
+
+  let allocCurrentPayment = null;   // the payment being allocated (read from URL params)
+  let allocSelectedIds = new Set(); // selected vehicle ids on the selection screen
+  let allocAmounts = {};            // vehicleId -> allocated amount, used on the confirmation screen
+
+  function parseAmount(str) { return parseFloat(String(str).replace(/,/g, '')) || 0; }
+  function formatAmount(n) { return n.toLocaleString('en-US', { maximumFractionDigits: 2 }); }
+  function currencySymbol(code) {
+    const signs = { USD: '$', JPY: '¥', EUR: '€', GBP: '£', AED: 'د.إ' };
+    return signs[code] || '';
+  }
+  function paymentDetailsHTML(p) {
+    return `
+      <div class="alloc-dd-item"><span class="alloc-dd-label">Transaction ID</span><span class="alloc-dd-value">${p.txnId}</span></div>
+      <div class="alloc-dd-item"><span class="alloc-dd-label">Upload Date</span><span class="alloc-dd-value">${p.uploadDate}</span></div>
+      <div class="alloc-dd-item"><span class="alloc-dd-label">Currency</span><span class="alloc-dd-value">${p.currency}</span></div>
+      <div class="alloc-dd-item"><span class="alloc-dd-label">Amount</span><span class="alloc-dd-value amt">${currencySymbol(p.currency)}${p.amount}</span></div>`;
+  }
+
+  // ── Load payment context from URL (sent over by Payment.html) ──
+  function loadAllocationFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    allocCurrentPayment = {
+      id: params.get('id') || 'PAY-000',
+      txnId: params.get('txnId') || '—',
+      uploadDate: params.get('uploadDate') || '—',
+      currency: params.get('currency') || 'USD',
+      amount: params.get('amount') || '0'
+    };
+    allocSelectedIds = new Set();
+
+    document.getElementById('alloc-payment-details').innerHTML = paymentDetailsHTML(allocCurrentPayment);
+    document.getElementById('alloc-search-input').value = '';
+    renderAllocVehicles(ALLOC_VEHICLES);
+    renderAllocKpis();
+    updateAllocFooter();
+  }
+
+  function goBackToPayments() {
+    window.location.href = 'Payment.html';
+  }
+
+  function renderAllocKpis() {
+    const p = allocCurrentPayment;
+    if (!p) return;
+    const selectedTotal = [...allocSelectedIds].reduce((sum, id) => {
+      const v = ALLOC_VEHICLES.find(x => x.id === id);
+      return sum + (v ? v.balanceDue : 0);
+    }, 0);
+    const paymentAmt = parseAmount(p.amount);
+    const allocated = Math.min(selectedTotal, paymentAmt);
+    const unallocated = Math.max(0, paymentAmt - allocated);
+    document.getElementById('alloc-kpi-grid').innerHTML = `
+      <div class="alloc-kpi-card">
+        <div class="alloc-kpi-icon blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/>
+            <path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/>
+            <path d="M18 12a2 2 0 0 0 0 4h4v-4z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="alloc-kpi-label">Total Payment</div>
+          <div class="alloc-kpi-value"><span class="cur">${currencySymbol(p.currency)}</span>${p.amount}</div>
+        </div>
+      </div>
+      <div class="alloc-kpi-card">
+        <div class="alloc-kpi-icon indigo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="alloc-kpi-label">Total Allocated</div>
+          <div class="alloc-kpi-value"><span class="cur">${currencySymbol(p.currency)}</span>${formatAmount(allocated)}</div>
+        </div>
+      </div>
+      <div class="alloc-kpi-card">
+        <div class="alloc-kpi-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+          </svg>
+        </div>
+        <div>
+          <div class="alloc-kpi-label">Total Unallocated</div>
+          <div class="alloc-kpi-value"><span class="cur">${currencySymbol(p.currency)}</span>${formatAmount(unallocated)}</div>
+        </div>
+      </div>`;
+  }
+
+  function renderAllocVehicles(list) {
+    const wrap = document.getElementById('alloc-vehicle-list');
+    const label = document.getElementById('alloc-section-label');
+    const clearBtn = document.getElementById('alloc-clear-sel');
+
+    if (!list.length) {
+      wrap.innerHTML = `<div class="empty-state">
+        <i class="ti ti-car-off"></i>
+        <div class="es-title">No vehicles found</div>
+        <div class="es-sub">Try a different search</div>
+      </div>`;
+      label.textContent = 'Select Vehicles';
+      return;
+    }
+
+    label.textContent = `Select Vehicles (${list.length})`;
+    clearBtn.style.display = allocSelectedIds.size ? '' : 'none';
+
+    wrap.innerHTML = list.map(v => {
+      const sel = allocSelectedIds.has(v.id);
+      return `<div class="alloc-veh-card ${sel ? 'selected' : ''}" onclick="toggleVehicleSelect('${v.id}')">
+        <div class="alloc-veh-icon"><i class="ti ti-car"></i></div>
+        <div class="alloc-veh-info">
+          <div class="alloc-veh-name">${v.name}</div>
+          <div class="alloc-veh-chassis">${v.chassis}</div>
+          <div class="alloc-veh-balance">Balance Due: <b>${currencySymbol(v.currency)}${formatAmount(v.balanceDue)}</b></div>
+        </div>
+        <div class="alloc-veh-check"><i class="ti ti-check"></i></div>
+      </div>`;
+    }).join('');
+  }
+
+  function toggleVehicleSelect(id) {
+    if (allocSelectedIds.has(id)) allocSelectedIds.delete(id);
+    else allocSelectedIds.add(id);
+    filterAllocVehicles();
+    renderAllocKpis();
+    updateAllocFooter();
+  }
+  function clearAllocSelection() {
+    allocSelectedIds = new Set();
+    filterAllocVehicles();
+    renderAllocKpis();
+    updateAllocFooter();
+  }
+  function filterAllocVehicles() {
+    const q = document.getElementById('alloc-search-input').value.toLowerCase();
+    const data = !q ? ALLOC_VEHICLES : ALLOC_VEHICLES.filter(v =>
+      v.name.toLowerCase().includes(q) || v.chassis.toLowerCase().includes(q));
+    renderAllocVehicles(data);
+  }
+  function updateAllocFooter() {
+    const btn = document.getElementById('alloc-submit-btn');
+    const sub = document.getElementById('alloc-footer-sub');
+    const count = allocSelectedIds.size;
+    btn.disabled = count === 0;
+    if (count > 0) {
+      sub.style.display = '';
+      sub.textContent = `${count} vehicle${count > 1 ? 's' : ''} selected`;
+    } else {
+      sub.style.display = 'none';
+    }
+  }
+
+  // ── Step 2: Confirmation screen ──
+  function openAllocConfirmScreen() {
+    if (!allocSelectedIds.size || !allocCurrentPayment) return;
+    const p = allocCurrentPayment;
+    let remaining = parseAmount(p.amount);
+    allocAmounts = {};
+
+    // Default-fill each selected vehicle up to its balance due, capped by what's left of the payment
+    [...allocSelectedIds].forEach(id => {
+      const v = ALLOC_VEHICLES.find(x => x.id === id);
+      const give = Math.max(0, Math.min(v.balanceDue, remaining));
+      allocAmounts[id] = give;
+      remaining -= give;
+    });
+
+    document.getElementById('alloc-confirm-payment-details').innerHTML = paymentDetailsHTML(p);
+    renderAllocConfirmList();
+    renderAllocSummary();
+
+    document.getElementById('alloc-confirm-screen').classList.add('open');
+  }
+  function closeAllocConfirmScreen() {
+    document.getElementById('alloc-confirm-screen').classList.remove('open');
+  }
+
+  function renderAllocConfirmList() {
+    const wrap = document.getElementById('alloc-confirm-list');
+    const p = allocCurrentPayment;
+    wrap.innerHTML = [...allocSelectedIds].map(id => {
+      const v = ALLOC_VEHICLES.find(x => x.id === id);
+      return `<div class="alloc-amt-card">
+        <div class="alloc-amt-top">
+          <div class="alloc-veh-icon"><i class="ti ti-car"></i></div>
+          <div class="alloc-veh-info">
+            <div class="alloc-veh-name">${v.name}</div>
+            <div class="alloc-veh-chassis">${v.chassis} · Balance Due ${currencySymbol(v.currency)}${formatAmount(v.balanceDue)}</div>
+          </div>
+        </div>
+        <div class="alloc-amt-input-row">
+          <span class="cur-tag">${currencySymbol(p.currency)}</span>
+          <input type="number" inputmode="decimal" value="${allocAmounts[id]}" oninput="onAllocAmountChange('${id}', this.value)">
+        </div>
+      </div>`;
+    }).join('');
+  }
+  function onAllocAmountChange(id, value) {
+    allocAmounts[id] = Math.max(0, parseFloat(value) || 0);
+    renderAllocSummary();
+  }
+  function renderAllocSummary() {
+    const p = allocCurrentPayment;
+    const paymentAmt = parseAmount(p.amount);
+    const totalAllocated = Object.values(allocAmounts).reduce((a, b) => a + b, 0);
+    const remaining = paymentAmt - totalAllocated;
+    const cls = remaining < 0 ? 'over' : 'ok';
+    document.getElementById('alloc-summary-card').innerHTML = `
+      <div class="alloc-summary-row total">
+        <span class="lbl">Total Payment</span>
+        <span class="val">${currencySymbol(p.currency)}${formatAmount(paymentAmt)}</span>
+      </div>
+      <div class="alloc-summary-row">
+        <span class="lbl">Total Allocated</span>
+        <span class="val">${currencySymbol(p.currency)}${formatAmount(totalAllocated)}</span>
+      </div>
+      <div class="alloc-summary-divider"></div>
+      <div class="alloc-summary-row remaining">
+        <span class="lbl">${remaining < 0 ? 'Over-allocated by' : 'Unallocated Balance'}</span>
+        <span class="val ${cls}">${currencySymbol(p.currency)}${formatAmount(Math.abs(remaining))}</span>
+      </div>`;
+  }
+
+  function submitAllocation() {
+    const p = allocCurrentPayment;
+    const paymentAmt = parseAmount(p.amount);
+    const totalAllocated = Object.values(allocAmounts).reduce((a, b) => a + b, 0);
+
+    if (totalAllocated <= 0) { showToast('Please enter an amount to allocate'); return; }
+    if (totalAllocated > paymentAmt) { showToast('Allocated amount exceeds payment amount'); return; }
+
+    showToast('Payment allocated successfully!');
+    setTimeout(() => { window.location.href = 'Payment.html?allocated=' + encodeURIComponent(p.id); }, 900);
+  }
+
+  // ── Toast ──
+  let _toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  // ── Init ──
+  loadAllocationFromURL();
+</script>
+
+</body>
+</html>
