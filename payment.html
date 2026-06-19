@@ -149,45 +149,56 @@
     margin-top: 3px;
   }
 
-  /* KPI STATS GRID */
+  /* KPI STATS ROW — horizontal scroll, one row */
   .kpi-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: 10px;
-    margin: 0 20px 16px;
+    margin: 0 0 6px;
+    padding: 2px 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    scroll-padding-left: 20px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+  .kpi-grid::-webkit-scrollbar { display: none; }
   .kpi-card {
     background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
     border: 1px solid var(--c-divider);
     border-radius: 14px;
-    padding: 12px 13px;
+    padding: 14px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 10px;
     cursor: pointer;
     transition: all 0.18s ease;
+    flex: 0 0 132px;
+    width: 132px;
+    scroll-snap-align: start;
   }
   .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
   .kpi-card:active { transform: scale(0.97); }
   .kpi-icon {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 11px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
   }
-  .kpi-icon i { font-size: 18px; color: #fff; }
+  .kpi-icon i { font-size: 17px; color: #fff; }
   .kpi-icon.green { background: linear-gradient(135deg, #059669 0%, #34d399 100%); box-shadow: 0 4px 12px rgba(5,150,105,0.28); }
   .kpi-icon.amber { background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%); box-shadow: 0 4px 12px rgba(217,119,6,0.28); }
   .kpi-icon.blue  { background: linear-gradient(135deg, #0e7490 0%, #22d3ee 100%); box-shadow: 0 4px 12px rgba(14,116,144,0.28); }
   .kpi-icon.purple{ background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%); box-shadow: 0 4px 12px rgba(124,58,237,0.28); }
   .kpi-icon.navy  { background: linear-gradient(135deg, #173559 0%, #2BA6FF 100%); box-shadow: 0 4px 12px rgba(23,53,89,0.28); }
-  .kpi-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .kpi-text { display: flex; flex-direction: column; min-width: 0; width: 100%; }
   .kpi-label {
-    font-size: 10px;
+    font-size: 11.5px;
     color: var(--c-text-muted);
     font-weight: 500;
     white-space: nowrap;
@@ -201,13 +212,14 @@
     color: var(--c-text);
     letter-spacing: -0.025em;
     line-height: 1.2;
-    margin-top: 1px;
+    margin-top: 4px;
+    white-space: nowrap;
   }
   .kpi-value .cur { font-size: 12px; font-weight: 600; opacity: 0.7; margin-right: 2px; }
 
   /* TOOLBAR */
   .toolbar {
-    padding: 8px 20px 12px;
+    padding: 4px 20px 12px;
     display: flex;
     gap: 8px;
     align-items: center;
@@ -279,31 +291,28 @@
   /* FAB — Floating Action Button */
   .fab {
     position: absolute;
-    bottom: 94px;
+    bottom: 90px;
     right: 20px;
-    height: 50px;
-    padding: 0 20px 0 18px;
+    height: 42px;
+    padding: 0 16px 0 14px;
     background: linear-gradient(135deg, var(--c-primary) 0%, #2a4a73 100%);
     color: #fff;
     border: none;
     border-radius: 999px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     cursor: pointer;
-    box-shadow: 0 6px 18px rgba(23,53,89,0.38), 0 2px 6px rgba(23,53,89,0.2);
+    box-shadow: 0 6px 16px rgba(23,53,89,0.34), 0 2px 5px rgba(23,53,89,0.18);
     transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
     z-index: 35;
     font-family: inherit;
   }
-  .fab:active { transform: scale(0.95); box-shadow: 0 3px 10px rgba(23,53,89,0.3); }
-  .fab i { font-size: 20px; }
-  .fab span { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
+  .fab:active { transform: scale(0.95); box-shadow: 0 3px 8px rgba(23,53,89,0.28); }
+  .fab i { font-size: 16px; }
+  .fab span { font-size: 12.5px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
 
-  /* KPI — Confirmed card full-width same style as other cards */
-  .kpi-card-confirmed {
-    grid-column: 1 / -1;
-  }
+  /* KPI — Confirmed card same style as other cards, no longer full-width */
 
   /* SECTION LABEL */
   .section-label {
@@ -806,7 +815,7 @@
   .addpay-screen {
     position: absolute;
     inset: 0;
-    background: var(--c-bg-app);
+    background: #fff;
     border-radius: 43px;
     z-index: 300;
     display: flex;
@@ -940,6 +949,66 @@
     font-size: 16px;
     pointer-events: none;
   }
+
+  /* Currency picker trigger button (replaces native select) */
+  .addpay-currency-btn {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    background: #fff;
+    border: 1.5px solid var(--c-divider);
+    border-radius: 12px;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .addpay-currency-btn:active { background: var(--c-bg-app); }
+  .addpay-currency-flag { font-size: 18px; line-height: 1; flex-shrink: 0; }
+  .addpay-currency-code {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.01em;
+    flex-shrink: 0;
+  }
+  .addpay-currency-name {
+    font-size: 13px;
+    color: var(--c-text-muted);
+    flex: 1;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .addpay-currency-btn .chev { position: static; transform: none; flex-shrink: 0; }
+
+  /* Currency picker list (inside bottom sheet) */
+  .currency-list { padding: 4px 0 8px; }
+  .currency-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-bottom: 1px solid var(--c-divider-soft);
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    transition: background 0.15s;
+  }
+  .currency-option:last-child { border-bottom: none; }
+  .currency-option:active { background: var(--c-bg-app); }
+  .currency-option .co-flag { font-size: 22px; line-height: 1; flex-shrink: 0; }
+  .currency-option .co-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .currency-option .co-code { font-size: 14px; font-weight: 700; color: var(--c-text); letter-spacing: -0.01em; }
+  .currency-option .co-name { font-size: 12px; color: var(--c-text-muted); margin-top: 1px; }
+  .currency-option .co-check { color: var(--c-accent); font-size: 20px; opacity: 0; flex-shrink: 0; }
+  .currency-option.selected .co-check { opacity: 1; }
 
   .addpay-footer {
     padding: 14px 16px 24px;
@@ -1395,24 +1464,19 @@
               <input type="file" id="addpay-file-input" accept=".png,.jpg,.jpeg,.pdf" style="display:none;" onchange="onAddPayFileSelected(this)">
             </div>
 
-            <div class="field-row">
-              <div class="field" style="margin-bottom:0">
-                <label>Currency <span class="req">*</span></label>
-                <div class="addpay-select-wrap">
-                  <select id="addpay-currency">
-                    <option value="USD" selected>USD</option>
-                    <option value="JPY">JPY</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                    <option value="AED">AED</option>
-                  </select>
-                  <i class="ti ti-chevron-down chev"></i>
-                </div>
-              </div>
-              <div class="field" style="margin-bottom:0">
-                <label>Amount <span class="req">*</span></label>
-                <input type="number" id="addpay-amount" placeholder="0.00">
-              </div>
+            <div class="field" style="margin-bottom:10px">
+              <label>Currency <span class="req">*</span></label>
+              <button type="button" class="addpay-currency-btn" id="addpay-currency-btn" onclick="openCurrencySheet()">
+                <span class="addpay-currency-flag" id="addpay-currency-flag">🇺🇸</span>
+                <span class="addpay-currency-code" id="addpay-currency-code">USD</span>
+                <span class="addpay-currency-name" id="addpay-currency-name">US Dollar</span>
+                <i class="ti ti-chevron-down chev"></i>
+              </button>
+              <input type="hidden" id="addpay-currency" value="USD">
+            </div>
+            <div class="field" style="margin-bottom:0">
+              <label>Amount <span class="req">*</span></label>
+              <input type="number" id="addpay-amount" placeholder="0.00">
             </div>
 
           </div>
@@ -1424,6 +1488,44 @@
           <i class="ti ti-plus"></i>
           Add Payment
         </button>
+      </div>
+
+      <!-- Currency Picker Sheet -->
+      <div class="sheet-backdrop" id="currency-backdrop" onclick="closeCurrencySheet()"></div>
+      <div class="bottom-sheet" id="currency-sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <span></span>
+          <span class="sheet-title">Select Currency</span>
+          <button class="sheet-close-btn" onclick="closeCurrencySheet()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="currency-list" id="currency-list">
+          <button type="button" class="currency-option selected" data-code="USD" data-flag="🇺🇸" data-name="US Dollar" onclick="selectCurrency(this)">
+            <span class="co-flag">🇺🇸</span>
+            <span class="co-text"><span class="co-code">USD</span><span class="co-name">US Dollar</span></span>
+            <i class="ti ti-check co-check"></i>
+          </button>
+          <button type="button" class="currency-option" data-code="JPY" data-flag="🇯🇵" data-name="Japanese Yen" onclick="selectCurrency(this)">
+            <span class="co-flag">🇯🇵</span>
+            <span class="co-text"><span class="co-code">JPY</span><span class="co-name">Japanese Yen</span></span>
+            <i class="ti ti-check co-check"></i>
+          </button>
+          <button type="button" class="currency-option" data-code="EUR" data-flag="🇪🇺" data-name="Euro" onclick="selectCurrency(this)">
+            <span class="co-flag">🇪🇺</span>
+            <span class="co-text"><span class="co-code">EUR</span><span class="co-name">Euro</span></span>
+            <i class="ti ti-check co-check"></i>
+          </button>
+          <button type="button" class="currency-option" data-code="GBP" data-flag="🇬🇧" data-name="British Pound" onclick="selectCurrency(this)">
+            <span class="co-flag">🇬🇧</span>
+            <span class="co-text"><span class="co-code">GBP</span><span class="co-name">British Pound</span></span>
+            <i class="ti ti-check co-check"></i>
+          </button>
+          <button type="button" class="currency-option" data-code="AED" data-flag="🇦🇪" data-name="UAE Dirham" onclick="selectCurrency(this)">
+            <span class="co-flag">🇦🇪</span>
+            <span class="co-text"><span class="co-code">AED</span><span class="co-name">UAE Dirham</span></span>
+            <i class="ti ti-check co-check"></i>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -1788,11 +1890,35 @@
     if (fileInput) fileInput.value = '';
     const amt = document.getElementById('addpay-amount'); if (amt) amt.value = '';
     const cur = document.getElementById('addpay-currency'); if (cur) cur.value = 'USD';
+    const curFlag = document.getElementById('addpay-currency-flag'); if (curFlag) curFlag.textContent = '🇺🇸';
+    const curCode = document.getElementById('addpay-currency-code'); if (curCode) curCode.textContent = 'USD';
+    const curName = document.getElementById('addpay-currency-name'); if (curName) curName.textContent = 'US Dollar';
+    document.querySelectorAll('.currency-option').forEach(o => o.classList.remove('selected'));
+    const defaultCur = document.querySelector('.currency-option[data-code="USD"]');
+    if (defaultCur) defaultCur.classList.add('selected');
 
     document.getElementById('addpay-screen').classList.add('open');
   }
   function closeAddPaymentScreen() {
     document.getElementById('addpay-screen').classList.remove('open');
+  }
+  function openCurrencySheet() {
+    document.getElementById('currency-backdrop').classList.add('show');
+    document.getElementById('currency-sheet').classList.add('show');
+  }
+  function closeCurrencySheet() {
+    document.getElementById('currency-backdrop').classList.remove('show');
+    document.getElementById('currency-sheet').classList.remove('show');
+  }
+  function selectCurrency(el) {
+    document.querySelectorAll('.currency-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    const code = el.dataset.code, flag = el.dataset.flag, name = el.dataset.name;
+    document.getElementById('addpay-currency-flag').textContent = flag;
+    document.getElementById('addpay-currency-code').textContent = code;
+    document.getElementById('addpay-currency-name').textContent = name;
+    document.getElementById('addpay-currency').value = code;
+    setTimeout(closeCurrencySheet, 220);
   }
   function onAddPayFileSelected(input) {
     if (!input.files || !input.files[0]) return;
