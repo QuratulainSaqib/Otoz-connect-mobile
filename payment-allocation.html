@@ -635,7 +635,7 @@
   }
 
   function goBackToPayments() {
-    window.location.href = 'Payment.html';
+    window.location.href = 'payment.html';
   }
 
   function renderAllocKpis() {
@@ -834,7 +834,7 @@
     if (totalAllocated > paymentAmt) { showToast('Allocated amount exceeds payment amount'); return; }
 
     showToast('Payment allocated successfully!');
-    setTimeout(() => { window.location.href = 'Payment.html?allocated=' + encodeURIComponent(p.id); }, 900);
+    setTimeout(() => { window.location.href = 'payment.html?allocated=' + encodeURIComponent(p.id); }, 900);
   }
 
   // ── Toast ──
