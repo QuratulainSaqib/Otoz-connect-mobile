@@ -537,8 +537,8 @@
     transition: all 0.18s ease;
   }
   .alloc-amt-input-row:focus-within { border-color: var(--c-accent); box-shadow: 0 0 0 3px rgba(43,166,255,0.12); }
-  .alloc-amt-input-row.error { border-color: var(--c-danger); }
-  .alloc-amt-input-row.error:focus-within { box-shadow: 0 0 0 3px rgba(255,59,48,0.12); }
+  .alloc-amt-input-row.capped { border-color: var(--c-danger); }
+  .alloc-amt-input-row.capped:focus-within { box-shadow: 0 0 0 3px rgba(255,59,48,0.12); }
   .alloc-amt-error {
     font-size: 11px;
     font-weight: 600;
@@ -978,14 +978,31 @@
     return cleaned;
   }
 
+  // Max this field can hold right now: capped by the vehicle's own remaining
+  // balance due, AND by what's left of the payment once other fields are accounted for.
+  function getMaxAllowedForField(id) {
+    const p = allocCurrentPayment;
+    const paymentAmt = parseAmount(p.amount);
+    const v = ALLOC_VEHICLES.find(x => x.id === id);
+    const othersTotal = Object.entries(allocAmounts).reduce((s, [k, val]) => k === id ? s : s + val, 0);
+    const poolAvailable = Math.max(0, paymentAmt - othersTotal);
+    return Math.max(0, Math.min(v.remaining, poolAvailable));
+  }
+
   function onAllocAmountChange(id, inputEl) {
-    const cleaned = sanitizeAmountInput(inputEl.value);
-    if (cleaned !== inputEl.value) {
-      const pos = inputEl.selectionStart - (inputEl.value.length - cleaned.length);
-      inputEl.value = cleaned;
-      if (document.activeElement === inputEl) inputEl.setSelectionRange(pos, pos);
+    let cleaned = sanitizeAmountInput(inputEl.value);
+    let numVal = parseFloat(cleaned) || 0;
+
+    // Hard-cap: user cannot enter more than the vehicle's remaining balance
+    // or the total unallocated balance, whichever is smaller.
+    const maxAllowed = getMaxAllowedForField(id);
+    if (numVal > maxAllowed) {
+      numVal = maxAllowed;
+      cleaned = maxAllowed > 0 ? String(maxAllowed) : '';
     }
-    allocAmounts[id] = Math.max(0, parseFloat(cleaned) || 0);
+    if (inputEl.value !== cleaned) inputEl.value = cleaned;
+
+    allocAmounts[id] = numVal;
     updateAllocLiveState();
   }
 
@@ -999,27 +1016,27 @@
     const kpiGrid = document.getElementById('alloc-confirm-kpi-grid');
     if (kpiGrid) kpiGrid.innerHTML = allocKpiHTML(p, Math.min(totalAllocated, paymentAmt), totalUnallocated);
 
-    // Per-field validation against the shared remaining balance
-    let hasError = false;
+    // Show a hint below each field that's currently sitting at its max
     [...allocSelectedIds].forEach(id => {
+      const v = ALLOC_VEHICLES.find(x => x.id === id);
       const val = allocAmounts[id] || 0;
-      const othersTotal = totalAllocated - val;
-      const maxAllowed = Math.max(0, paymentAmt - othersTotal);
+      const maxAllowed = getMaxAllowedForField(id);
       const rowEl = document.getElementById(`alloc-amt-row-${id}`);
       const errEl = document.getElementById(`alloc-amt-error-${id}`);
-      if (val > maxAllowed) {
-        hasError = true;
-        const over = val - maxAllowed;
-        if (rowEl) rowEl.classList.add('error');
-        if (errEl) errEl.innerHTML = `Exceeds remaining balance by ${currencySymbol(p.currency)}${formatAmount(over)}. Max Allowed ${currencySymbol(p.currency)}${formatAmount(maxAllowed)}`;
+      if (val > 0 && maxAllowed > 0 && val >= maxAllowed) {
+        const reason = v.remaining <= maxAllowed
+          ? "vehicle's remaining balance"
+          : 'total unallocated balance';
+        if (rowEl) rowEl.classList.add('capped');
+        if (errEl) errEl.innerHTML = `Maximum allocatable amount is ${currencySymbol(p.currency)}${formatAmount(maxAllowed)} (${reason})`;
       } else {
-        if (rowEl) rowEl.classList.remove('error');
+        if (rowEl) rowEl.classList.remove('capped');
         if (errEl) errEl.innerHTML = '';
       }
     });
 
     const submitBtn = document.getElementById('alloc-confirm-submit-btn');
-    if (submitBtn) submitBtn.disabled = hasError || totalAllocated <= 0;
+    if (submitBtn) submitBtn.disabled = totalAllocated <= 0;
 
     renderAllocSummary();
   }
