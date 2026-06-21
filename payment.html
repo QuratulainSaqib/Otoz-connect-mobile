@@ -1941,6 +1941,35 @@
     document.getElementById('addpay-upload-filled').style.display = '';
   }
   function submitAddPayment() {
+    const amountInput = document.getElementById('addpay-amount');
+    const currencyInput = document.getElementById('addpay-currency');
+
+    if (!amountInput || !amountInput.value.trim()) {
+      showToast('Please enter an amount');
+      return;
+    }
+
+    const amount = amountInput.value.trim();
+    const currency = currencyInput ? currencyInput.value : 'USD';
+    const newId = `PAY-${String(PAYMENTS.length + 1).padStart(3, '0')}`;
+
+    PAYMENTS.unshift({
+      id: newId,
+      txnId: `TXN-${new Date().getFullYear()}-${String(Date.now()).slice(-5)}`,
+      uploadDate: new Date().toLocaleDateString('en-GB', {
+        day: '2-digit', month: 'short', year: 'numeric'
+      }).replace(/\//g, ' ').replace(',', ''),
+      currency,
+      amount,
+      status: 'pending',
+      receiptImg: null,
+      hasAllocation: false,
+      hasConfirmReceipt: false,
+      confirmReceiptName: null,
+      rejectionReason: null
+    });
+
+    filterCards();
     closeAddPaymentScreen();
     showToast('Payment submitted successfully!');
   }
@@ -1975,8 +2004,12 @@
     const allocatedId = params.get('allocated');
     if (allocatedId) {
       const p = PAYMENTS.find(x => x.id === allocatedId);
-      if (p) p.hasAllocation = true;
+      if (p) {
+        p.hasAllocation = true;
+        p.status = 'confirmed';
+      }
       history.replaceState(null, '', window.location.pathname);
+      filterCards();
       setTimeout(() => showToast('Payment allocated successfully!'), 300);
     }
   })();
