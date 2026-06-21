@@ -576,9 +576,10 @@
     top: 0;
     z-index: 6;
     margin: 0 0 14px;
-    border-radius: 16px;
+    border-radius: 0 0 16px 16px;
     background: #fff;
     border: 1px solid var(--c-divider);
+    border-top: none;
     box-shadow: 0 6px 20px -8px rgba(15,23,42,0.14);
     padding: 14px 16px 16px;
     display: flex;
@@ -593,26 +594,12 @@
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
     box-shadow: 0 4px 10px rgba(43,166,255,0.35);
-    transition: all 0.2s ease;
   }
   .alloc-unalloc-icon i { font-size: 18px; color: #fff; }
-  .alloc-unalloc-icon.over {
-    background: linear-gradient(135deg, #ff8a7a 0%, #ff3b30 100%);
-    box-shadow: 0 4px 10px rgba(255,59,48,0.35);
-  }
   .alloc-unalloc-info { flex: 1; min-width: 0; }
   .alloc-unalloc-title { font-size: 13px; font-weight: 700; color: var(--c-text); }
   .alloc-unalloc-sub { font-size: 10px; font-weight: 500; color: var(--c-text-subtle); margin-top: 1px; }
   .alloc-unalloc-value { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; color: #0058c7; white-space: nowrap; }
-  .alloc-unalloc-value.over { color: var(--c-danger); }
-  .alloc-unalloc-bar { height: 6px; border-radius: 4px; background: #eef1f5; overflow: hidden; }
-  .alloc-unalloc-bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    background: linear-gradient(90deg, #2BA6FF, #0058c7);
-    transition: width 0.25s ease, background 0.25s ease;
-  }
-  .alloc-unalloc-bar-fill.over { background: linear-gradient(90deg, #ff8a7a, #ff3b30); }
 </style>
 </head>
 <body>
@@ -1040,19 +1027,16 @@
     const p = allocCurrentPayment;
     const paymentAmt = parseAmount(p.amount);
     const totalAllocated = Object.values(allocAmounts).reduce((a, b) => a + b, 0);
-    const remaining = paymentAmt - totalAllocated;
-    const over = remaining < 0;
-    const pct = paymentAmt > 0 ? Math.min(100, (totalAllocated / paymentAmt) * 100) : 0;
+    const remaining = Math.max(0, paymentAmt - totalAllocated);
     document.getElementById('alloc-summary-card').innerHTML = `
       <div class="alloc-unalloc-top">
-        <div class="alloc-unalloc-icon ${over ? 'over' : ''}"><i class="ti ti-wallet"></i></div>
+        <div class="alloc-unalloc-icon"><i class="ti ti-wallet"></i></div>
         <div class="alloc-unalloc-info">
           <div class="alloc-unalloc-title">Total Unallocated</div>
           <div class="alloc-unalloc-sub">Updates as you allocate</div>
         </div>
-        <div class="alloc-unalloc-value ${over ? 'over' : ''}">${over ? '-' : ''}${currencySymbol(p.currency)}${formatAmount(Math.abs(remaining))}</div>
-      </div>
-      <div class="alloc-unalloc-bar"><div class="alloc-unalloc-bar-fill ${over ? 'over' : ''}" style="width:${over ? 100 : pct}%"></div></div>`;
+        <div class="alloc-unalloc-value">${currencySymbol(p.currency)}${formatAmount(remaining)}</div>
+      </div>`;
   }
 
   function submitAllocation() {
