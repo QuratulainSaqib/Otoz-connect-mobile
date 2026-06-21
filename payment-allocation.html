@@ -141,6 +141,18 @@
   }
   .search-wrap input::placeholder { color: var(--c-text-subtle); }
 
+  /* Search row — toolbar pattern matching payment.html (search + 2 icon buttons), sticky */
+  .alloc-toolbar {
+    padding: 4px 16px 12px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--c-bg-app);
+  }
+
   /* EMPTY STATE */
   .empty-state {
     display: flex;
@@ -219,7 +231,7 @@
   .alloc-screen {
     flex: 1;
     min-height: 0;
-    background: #fff;
+    background: var(--c-bg-app);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -229,7 +241,7 @@
   .alloc-confirm-screen {
     position: absolute;
     inset: 0;
-    background: #fff;
+    background: var(--c-bg-app);
     border-radius: 43px;
     z-index: 310;
     display: flex;
@@ -256,6 +268,7 @@
     padding: 2px 16px 4px;
     overflow-x: auto;
     scroll-snap-type: x proximity;
+    scroll-padding-left: 16px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     margin-bottom: 16px;
@@ -270,8 +283,8 @@
     display: flex;
     flex-direction: column;
     gap: 9px;
-    flex: 0 0 128px;
-    width: 128px;
+    flex: 0 0 132px;
+    width: 132px;
     scroll-snap-align: start;
     transition: all 0.18s ease;
   }
@@ -282,13 +295,14 @@
     flex-shrink: 0;
   }
   .alloc-kpi-icon i { font-size: 15px; color: #fff; }
-  .alloc-kpi-icon svg { width: 18px; height: 18px; }
+  .alloc-kpi-icon svg { width: 18px; height: 18px; color: #fff; }
   .alloc-kpi-icon.blue   { background: linear-gradient(135deg, #0071e3 0%, #00a3ff 100%); box-shadow: 0 4px 10px rgba(0,113,227,0.28); }
   .alloc-kpi-icon.indigo { background: linear-gradient(135deg, #4f46e5 0%, #818cf8 100%); box-shadow: 0 4px 10px rgba(79,70,229,0.28); }
   .alloc-kpi-icon.green  { background: linear-gradient(135deg, #059669 0%, #34d399 100%); box-shadow: 0 4px 10px rgba(5,150,105,0.28); }
   .alloc-kpi-label {
     font-size: 11px; font-weight: 500; color: var(--c-text-muted);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    white-space: normal; line-height: 1.3;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   }
   .alloc-kpi-value {
     font-size: 16.5px; font-weight: 700; color: var(--c-text);
@@ -333,16 +347,31 @@
   .alloc-dd-item { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .alloc-dd-label {
     font-size: 10px; font-weight: 600; color: var(--c-text-tertiary);
-    text-transform: uppercase; letter-spacing: 0.06em;
+    letter-spacing: 0.01em;
   }
   .alloc-dd-value {
     font-size: 13.5px; font-weight: 700; color: var(--c-text);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .alloc-dd-value.amt { color: var(--c-primary); font-size: 15px; }
+  .alloc-dd-value.amt {
+    color: var(--c-primary); font-size: 19px; font-weight: 800; letter-spacing: -0.02em;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .alloc-dd-curr-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6e6e73;
+    line-height: 1;
+    flex-shrink: 0;
+  }
 
   /* Search row (no filter icon, just search) */
-  .alloc-search-row { padding: 0 16px 12px; }
 
   .alloc-section-label {
     padding: 0 16px 8px;
@@ -364,8 +393,8 @@
 
   .alloc-veh-card {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    flex-direction: column;
+    gap: 10px;
     background: #fff;
     border: 1.5px solid var(--c-divider);
     border-radius: 14px;
@@ -378,6 +407,11 @@
     border-color: var(--c-accent);
     background: rgba(43,166,255,0.05);
     box-shadow: 0 0 0 3px rgba(43,166,255,0.1);
+  }
+  .alloc-veh-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
   .alloc-veh-icon {
     width: 44px; height: 44px;
@@ -392,14 +426,17 @@
     font-size: 14px; font-weight: 700; color: var(--c-text);
     letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
+  .alloc-veh-name .alloc-veh-year { font-weight: 500; color: var(--c-text-subtle); }
   .alloc-veh-chassis {
     font-size: 11px; color: var(--c-text-subtle); margin-top: 2px;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .alloc-veh-balance {
-    font-size: 11px; color: var(--c-text-muted); margin-top: 4px; font-weight: 500;
+  .alloc-veh-dest {
+    font-size: 11px; color: var(--c-text-muted); margin-top: 3px; font-weight: 500;
+    display: flex; align-items: center; gap: 3px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .alloc-veh-balance b { color: var(--c-primary); font-weight: 700; }
+  .alloc-veh-dest i { font-size: 12px; color: var(--c-text-subtle); flex-shrink: 0; }
   .alloc-veh-check {
     width: 22px; height: 22px;
     border-radius: 50%;
@@ -414,6 +451,40 @@
     border-color: var(--c-accent);
   }
   .alloc-veh-card.selected .alloc-veh-check i { opacity: 1; transform: scale(1); }
+
+  /* Purchase price / Allocated / Paid / Remaining — mirrors the web table's columns */
+  .alloc-veh-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--c-divider-soft);
+  }
+  .avs-item { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .avs-label {
+    font-size: 9.5px; font-weight: 600; color: var(--c-text-tertiary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .avs-value {
+    font-size: 12.5px; font-weight: 700; color: var(--c-text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .avs-curr-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 5px;
+    padding: 2px 7px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #6e6e73;
+    line-height: 1.4;
+    flex-shrink: 0;
+  }
+  .avs-paid { color: var(--c-success); }
+  .avs-remaining { color: var(--c-danger); }
 
   .alloc-footer-sub {
     text-align: center;
@@ -510,13 +581,13 @@
         <div class="alloc-details-card">
           <div class="alloc-details-head">
             <span class="alloc-details-icon"><i class="ti ti-receipt"></i></span>
-            <span class="alloc-details-title">Allocation Payment Details</span>
+            <span class="alloc-details-title">Allocation Payment</span>
           </div>
           <div class="alloc-details-body" id="alloc-payment-details"></div>
         </div>
 
         <!-- Search -->
-        <div class="alloc-search-row">
+        <div class="alloc-toolbar">
           <div class="search-wrap">
             <i class="ti ti-search"></i>
             <input type="text" id="alloc-search-input" placeholder="Search vehicles..." oninput="filterAllocVehicles()">
@@ -590,11 +661,11 @@
 <script>
   // Vehicles / purchase orders available to allocate this payment against
   const ALLOC_VEHICLES = [
-    { id: 'VEH-201', name: 'Toyota Raize',   chassis: 'WDC2539052F422655', currency: 'USD', balanceDue: 5500 },
-    { id: 'VEH-202', name: 'Honda Vezel',    chassis: 'JHLRD78423C123456', currency: 'USD', balanceDue: 4200 },
-    { id: 'VEH-203', name: 'Nissan X-Trail', chassis: 'JN1TANT32Z0123789', currency: 'USD', balanceDue: 8900 },
-    { id: 'VEH-204', name: 'Suzuki Swift',   chassis: 'JSAFB31S00012345',  currency: 'USD', balanceDue: 1500 },
-    { id: 'VEH-205', name: 'Mazda CX-5',     chassis: 'JM3KFBDM5K0456789', currency: 'USD', balanceDue: 9400 }
+    { id: 'VEH-201', make: 'Toyota', model: 'Raize',   code: '5BA-A200A',  year: 2022, chassis: 'WDC2539052F422655', dest: 'Mombasa Port',   currency: 'USD', total: 32650, paid: 27150, allocated: 27150, remaining: 5500 },
+    { id: 'VEH-202', make: 'Honda',  model: 'Vezel',   code: 'DBA-RU3',    year: 2021, chassis: 'JHLRD78423C123456', dest: 'Dar es Salaam',  currency: 'USD', total: 24800, paid: 20600, allocated: 20600, remaining: 4200 },
+    { id: 'VEH-203', make: 'Nissan', model: 'X-Trail', code: 'DBA-T32',    year: 2023, chassis: 'JN1TANT32Z0123789', dest: 'Durban',         currency: 'USD', total: 31900, paid: 23000, allocated: 23000, remaining: 8900 },
+    { id: 'VEH-204', make: 'Suzuki', model: 'Swift',   code: 'DAA-ZC83S',  year: 2020, chassis: 'JSAFB31S00012345',  dest: 'Lagos',          currency: 'USD', total: 14500, paid: 13000, allocated: 13000, remaining: 1500 },
+    { id: 'VEH-205', make: 'Mazda',  model: 'CX-5',    code: '6BA-KF2P',   year: 2022, chassis: 'JM3KFBDM5K0456789', dest: 'Zimbabwe',       currency: 'USD', total: 28400, paid: 19000, allocated: 19000, remaining: 9400 }
   ];
 
   let allocCurrentPayment = null;   // the payment being allocated (read from URL params)
@@ -609,10 +680,10 @@
   }
   function paymentDetailsHTML(p) {
     return `
-      <div class="alloc-dd-item"><span class="alloc-dd-label">Transaction ID</span><span class="alloc-dd-value">${p.txnId}</span></div>
-      <div class="alloc-dd-item"><span class="alloc-dd-label">Upload Date</span><span class="alloc-dd-value">${p.uploadDate}</span></div>
-      <div class="alloc-dd-item"><span class="alloc-dd-label">Currency</span><span class="alloc-dd-value">${p.currency}</span></div>
-      <div class="alloc-dd-item"><span class="alloc-dd-label">Amount</span><span class="alloc-dd-value amt">${currencySymbol(p.currency)}${p.amount}</span></div>`;
+      <div class="alloc-dd-item"><span class="alloc-dd-label">Transaction id</span><span class="alloc-dd-value">${p.txnId}</span></div>
+      <div class="alloc-dd-item"><span class="alloc-dd-label">Amount</span><span class="alloc-dd-value amt"><span class="alloc-dd-curr-pill">${p.currency}</span>${currencySymbol(p.currency)}${p.amount}</span></div>
+      <div class="alloc-dd-item"><span class="alloc-dd-label">Upload date</span><span class="alloc-dd-value">${p.uploadDate}</span></div>
+      <div class="alloc-dd-item"><span class="alloc-dd-label">Ref id</span><span class="alloc-dd-value">${p.id}</span></div>`;
   }
 
   // ── Load payment context from URL (sent over by Payment.html) ──
@@ -635,7 +706,7 @@
   }
 
   function goBackToPayments() {
-    window.location.href = 'payment.html';
+    window.location.href = 'Payment.html';
   }
 
   function renderAllocKpis() {
@@ -643,7 +714,7 @@
     if (!p) return;
     const selectedTotal = [...allocSelectedIds].reduce((sum, id) => {
       const v = ALLOC_VEHICLES.find(x => x.id === id);
-      return sum + (v ? v.balanceDue : 0);
+      return sum + (v ? v.remaining : 0);
     }, 0);
     const paymentAmt = parseAmount(p.amount);
     const allocated = Math.min(selectedTotal, paymentAmt);
@@ -711,13 +782,32 @@
     wrap.innerHTML = list.map(v => {
       const sel = allocSelectedIds.has(v.id);
       return `<div class="alloc-veh-card ${sel ? 'selected' : ''}" onclick="toggleVehicleSelect('${v.id}')">
-        <div class="alloc-veh-icon"><i class="ti ti-car"></i></div>
-        <div class="alloc-veh-info">
-          <div class="alloc-veh-name">${v.name}</div>
-          <div class="alloc-veh-chassis">${v.chassis}</div>
-          <div class="alloc-veh-balance">Balance Due: <b>${currencySymbol(v.currency)}${formatAmount(v.balanceDue)}</b></div>
+        <div class="alloc-veh-top">
+          <div class="alloc-veh-info">
+            <div class="alloc-veh-name">${v.make} ${v.model} <span class="alloc-veh-year">· ${v.year}</span></div>
+            <div class="alloc-veh-chassis">${v.chassis}</div>
+            <div class="alloc-veh-dest"><i class="ti ti-map-pin"></i>${v.dest}</div>
+          </div>
+          <div class="alloc-veh-check"><i class="ti ti-check"></i></div>
         </div>
-        <div class="alloc-veh-check"><i class="ti ti-check"></i></div>
+        <div class="alloc-veh-stats">
+          <div class="avs-item">
+            <span class="avs-label">Purchase price</span>
+            <span class="avs-value"><span class="avs-curr-pill">${v.currency}</span>${formatAmount(v.total)}</span>
+          </div>
+          <div class="avs-item">
+            <span class="avs-label">Allocated amount</span>
+            <span class="avs-value">${currencySymbol(v.currency)}${formatAmount(v.allocated)}</span>
+          </div>
+          <div class="avs-item">
+            <span class="avs-label">Paid</span>
+            <span class="avs-value avs-paid">${currencySymbol(v.currency)}${formatAmount(v.paid)}</span>
+          </div>
+          <div class="avs-item">
+            <span class="avs-label">Remaining</span>
+            <span class="avs-value avs-remaining">${currencySymbol(v.currency)}${formatAmount(v.remaining)}</span>
+          </div>
+        </div>
       </div>`;
     }).join('');
   }
@@ -738,7 +828,7 @@
   function filterAllocVehicles() {
     const q = document.getElementById('alloc-search-input').value.toLowerCase();
     const data = !q ? ALLOC_VEHICLES : ALLOC_VEHICLES.filter(v =>
-      v.name.toLowerCase().includes(q) || v.chassis.toLowerCase().includes(q));
+      `${v.make} ${v.model}`.toLowerCase().includes(q) || v.chassis.toLowerCase().includes(q));
     renderAllocVehicles(data);
   }
   function updateAllocFooter() {
@@ -764,7 +854,7 @@
     // Default-fill each selected vehicle up to its balance due, capped by what's left of the payment
     [...allocSelectedIds].forEach(id => {
       const v = ALLOC_VEHICLES.find(x => x.id === id);
-      const give = Math.max(0, Math.min(v.balanceDue, remaining));
+      const give = Math.max(0, Math.min(v.remaining, remaining));
       allocAmounts[id] = give;
       remaining -= give;
     });
@@ -786,10 +876,9 @@
       const v = ALLOC_VEHICLES.find(x => x.id === id);
       return `<div class="alloc-amt-card">
         <div class="alloc-amt-top">
-          <div class="alloc-veh-icon"><i class="ti ti-car"></i></div>
           <div class="alloc-veh-info">
-            <div class="alloc-veh-name">${v.name}</div>
-            <div class="alloc-veh-chassis">${v.chassis} · Balance Due ${currencySymbol(v.currency)}${formatAmount(v.balanceDue)}</div>
+            <div class="alloc-veh-name">${v.make} ${v.model} <span class="alloc-veh-year">· ${v.year}</span></div>
+            <div class="alloc-veh-chassis">${v.chassis} · Remaining ${currencySymbol(v.currency)}${formatAmount(v.remaining)}</div>
           </div>
         </div>
         <div class="alloc-amt-input-row">
@@ -834,7 +923,7 @@
     if (totalAllocated > paymentAmt) { showToast('Allocated amount exceeds payment amount'); return; }
 
     showToast('Payment allocated successfully!');
-    setTimeout(() => { window.location.href = 'payment.html?allocated=' + encodeURIComponent(p.id); }, 900);
+    setTimeout(() => { window.location.href = 'Payment.html?allocated=' + encodeURIComponent(p.id); }, 900);
   }
 
   // ── Toast ──
