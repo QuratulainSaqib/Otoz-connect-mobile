@@ -411,16 +411,6 @@
     box-shadow: 0 6px 18px -6px rgba(43,166,255,0.35), 0 0 0 1px rgba(43,166,255,0.08);
     transform: translateY(-1px);
   }
-  .alloc-veh-card.selected::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 14px;
-    bottom: 14px;
-    width: 3px;
-    border-radius: 0 3px 3px 0;
-    background: var(--c-accent);
-  }
   .alloc-veh-top {
     display: flex;
     align-items: center;
@@ -471,8 +461,6 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px 8px;
-    padding-top: 10px;
-    border-top: 1px solid var(--c-divider-soft);
   }
   .avs-item { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .avs-label {
@@ -480,7 +468,7 @@
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .avs-value {
-    font-size: 12.5px; font-weight: 700; color: var(--c-text);
+    font-size: 14px; font-weight: 800; color: var(--c-text); letter-spacing: -0.01em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     display: inline-flex; align-items: center; gap: 5px;
   }
@@ -515,16 +503,50 @@
     border-radius: 14px;
     padding: 12px 13px;
   }
-  .alloc-amt-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .alloc-amt-top { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .alloc-amt-code {
+    font-size: 11px; color: var(--c-text-subtle); margin-top: 2px; font-weight: 500;
+  }
+  .alloc-amt-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 8px;
+    padding-top: 4px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--c-divider-soft);
+  }
+  .avs-item.id-row {
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--c-divider-soft);
+  }
+  .alloc-amt-stats .avs-item.full { grid-column: 1 / -1; }
+  .alloc-amt-label {
+    font-size: 11px; font-weight: 600; color: var(--c-text-muted);
+    margin-bottom: 6px;
+  }
   .alloc-amt-input-row {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: var(--c-bg-app);
+    background: #fff;
     border: 1.5px solid var(--c-divider);
     border-radius: 10px;
     padding: 0 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    transition: all 0.18s ease;
   }
+  .alloc-amt-input-row:focus-within { border-color: var(--c-accent); box-shadow: 0 0 0 3px rgba(43,166,255,0.12); }
+  .alloc-amt-input-row.error { border-color: var(--c-danger); }
+  .alloc-amt-input-row.error:focus-within { box-shadow: 0 0 0 3px rgba(255,59,48,0.12); }
+  .alloc-amt-error {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--c-danger);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+  .alloc-amt-error:empty { display: none; margin-top: 0; }
   .alloc-amt-input-row .cur-tag {
     font-size: 12px; font-weight: 700; color: var(--c-text-muted); flex-shrink: 0;
   }
@@ -539,25 +561,31 @@
     color: var(--c-text);
     font-family: inherit;
     min-width: 0;
+    appearance: none;
+    -moz-appearance: textfield;
   }
+  .alloc-amt-input-row input::-webkit-outer-spin-button,
+  .alloc-amt-input-row input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .alloc-amt-input-row input::placeholder { color: var(--c-text-subtle); font-weight: 500; }
 
   .alloc-summary-card {
-    margin: 4px 16px 16px;
+    margin: 0 16px 16px;
     border-radius: 14px;
     border: 1px solid rgba(43,166,255,0.25);
     background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
-    padding: 14px;
+    padding: 12px 16px;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
-  .alloc-summary-row { display: flex; justify-content: space-between; align-items: center; }
-  .alloc-summary-row .lbl { font-size: 12.5px; font-weight: 600; color: #1e3a5f; }
-  .alloc-summary-row .val { font-size: 14px; font-weight: 700; color: var(--c-text); }
-  .alloc-summary-row.total .val { font-size: 16px; color: #0058c7; }
-  .alloc-summary-divider { height: 1px; background: rgba(0,113,227,0.18); }
-  .alloc-summary-row.remaining .val.ok   { color: #047857; }
-  .alloc-summary-row.remaining .val.over { color: #b91c1c; }
+  .alloc-unalloc-title { font-size: 12.5px; font-weight: 700; color: #1e3a5f; }
+  .alloc-unalloc-sub { font-size: 10px; font-weight: 500; color: #6b87a8; margin-top: 2px; }
+  .alloc-unalloc-value { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; color: #0058c7; white-space: nowrap; }
+  .alloc-unalloc-value.over { color: var(--c-danger); }
 </style>
 </head>
 <body>
@@ -643,8 +671,11 @@
 
       <div class="alloc-scroll">
 
+        <!-- Top context cards -->
+        <div class="alloc-kpi-grid" id="alloc-confirm-kpi-grid"></div>
+
         <!-- Payment Details recap -->
-        <div class="alloc-details-card" style="margin-top:14px;">
+        <div class="alloc-details-card">
           <div class="alloc-details-head">
             <span class="alloc-details-icon"><i class="ti ti-receipt"></i></span>
             <span class="alloc-details-title">Payment Details</span>
@@ -652,18 +683,18 @@
           <div class="alloc-details-body" id="alloc-confirm-payment-details"></div>
         </div>
 
+        <div class="alloc-summary-card" id="alloc-summary-card"></div>
+
         <div class="alloc-section-label"><span>Allocated To</span></div>
 
         <div id="alloc-confirm-list"></div>
 
-        <div class="alloc-summary-card" id="alloc-summary-card"></div>
-
       </div>
 
       <div class="addpay-footer">
-        <button class="btn-submit" onclick="submitAllocation()">
+        <button class="btn-submit" id="alloc-confirm-submit-btn" onclick="submitAllocation()">
           <i class="ti ti-circle-check"></i>
-          Confirm Allocation
+          Allocate Amount
         </button>
       </div>
     </div>
@@ -733,17 +764,8 @@
     window.location.href = 'payment.html';
   }
 
-  function renderAllocKpis() {
-    const p = allocCurrentPayment;
-    if (!p) return;
-    const selectedTotal = [...allocSelectedIds].reduce((sum, id) => {
-      const v = ALLOC_VEHICLES.find(x => x.id === id);
-      return sum + (v ? v.remaining : 0);
-    }, 0);
-    const paymentAmt = parseAmount(p.amount);
-    const allocated = Math.min(selectedTotal, paymentAmt);
-    const unallocated = Math.max(0, paymentAmt - allocated);
-    document.getElementById('alloc-kpi-grid').innerHTML = `
+  function allocKpiHTML(p, allocated, unallocated) {
+    return `
       <div class="alloc-kpi-card">
         <div class="alloc-kpi-icon blue">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -785,6 +807,19 @@
       </div>`;
   }
 
+  function renderAllocKpis() {
+    const p = allocCurrentPayment;
+    if (!p) return;
+    const selectedTotal = [...allocSelectedIds].reduce((sum, id) => {
+      const v = ALLOC_VEHICLES.find(x => x.id === id);
+      return sum + (v ? v.remaining : 0);
+    }, 0);
+    const paymentAmt = parseAmount(p.amount);
+    const allocated = Math.min(selectedTotal, paymentAmt);
+    const unallocated = Math.max(0, paymentAmt - allocated);
+    document.getElementById('alloc-kpi-grid').innerHTML = allocKpiHTML(p, allocated, unallocated);
+  }
+
   function renderAllocVehicles(list) {
     const wrap = document.getElementById('alloc-vehicle-list');
     const label = document.getElementById('alloc-section-label');
@@ -809,10 +844,14 @@
         <div class="alloc-veh-top">
           <div class="alloc-veh-info">
             <div class="alloc-veh-name">${v.make} ${v.model} <span class="alloc-veh-year">· ${v.year}</span></div>
-            <div class="alloc-veh-chassis">${v.chassis}</div>
+            <div class="alloc-amt-code">${v.code}</div>
             <div class="alloc-veh-dest"><i class="ti ti-map-pin"></i>${v.dest}</div>
           </div>
           <div class="alloc-veh-check"><i class="ti ti-check"></i></div>
+        </div>
+        <div class="avs-item id-row">
+          <span class="avs-label">Chassis No.</span>
+          <span class="avs-value">${v.chassis}</span>
         </div>
         <div class="alloc-veh-stats">
           <div class="avs-item">
@@ -885,7 +924,7 @@
 
     document.getElementById('alloc-confirm-payment-details').innerHTML = paymentDetailsHTML(p);
     renderAllocConfirmList();
-    renderAllocSummary();
+    updateAllocLiveState();
 
     document.getElementById('alloc-confirm-screen').classList.add('open');
   }
@@ -902,18 +941,89 @@
         <div class="alloc-amt-top">
           <div class="alloc-veh-info">
             <div class="alloc-veh-name">${v.make} ${v.model} <span class="alloc-veh-year">· ${v.year}</span></div>
-            <div class="alloc-veh-chassis">${v.chassis} · Remaining ${currencySymbol(v.currency)}${formatAmount(v.remaining)}</div>
+            <div class="alloc-amt-code">${v.code}</div>
           </div>
         </div>
-        <div class="alloc-amt-input-row">
-          <span class="cur-tag">${currencySymbol(p.currency)}</span>
-          <input type="number" inputmode="decimal" value="${allocAmounts[id]}" oninput="onAllocAmountChange('${id}', this.value)">
+
+        <div class="alloc-amt-stats">
+          <div class="avs-item full id-row">
+            <span class="avs-label">Chassis No.</span>
+            <span class="avs-value">${v.chassis}</span>
+          </div>
+          <div class="avs-item">
+            <span class="avs-label">Purchase Price</span>
+            <span class="avs-value"><span class="avs-curr-pill">${v.currency}</span>${formatAmount(v.total)}</span>
+          </div>
+          <div class="avs-item">
+            <span class="avs-label">Paid Amount</span>
+            <span class="avs-value avs-paid">${currencySymbol(v.currency)}${formatAmount(v.paid)}</span>
+          </div>
+          <div class="avs-item full">
+            <span class="avs-label">Remaining Amount</span>
+            <span class="avs-value avs-remaining">${currencySymbol(v.currency)}${formatAmount(v.remaining)}</span>
+          </div>
         </div>
+
+        <div class="alloc-amt-label">Allocated Amount</div>
+        <div class="alloc-amt-input-row" id="alloc-amt-row-${id}">
+          <span class="cur-tag">${currencySymbol(p.currency)}</span>
+          <input type="text" inputmode="decimal" placeholder="Enter Amount" value="${allocAmounts[id] || ''}" oninput="onAllocAmountChange('${id}', this)">
+        </div>
+        <div class="alloc-amt-error" id="alloc-amt-error-${id}"></div>
       </div>`;
     }).join('');
   }
-  function onAllocAmountChange(id, value) {
-    allocAmounts[id] = Math.max(0, parseFloat(value) || 0);
+  function sanitizeAmountInput(raw) {
+    // Strip everything except digits and a single decimal point
+    let cleaned = raw.replace(/[^0-9.]/g, '');
+    const parts = cleaned.split('.');
+    if (parts.length > 2) cleaned = parts[0] + '.' + parts.slice(1).join('');
+    return cleaned;
+  }
+
+  function onAllocAmountChange(id, inputEl) {
+    const cleaned = sanitizeAmountInput(inputEl.value);
+    if (cleaned !== inputEl.value) {
+      const pos = inputEl.selectionStart - (inputEl.value.length - cleaned.length);
+      inputEl.value = cleaned;
+      if (document.activeElement === inputEl) inputEl.setSelectionRange(pos, pos);
+    }
+    allocAmounts[id] = Math.max(0, parseFloat(cleaned) || 0);
+    updateAllocLiveState();
+  }
+
+  function updateAllocLiveState() {
+    const p = allocCurrentPayment;
+    const paymentAmt = parseAmount(p.amount);
+    const totalAllocated = Object.values(allocAmounts).reduce((s, v) => s + v, 0);
+    const totalUnallocated = Math.max(0, paymentAmt - totalAllocated);
+
+    // Live KPI cards at the top of the screen
+    const kpiGrid = document.getElementById('alloc-confirm-kpi-grid');
+    if (kpiGrid) kpiGrid.innerHTML = allocKpiHTML(p, Math.min(totalAllocated, paymentAmt), totalUnallocated);
+
+    // Per-field validation against the shared remaining balance
+    let hasError = false;
+    [...allocSelectedIds].forEach(id => {
+      const val = allocAmounts[id] || 0;
+      const othersTotal = totalAllocated - val;
+      const maxAllowed = Math.max(0, paymentAmt - othersTotal);
+      const rowEl = document.getElementById(`alloc-amt-row-${id}`);
+      const errEl = document.getElementById(`alloc-amt-error-${id}`);
+      if (val > maxAllowed) {
+        hasError = true;
+        const over = val - maxAllowed;
+        if (rowEl) rowEl.classList.add('error');
+        if (errEl) errEl.innerHTML = `Exceeds remaining balance by ${currencySymbol(p.currency)}${formatAmount(over)}. Max Allowed ${currencySymbol(p.currency)}${formatAmount(maxAllowed)}`;
+      } else {
+        if (rowEl) rowEl.classList.remove('error');
+        if (errEl) errEl.innerHTML = '';
+      }
+    });
+
+    const submitBtn = document.getElementById('alloc-confirm-submit-btn');
+    if (submitBtn) submitBtn.disabled = hasError || totalAllocated <= 0;
+
     renderAllocSummary();
   }
   function renderAllocSummary() {
@@ -921,21 +1031,13 @@
     const paymentAmt = parseAmount(p.amount);
     const totalAllocated = Object.values(allocAmounts).reduce((a, b) => a + b, 0);
     const remaining = paymentAmt - totalAllocated;
-    const cls = remaining < 0 ? 'over' : 'ok';
+    const over = remaining < 0;
     document.getElementById('alloc-summary-card').innerHTML = `
-      <div class="alloc-summary-row total">
-        <span class="lbl">Total Payment</span>
-        <span class="val">${currencySymbol(p.currency)}${formatAmount(paymentAmt)}</span>
+      <div>
+        <div class="alloc-unalloc-title">Total Unallocated</div>
+        <div class="alloc-unalloc-sub">Updates as you allocate</div>
       </div>
-      <div class="alloc-summary-row">
-        <span class="lbl">Total Allocated</span>
-        <span class="val">${currencySymbol(p.currency)}${formatAmount(totalAllocated)}</span>
-      </div>
-      <div class="alloc-summary-divider"></div>
-      <div class="alloc-summary-row remaining">
-        <span class="lbl">${remaining < 0 ? 'Over-allocated by' : 'Unallocated Balance'}</span>
-        <span class="val ${cls}">${currencySymbol(p.currency)}${formatAmount(Math.abs(remaining))}</span>
-      </div>`;
+      <div class="alloc-unalloc-value ${over ? 'over' : ''}">${over ? '-' : ''}${currencySymbol(p.currency)}${formatAmount(Math.abs(remaining))}</div>`;
   }
 
   function submitAllocation() {
