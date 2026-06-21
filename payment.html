@@ -322,8 +322,7 @@
     font-size: 11px;
     font-weight: 700;
     color: var(--c-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.01em;
   }
 
   /* PAYMENT CARDS */
@@ -449,10 +448,10 @@
   .pay-txn-info { flex: 1; min-width: 0; }
   .pay-txn-label {
     font-size: 10px;
-    font-weight: 600;
-    color: var(--c-text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-weight: 500;
+    color: var(--c-text-muted);
+    line-height: 1;
+    white-space: nowrap;
     margin-bottom: 3px;
   }
   .pay-txn-value {
@@ -491,10 +490,10 @@
   }
   .pay-purch-label {
     font-size: 10px;
-    font-weight: 600;
-    color: var(--c-text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-weight: 500;
+    color: var(--c-text-muted);
+    line-height: 1;
+    white-space: nowrap;
   }
   .pay-purch-date-value {
     font-size: 13px;
@@ -1298,7 +1297,7 @@
       </div>
 
       <!-- Section Label -->
-      <div class="section-label" id="section-label">All Transactions (5)</div>
+      <div class="section-label" id="section-label">All transactions (5)</div>
 
       <!-- Payment Cards -->
       <div class="cards-list" id="cards-list"></div>
@@ -1749,11 +1748,11 @@
         <div class="es-title">No transactions found</div>
         <div class="es-sub">Try a different search or filter</div>
       </div>`;
-      label.textContent = '0 Transactions';
+      label.textContent = '0 transactions';
       return;
     }
 
-    const filterText = currentFilter === 'all' ? 'All Transactions' :
+    const filterText = currentFilter === 'all' ? 'All transactions' :
                        currentFilter === 'confirmed' ? 'Confirmed' :
                        currentFilter === 'pending'   ? 'Pending'   : 'Rejected';
     label.textContent = `${filterText} (${data.length})`;
