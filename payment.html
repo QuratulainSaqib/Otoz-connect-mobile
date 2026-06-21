@@ -1777,13 +1777,9 @@
       // 4 & 5. Allocation always shown if confirmed; receipt only if hasConfirmReceipt
       //         Buttons: home-style pill, blue for alloc, green for receipt
       const allocBtn = (p.status === 'confirmed')
-        ? (p.hasAllocation
-            ? `<button class="pay-action-btn alloc allocated" onclick="goToAllocation('${p.id}')">
-                <i class="ti ti-circle-check"></i> Allocated
-               </button>`
-            : `<button class="pay-action-btn alloc" onclick="goToAllocation('${p.id}')">
-                <i class="ti ti-plus"></i> Allocation
-               </button>`)
+        ? `<button class="pay-action-btn alloc" onclick="goToAllocation('${p.id}')">
+            <i class="ti ti-plus"></i> Allocation
+           </button>`
         : '';
 
       const receiptBtn = (p.status === 'confirmed' && p.hasConfirmReceipt)
