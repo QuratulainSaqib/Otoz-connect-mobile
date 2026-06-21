@@ -572,20 +572,47 @@
   .alloc-amt-input-row input::placeholder { color: var(--c-text-subtle); font-weight: 500; }
 
   .alloc-summary-card {
-    margin: 0 16px 16px;
-    border-radius: 14px;
-    border: 1px solid rgba(43,166,255,0.25);
-    background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
-    padding: 12px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    margin: 0 0 14px;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    box-shadow: 0 6px 20px -8px rgba(15,23,42,0.14);
+    padding: 14px 16px 16px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    flex-direction: column;
+    gap: 11px;
   }
-  .alloc-unalloc-title { font-size: 12.5px; font-weight: 700; color: #1e3a5f; }
-  .alloc-unalloc-sub { font-size: 10px; font-weight: 500; color: #6b87a8; margin-top: 2px; }
+  .alloc-unalloc-top { display: flex; align-items: center; gap: 12px; }
+  .alloc-unalloc-icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2BA6FF 0%, #0058c7 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(43,166,255,0.35);
+    transition: all 0.2s ease;
+  }
+  .alloc-unalloc-icon i { font-size: 18px; color: #fff; }
+  .alloc-unalloc-icon.over {
+    background: linear-gradient(135deg, #ff8a7a 0%, #ff3b30 100%);
+    box-shadow: 0 4px 10px rgba(255,59,48,0.35);
+  }
+  .alloc-unalloc-info { flex: 1; min-width: 0; }
+  .alloc-unalloc-title { font-size: 13px; font-weight: 700; color: var(--c-text); }
+  .alloc-unalloc-sub { font-size: 10px; font-weight: 500; color: var(--c-text-subtle); margin-top: 1px; }
   .alloc-unalloc-value { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; color: #0058c7; white-space: nowrap; }
   .alloc-unalloc-value.over { color: var(--c-danger); }
+  .alloc-unalloc-bar { height: 6px; border-radius: 4px; background: #eef1f5; overflow: hidden; }
+  .alloc-unalloc-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #2BA6FF, #0058c7);
+    transition: width 0.25s ease, background 0.25s ease;
+  }
+  .alloc-unalloc-bar-fill.over { background: linear-gradient(90deg, #ff8a7a, #ff3b30); }
 </style>
 </head>
 <body>
@@ -670,18 +697,6 @@
       </div>
 
       <div class="alloc-scroll">
-
-        <!-- Top context cards -->
-        <div class="alloc-kpi-grid" id="alloc-confirm-kpi-grid"></div>
-
-        <!-- Payment Details recap -->
-        <div class="alloc-details-card">
-          <div class="alloc-details-head">
-            <span class="alloc-details-icon"><i class="ti ti-receipt"></i></span>
-            <span class="alloc-details-title">Payment Details</span>
-          </div>
-          <div class="alloc-details-body" id="alloc-confirm-payment-details"></div>
-        </div>
 
         <div class="alloc-summary-card" id="alloc-summary-card"></div>
 
@@ -918,7 +933,6 @@
       allocAmounts[id] = 0;
     });
 
-    document.getElementById('alloc-confirm-payment-details').innerHTML = paymentDetailsHTML(p);
     renderAllocConfirmList();
     updateAllocLiveState();
 
@@ -1028,12 +1042,17 @@
     const totalAllocated = Object.values(allocAmounts).reduce((a, b) => a + b, 0);
     const remaining = paymentAmt - totalAllocated;
     const over = remaining < 0;
+    const pct = paymentAmt > 0 ? Math.min(100, (totalAllocated / paymentAmt) * 100) : 0;
     document.getElementById('alloc-summary-card').innerHTML = `
-      <div>
-        <div class="alloc-unalloc-title">Total Unallocated</div>
-        <div class="alloc-unalloc-sub">Updates as you allocate</div>
+      <div class="alloc-unalloc-top">
+        <div class="alloc-unalloc-icon ${over ? 'over' : ''}"><i class="ti ti-wallet"></i></div>
+        <div class="alloc-unalloc-info">
+          <div class="alloc-unalloc-title">Total Unallocated</div>
+          <div class="alloc-unalloc-sub">Updates as you allocate</div>
+        </div>
+        <div class="alloc-unalloc-value ${over ? 'over' : ''}">${over ? '-' : ''}${currencySymbol(p.currency)}${formatAmount(Math.abs(remaining))}</div>
       </div>
-      <div class="alloc-unalloc-value ${over ? 'over' : ''}">${over ? '-' : ''}${currencySymbol(p.currency)}${formatAmount(Math.abs(remaining))}</div>`;
+      <div class="alloc-unalloc-bar"><div class="alloc-unalloc-bar-fill ${over ? 'over' : ''}" style="width:${over ? 100 : pct}%"></div></div>`;
   }
 
   function submitAllocation() {
