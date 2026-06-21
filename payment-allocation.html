@@ -258,7 +258,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    padding: 14px 0 90px;
+    padding: 0 0 90px;
   }
 
   /* Top context KPI row inside allocation screen */
@@ -266,6 +266,7 @@
     display: flex;
     gap: 10px;
     padding: 2px 16px 4px;
+    margin-top: 14px;
     overflow-x: auto;
     scroll-snap-type: x proximity;
     scroll-padding-left: 16px;
@@ -661,11 +662,21 @@
 <script>
   // Vehicles / purchase orders available to allocate this payment against
   const ALLOC_VEHICLES = [
-    { id: 'VEH-201', make: 'Toyota', model: 'Raize',   code: '5BA-A200A',  year: 2022, chassis: 'WDC2539052F422655', dest: 'Mombasa Port',   currency: 'USD', total: 32650, paid: 27150, allocated: 27150, remaining: 5500 },
-    { id: 'VEH-202', make: 'Honda',  model: 'Vezel',   code: 'DBA-RU3',    year: 2021, chassis: 'JHLRD78423C123456', dest: 'Dar es Salaam',  currency: 'USD', total: 24800, paid: 20600, allocated: 20600, remaining: 4200 },
-    { id: 'VEH-203', make: 'Nissan', model: 'X-Trail', code: 'DBA-T32',    year: 2023, chassis: 'JN1TANT32Z0123789', dest: 'Durban',         currency: 'USD', total: 31900, paid: 23000, allocated: 23000, remaining: 8900 },
-    { id: 'VEH-204', make: 'Suzuki', model: 'Swift',   code: 'DAA-ZC83S',  year: 2020, chassis: 'JSAFB31S00012345',  dest: 'Lagos',          currency: 'USD', total: 14500, paid: 13000, allocated: 13000, remaining: 1500 },
-    { id: 'VEH-205', make: 'Mazda',  model: 'CX-5',    code: '6BA-KF2P',   year: 2022, chassis: 'JM3KFBDM5K0456789', dest: 'Zimbabwe',       currency: 'USD', total: 28400, paid: 19000, allocated: 19000, remaining: 9400 }
+    { id: 'VEH-201', make: 'Toyota',    model: 'Raize',    code: '5BA-A200A',  year: 2022, chassis: 'WDC2539052F422655', dest: 'Mombasa Port',   currency: 'USD', total: 32650, paid: 27150, allocated: 27150, remaining: 5500 },
+    { id: 'VEH-202', make: 'Honda',     model: 'Vezel',    code: 'DBA-RU3',    year: 2021, chassis: 'JHLRD78423C123456', dest: 'Dar es Salaam',  currency: 'USD', total: 24800, paid: 20600, allocated: 20600, remaining: 4200 },
+    { id: 'VEH-203', make: 'Nissan',    model: 'X-Trail',  code: 'DBA-T32',    year: 2023, chassis: 'JN1TANT32Z0123789', dest: 'Durban',         currency: 'USD', total: 31900, paid: 23000, allocated: 23000, remaining: 8900 },
+    { id: 'VEH-204', make: 'Suzuki',    model: 'Swift',    code: 'DAA-ZC83S',  year: 2020, chassis: 'JSAFB31S00012345',  dest: 'Lagos',          currency: 'USD', total: 14500, paid: 13000, allocated: 13000, remaining: 1500 },
+    { id: 'VEH-205', make: 'Mazda',     model: 'CX-5',     code: '6BA-KF2P',   year: 2022, chassis: 'JM3KFBDM5K0456789', dest: 'Zimbabwe',       currency: 'USD', total: 28400, paid: 19000, allocated: 19000, remaining: 9400 },
+    { id: 'VEH-206', make: 'Toyota',    model: 'Aqua',     code: 'NHP10-2345', year: 2021, chassis: 'NHP10-6012345',     dest: 'Karachi',        currency: 'USD', total: 18900, paid: 18900, allocated: 18900, remaining: 0    },
+    { id: 'VEH-207', make: 'Mitsubishi',model: 'Outlander',code: 'GF8W-0156',  year: 2022, chassis: 'JA32W8E12NU000123', dest: 'Lome',           currency: 'USD', total: 26300, paid: 14000, allocated: 14000, remaining: 12300 },
+    { id: 'VEH-208', make: 'Subaru',    model: 'Forester', code: 'SK9-002341', year: 2023, chassis: 'SK9067890123456',   dest: 'Apapa Port',     currency: 'USD', total: 29750, paid: 29750, allocated: 29750, remaining: 0    },
+    { id: 'VEH-209', make: 'Toyota',    model: 'Hilux',    code: 'GUN125-789', year: 2021, chassis: 'MR0FZ22G701234567', dest: 'Beira Port',     currency: 'USD', total: 35200, paid: 21000, allocated: 21000, remaining: 14200 },
+    { id: 'VEH-210', make: 'Honda',     model: 'Fit',      code: 'GK3-301245', year: 2020, chassis: 'GK3-1023456',       dest: 'Cotonou',        currency: 'USD', total: 12800, paid: 12800, allocated: 12800, remaining: 0    },
+    { id: 'VEH-211', make: 'Nissan',    model: 'Navara',   code: 'D23-441567', year: 2022, chassis: 'JN1MD0D23U0123456', dest: 'Mombasa Port',   currency: 'USD', total: 33450, paid: 18000, allocated: 18000, remaining: 15450 },
+    { id: 'VEH-212', make: 'Mazda',     model: 'Demio',    code: 'DJ3FS-1023', year: 2021, chassis: 'DJ3FS-0098765',     dest: 'Dar es Salaam',  currency: 'USD', total: 13950, paid: 9000,  allocated: 9000,  remaining: 4950 },
+    { id: 'VEH-213', make: 'Toyota',    model: 'Land Cruiser Prado', code: 'TRJ150-5512', year: 2023, chassis: 'JTEBU5JR9P5012345', dest: 'Durban', currency: 'USD', total: 48600, paid: 48600, allocated: 48600, remaining: 0 },
+    { id: 'VEH-214', make: 'Suzuki',    model: 'Every',    code: 'DA17V-7781', year: 2020, chassis: 'DA17V-0034521',     dest: 'Lagos',          currency: 'USD', total: 9800,  paid: 6500,  allocated: 6500,  remaining: 3300 },
+    { id: 'VEH-215', make: 'Isuzu',     model: 'D-Max',    code: 'TFS85-2290', year: 2022, chassis: 'MPATFS85HN1012345', dest: 'Zimbabwe',       currency: 'USD', total: 30150, paid: 17500, allocated: 17500, remaining: 12650 }
   ];
 
   let allocCurrentPayment = null;   // the payment being allocated (read from URL params)
