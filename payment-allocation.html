@@ -253,6 +253,115 @@
   .alloc-confirm-screen.open { transform: translateX(0); }
   .alloc-confirm-screen .status-bar { background: #fff; flex-shrink: 0; }
 
+  /* ===== FINAL CONFIRMATION SCREEN ===== */
+  .alloc-final-screen {
+    position: absolute;
+    inset: 0;
+    background: var(--c-bg-app);
+    border-radius: 43px;
+    z-index: 320;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.38s cubic-bezier(0.32, 0.72, 0, 1);
+    overflow: hidden;
+  }
+  .alloc-final-screen.open { transform: translateX(0); }
+  .alloc-final-screen .status-bar { background: #fff; flex-shrink: 0; }
+
+  .final-total-card {
+    margin: 14px 16px 4px;
+    border-radius: 20px;
+    background: linear-gradient(160deg, #234876 0%, #0a1e36 100%);
+    padding: 28px 20px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-total-card::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(43,166,255,0.30) 0%, rgba(43,166,255,0) 70%);
+  }
+  .final-total-card::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -30px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(43,166,255,0.14) 0%, rgba(43,166,255,0) 70%);
+  }
+  .final-total-icon {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2BA6FF 0%, #0058c7 100%);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 22px rgba(43,166,255,0.45);
+    position: relative;
+  }
+  .final-total-icon i { font-size: 24px; color: #fff; }
+  .final-total-label {
+    font-size: 11.5px; font-weight: 700; color: rgba(255,255,255,0.6);
+    letter-spacing: 0.04em; text-transform: uppercase; position: relative;
+  }
+  .final-total-value {
+    font-size: 34px; font-weight: 800; letter-spacing: -0.02em; color: #fff;
+    margin-top: 6px; position: relative;
+  }
+  .final-total-sub {
+    font-size: 12.5px; font-weight: 500; color: rgba(255,255,255,0.55);
+    margin-top: 5px; position: relative;
+  }
+
+  .final-list-card {
+    margin: 4px 16px 16px;
+    border-radius: 14px;
+    border: 1px solid var(--c-divider);
+    overflow: hidden;
+    background: #fff;
+  }
+  .final-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--c-divider-soft);
+  }
+  .final-row:last-child { border-bottom: none; }
+  .final-row-left { display: flex; align-items: center; gap: 11px; min-width: 0; }
+  .final-row-info { min-width: 0; }
+  .final-row-name {
+    font-size: 13.5px; font-weight: 700; color: var(--c-text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .final-row-chassis { font-size: 10.5px; font-weight: 500; color: var(--c-text-subtle); margin-top: 2px; }
+  .final-row-amount { font-size: 14.5px; font-weight: 800; color: #0058c7; white-space: nowrap; flex-shrink: 0; }
+
+  .final-footer { display: flex; gap: 10px; }
+  .btn-cancel {
+    flex: 1;
+    height: 50px;
+    border-radius: 14px;
+    border: 1.5px solid var(--c-divider);
+    background: #fff;
+    color: var(--c-text);
+    font-size: 14.5px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    font-family: inherit;
+  }
+  .btn-cancel i { font-size: 16px; }
+  .btn-cancel:active { transform: scale(0.98); }
+  .final-footer .btn-submit { flex: 1; }
+
   .alloc-scroll {
     flex: 1;
     overflow-y: auto;
@@ -694,9 +803,44 @@
       </div>
 
       <div class="addpay-footer">
-        <button class="btn-submit" id="alloc-confirm-submit-btn" onclick="submitAllocation()">
+        <button class="btn-submit" id="alloc-confirm-submit-btn" onclick="openFinalConfirmScreen()">
           <i class="ti ti-circle-check"></i>
           Allocate Amount
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== PAYMENT ALLOCATION — FINAL CONFIRMATION SCREEN ===== -->
+    <div class="alloc-final-screen" id="alloc-final-screen">
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 7l4.5 4.5C7.9 9.1 10.8 8 14 8s6.1 1.1 8.5 3.5L24 10C21.1 6.9 17.3 5 13 5S4.9 6.9 2 10l-1-3z M14 12c-1.8 0-3.4.7-4.6 1.9L14 19l4.6-5.1c-1.2-1.2-2.8-1.9-4.6-1.9z M14 0C8.5 0 3.5 2.2 0 5.8l1.4 1.4C4.5 3.9 9 1.7 14 1.7s9.5 2.2 12.6 5.5L28 5.8C24.5 2.2 19.5 0 14 0z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+        </div>
+      </div>
+      <div class="addpay-nav">
+        <button class="addpay-back-btn" onclick="closeFinalConfirmScreen()"><i class="ti ti-x"></i></button>
+        <div class="addpay-nav-title">Confirm Allocation</div>
+        <span class="addpay-nav-spacer"></span>
+      </div>
+
+      <div class="alloc-scroll">
+
+        <div class="final-total-card" id="final-total-card"></div>
+
+        <div class="alloc-section-label"><span>Review Allocations</span></div>
+
+        <div id="final-alloc-list"></div>
+
+      </div>
+
+      <div class="addpay-footer final-footer">
+        <button class="btn-cancel" onclick="closeFinalConfirmScreen()">
+          <i class="ti ti-x"></i> Cancel
+        </button>
+        <button class="btn-submit" onclick="submitAllocation()">
+          <i class="ti ti-circle-check"></i> Confirm Allocation
         </button>
       </div>
     </div>
@@ -1052,6 +1196,37 @@
         </div>
         <div class="alloc-unalloc-value">${currencySymbol(p.currency)}${formatAmount(remaining)}</div>
       </div>`;
+  }
+
+  // ── Step 3: Final review before submitting (bank-style confirmation) ──
+  function openFinalConfirmScreen() {
+    const p = allocCurrentPayment;
+    const ids = [...allocSelectedIds].filter(id => (allocAmounts[id] || 0) > 0);
+    if (!ids.length) return;
+    const totalAllocated = ids.reduce((s, id) => s + (allocAmounts[id] || 0), 0);
+
+    document.getElementById('final-total-card').innerHTML = `
+      <div class="final-total-label">Total Allocation Amount</div>
+      <div class="final-total-value">${currencySymbol(p.currency)}${formatAmount(totalAllocated)}</div>
+      <div class="final-total-sub">to ${ids.length} vehicle${ids.length !== 1 ? 's' : ''}</div>`;
+
+    document.getElementById('final-alloc-list').innerHTML = `<div class="final-list-card">` + ids.map(id => {
+      const v = ALLOC_VEHICLES.find(x => x.id === id);
+      return `<div class="final-row">
+        <div class="final-row-left">
+          <div class="final-row-info">
+            <div class="final-row-name">${v.make} ${v.model} · ${v.year}</div>
+            <div class="final-row-chassis">${v.chassis}</div>
+          </div>
+        </div>
+        <div class="final-row-amount">${currencySymbol(v.currency)}${formatAmount(allocAmounts[id])}</div>
+      </div>`;
+    }).join('') + `</div>`;
+
+    document.getElementById('alloc-final-screen').classList.add('open');
+  }
+  function closeFinalConfirmScreen() {
+    document.getElementById('alloc-final-screen').classList.remove('open');
   }
 
   function submitAllocation() {
