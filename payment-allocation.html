@@ -709,6 +709,7 @@
   .alloc-unalloc-title { font-size: 13px; font-weight: 700; color: var(--c-text); }
   .alloc-unalloc-sub { font-size: 10px; font-weight: 500; color: var(--c-text-subtle); margin-top: 1px; }
   .alloc-unalloc-value { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; color: #0058c7; white-space: nowrap; }
+  .alloc-unalloc-value.zero { color: var(--c-danger); }
 </style>
 </head>
 <body>
@@ -804,7 +805,7 @@
 
       <div class="addpay-footer">
         <button class="btn-submit" id="alloc-confirm-submit-btn" onclick="openFinalConfirmScreen()">
-          <i class="ti ti-circle-check"></i>
+          <i class="ti ti-check"></i>
           Allocate Amount
         </button>
       </div>
@@ -829,7 +830,7 @@
 
         <div class="final-total-card" id="final-total-card"></div>
 
-        <div class="alloc-section-label"><span>Review Allocations</span></div>
+        <div class="alloc-section-label" style="margin-top:10px;"><span>Review Allocations</span></div>
 
         <div id="final-alloc-list"></div>
 
@@ -840,7 +841,7 @@
           <i class="ti ti-x"></i> Cancel
         </button>
         <button class="btn-submit" onclick="submitAllocation()">
-          <i class="ti ti-circle-check"></i> Confirm Allocation
+          <i class="ti ti-check"></i> Confirm
         </button>
       </div>
     </div>
@@ -1194,7 +1195,7 @@
           <div class="alloc-unalloc-title">Total Unallocated</div>
           <div class="alloc-unalloc-sub">Updates as you allocate</div>
         </div>
-        <div class="alloc-unalloc-value">${currencySymbol(p.currency)}${formatAmount(remaining)}</div>
+        <div class="alloc-unalloc-value ${remaining === 0 ? 'zero' : ''}">${currencySymbol(p.currency)}${formatAmount(remaining)}</div>
       </div>`;
   }
 
