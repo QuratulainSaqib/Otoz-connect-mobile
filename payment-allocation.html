@@ -990,19 +990,13 @@
   }
 
   function onAllocAmountChange(id, inputEl) {
-    let cleaned = sanitizeAmountInput(inputEl.value);
-    let numVal = parseFloat(cleaned) || 0;
-
-    // Hard-cap: user cannot enter more than the vehicle's remaining balance
-    // or the total unallocated balance, whichever is smaller.
-    const maxAllowed = getMaxAllowedForField(id);
-    if (numVal > maxAllowed) {
-      numVal = maxAllowed;
-      cleaned = maxAllowed > 0 ? String(maxAllowed) : '';
+    const cleaned = sanitizeAmountInput(inputEl.value);
+    if (cleaned !== inputEl.value) {
+      const pos = inputEl.selectionStart - (inputEl.value.length - cleaned.length);
+      inputEl.value = cleaned;
+      if (document.activeElement === inputEl) inputEl.setSelectionRange(pos, pos);
     }
-    if (inputEl.value !== cleaned) inputEl.value = cleaned;
-
-    allocAmounts[id] = numVal;
+    allocAmounts[id] = Math.max(0, parseFloat(cleaned) || 0);
     updateAllocLiveState();
   }
 
@@ -1016,19 +1010,23 @@
     const kpiGrid = document.getElementById('alloc-confirm-kpi-grid');
     if (kpiGrid) kpiGrid.innerHTML = allocKpiHTML(p, Math.min(totalAllocated, paymentAmt), totalUnallocated);
 
-    // Show a hint below each field that's currently sitting at its max
+    // Validate each field against its vehicle's remaining balance AND the shared
+    // total unallocated pool — the user must correct it themselves, nothing is auto-filled.
+    let hasError = false;
     [...allocSelectedIds].forEach(id => {
       const v = ALLOC_VEHICLES.find(x => x.id === id);
       const val = allocAmounts[id] || 0;
       const maxAllowed = getMaxAllowedForField(id);
       const rowEl = document.getElementById(`alloc-amt-row-${id}`);
       const errEl = document.getElementById(`alloc-amt-error-${id}`);
-      if (val > 0 && maxAllowed > 0 && val >= maxAllowed) {
+      if (val > maxAllowed) {
+        hasError = true;
+        const over = val - maxAllowed;
         const reason = v.remaining <= maxAllowed
           ? "vehicle's remaining balance"
           : 'total unallocated balance';
         if (rowEl) rowEl.classList.add('capped');
-        if (errEl) errEl.innerHTML = `Maximum allocatable amount is ${currencySymbol(p.currency)}${formatAmount(maxAllowed)} (${reason})`;
+        if (errEl) errEl.innerHTML = `Exceeds ${reason} by ${currencySymbol(p.currency)}${formatAmount(over)}. Max Allowed ${currencySymbol(p.currency)}${formatAmount(maxAllowed)}`;
       } else {
         if (rowEl) rowEl.classList.remove('capped');
         if (errEl) errEl.innerHTML = '';
@@ -1036,7 +1034,7 @@
     });
 
     const submitBtn = document.getElementById('alloc-confirm-submit-btn');
-    if (submitBtn) submitBtn.disabled = totalAllocated <= 0;
+    if (submitBtn) submitBtn.disabled = hasError || totalAllocated <= 0;
 
     renderAllocSummary();
   }
