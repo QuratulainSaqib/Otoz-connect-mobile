@@ -455,6 +455,7 @@
     gap: 12px 14px;
   }
   .alloc-dd-item { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .alloc-dd-item.full { grid-column: 1 / -1; }
   .alloc-dd-label {
     font-size: 10px; font-weight: 600; color: var(--c-text-tertiary);
     letter-spacing: 0.01em;
@@ -882,8 +883,8 @@
   }
   function paymentDetailsHTML(p) {
     return `
-      <div class="alloc-dd-item"><span class="alloc-dd-label">Transaction id</span><span class="alloc-dd-value">${p.txnId}</span></div>
-      <div class="alloc-dd-item"><span class="alloc-dd-label">Amount</span><span class="alloc-dd-value amt"><span class="alloc-dd-curr-pill">${p.currency}</span>${currencySymbol(p.currency)}${p.amount}</span></div>
+      <div class="alloc-dd-item full"><span class="alloc-dd-label">Transaction id</span><span class="alloc-dd-value">${p.txnId}</span></div>
+      <div class="alloc-dd-item full"><span class="alloc-dd-label">Amount</span><span class="alloc-dd-value amt"><span class="alloc-dd-curr-pill">${p.currency}</span>${currencySymbol(p.currency)}${p.amount}</span></div>
       <div class="alloc-dd-item"><span class="alloc-dd-label">Upload date</span><span class="alloc-dd-value">${p.uploadDate}</span></div>
       <div class="alloc-dd-item"><span class="alloc-dd-label">Ref id</span><span class="alloc-dd-value">${p.id}</span></div>`;
   }
@@ -1217,7 +1218,7 @@
         <div class="final-row-left">
           <div class="final-row-info">
             <div class="final-row-name">${v.make} ${v.model} · ${v.year}</div>
-            <div class="final-row-chassis">${v.chassis}</div>
+            <div class="final-row-chassis"><span style="color:var(--c-text-muted);font-weight:600;">Chassis No.</span> ${v.chassis}</div>
           </div>
         </div>
         <div class="final-row-amount">${currencySymbol(v.currency)}${formatAmount(allocAmounts[id])}</div>
