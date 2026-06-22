@@ -342,7 +342,9 @@
     font-size: 13.5px; font-weight: 700; color: var(--c-text);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .final-row-chassis { font-size: 10.5px; font-weight: 500; color: var(--c-text-subtle); margin-top: 2px; }
+  .final-row-chassis { display: flex; flex-direction: column; gap: 1px; margin-top: 3px; }
+  .final-chassis-label { font-size: 9.5px; font-weight: 600; color: var(--c-text-tertiary); letter-spacing: 0.01em; }
+  .final-chassis-value { font-size: 11px; font-weight: 600; color: var(--c-text-subtle); }
   .final-row-amount { font-size: 14.5px; font-weight: 800; color: #0058c7; white-space: nowrap; flex-shrink: 0; }
 
   .final-footer { display: flex; gap: 10px; }
@@ -1218,7 +1220,7 @@
         <div class="final-row-left">
           <div class="final-row-info">
             <div class="final-row-name">${v.make} ${v.model} · ${v.year}</div>
-            <div class="final-row-chassis"><span style="color:var(--c-text-muted);font-weight:600;">Chassis No.</span> ${v.chassis}</div>
+            <div class="final-row-chassis"><span class="final-chassis-label">Chassis No.</span><span class="final-chassis-value">${v.chassis}</span></div>
           </div>
         </div>
         <div class="final-row-amount">${currencySymbol(v.currency)}${formatAmount(allocAmounts[id])}</div>
