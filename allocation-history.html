@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otoz Connect · History</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+  :root {
+    --c-primary: #173559;
+    --c-primary-hover: #122a47;
+    --c-accent: #2BA6FF;
+    --c-text: #1d1d1f;
+    --c-text-muted: #6e6e73;
+    --c-text-subtle: #86868b;
+    --c-text-tertiary: #a1a1a6;
+    --c-bg-app: #f5f5f7;
+    --c-bg-soft: #fafafb;
+    --c-divider: #e8e8ed;
+    --c-divider-soft: #f1f5f9;
+    --c-success: #30c46d;
+    --c-danger: #ff3b30;
+    --c-warning: #f59e0b;
+    --c-green: #1c9e5e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: #e8e8ed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .device {
+    width: 380px;
+    height: 800px;
+    background: #1d1d1f;
+    border-radius: 54px;
+    padding: 11px;
+    position: relative;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.08);
+  }
+
+  .screen-wrapper {
+    width: 100%;
+    height: 100%;
+    background: var(--c-bg-app);
+    border-radius: 43px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .home-indicator {
+    position: absolute;
+    bottom: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 5px;
+    background: #1d1d1f;
+    border-radius: 3px;
+    opacity: 0.9;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  /* STATUS BAR */
+  .status-bar {
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 32px 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--c-text);
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+    background: var(--c-bg-app);
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; }
+
+  /* TOAST */
+  .toast {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--c-text);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    z-index: 1000;
+    transition: top 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    white-space: nowrap;
+    max-width: 90%;
+  }
+  .toast.show { top: 75px; }
+  .toast .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-success); flex-shrink: 0; }
+
+  /* SCROLLABLE */
+  .page-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 90px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .page-scroll::-webkit-scrollbar { display: none; }
+
+  /* PAGE HEADER */
+  .page-header {
+    padding: 8px 20px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--c-bg-app);
+    flex-shrink: 0;
+  }
+  .page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+  .page-subtitle {
+    font-size: 13px;
+    color: var(--c-text-muted);
+    margin-top: 3px;
+  }
+
+  /* KPI STATS — matches payment.html */
+  .kpi-grid {
+    display: flex;
+    gap: 10px;
+    margin: 0 0 6px;
+    padding: 2px 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    scroll-padding-left: 20px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .kpi-grid::-webkit-scrollbar { display: none; }
+  .kpi-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+    border: 1px solid var(--c-divider);
+    border-radius: 14px;
+    padding: 14px 13px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    flex: 0 0 140px;
+    width: 140px;
+    scroll-snap-align: start;
+  }
+  .kpi-card:active { transform: scale(0.97); }
+  .kpi-icon {
+    width: 36px; height: 36px;
+    border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .kpi-icon i { font-size: 17px; color: #fff; }
+  .kpi-icon.blue   { background: linear-gradient(135deg, #0e7490 0%, #22d3ee 100%); box-shadow: 0 4px 12px rgba(14,116,144,0.28); }
+  .kpi-icon.indigo { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%); box-shadow: 0 4px 12px rgba(124,58,237,0.28); }
+  .kpi-icon.green  { background: linear-gradient(135deg, #059669 0%, #34d399 100%); box-shadow: 0 4px 12px rgba(5,150,105,0.28); }
+  .kpi-text { display: flex; flex-direction: column; min-width: 0; width: 100%; }
+  .kpi-label {
+    font-size: 11px;
+    color: var(--c-text-muted);
+    font-weight: 500;
+    white-space: normal;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .kpi-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    margin-top: 6px;
+    white-space: nowrap;
+  }
+  .kpi-value .cur { font-size: 12px; font-weight: 600; opacity: 0.7; margin-right: 2px; }
+
+  /* TABS */
+  .tabs-wrap {
+    padding: 10px 20px 0;
+    background: var(--c-bg-app);
+    display: flex;
+    gap: 0;
+    background: rgba(0,0,0,0.045);
+    margin: 8px 20px 0;
+    border-radius: 14px;
+    padding: 5px;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 8px;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    background: transparent;
+    color: var(--c-text-muted);
+  }
+  .tab-btn.active {
+    background: #fff;
+    color: var(--c-primary);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10), 0 2px 10px rgba(0,0,0,0.06);
+  }
+  .tab-btn i { font-size: 14px; }
+  .tab-count {
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 20px;
+  }
+  .tab-btn.active .tab-count {
+    background: rgba(23,53,89,0.1);
+    color: var(--c-primary);
+  }
+  .tab-btn:not(.active) .tab-count {
+    background: rgba(0,0,0,0.08);
+    color: var(--c-text-muted);
+  }
+
+  /* TOOLBAR */
+  .toolbar {
+    padding: 10px 20px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--c-bg-app);
+  }
+  .search-wrap {
+    flex: 1;
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    min-width: 0;
+  }
+  .search-wrap:focus-within { border-color: var(--c-accent); }
+  .search-wrap i { font-size: 17px; color: var(--c-text-subtle); flex-shrink: 0; }
+  .search-wrap input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 13px;
+    color: var(--c-text);
+    font-family: inherit;
+    min-width: 0;
+  }
+  .search-wrap input::placeholder { color: var(--c-text-subtle); }
+
+  /* SECTION LABEL */
+  .section-label {
+    padding: 0 16px 8px;
+    font-size: 11px; font-weight: 700; color: var(--c-text-muted);
+    text-transform: uppercase; letter-spacing: 0.07em;
+  }
+
+  /* VEHICLE CARDS — matches payment-allocation.html exactly */
+  .vehicle-list { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; }
+
+  .vc-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #fff;
+    border: 1.5px solid var(--c-divider);
+    border-radius: 14px;
+    padding: 12px 13px;
+    transition: all 0.16s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .vc-card:active { transform: scale(0.99); }
+
+  .vc-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .vc-top-info { flex: 1; min-width: 0; }
+  .vc-name {
+    font-size: 14px; font-weight: 700; color: var(--c-text);
+    letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .vc-year { font-weight: 500; color: var(--c-text-subtle); }
+  .vc-code {
+    font-size: 11px; color: var(--c-text-subtle); margin-top: 2px;
+  }
+  .vc-dest {
+    font-size: 11px; color: var(--c-text-muted); margin-top: 3px; font-weight: 500;
+    display: flex; align-items: center; gap: 3px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .vc-dest i { font-size: 12px; color: var(--c-text-subtle); flex-shrink: 0; }
+
+  /* Chassis row — with border-bottom divider like payment-allocation */
+  .vc-chassis-row {
+    display: flex; flex-direction: column; gap: 3px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--c-divider-soft);
+  }
+  .avs-label {
+    font-size: 9.5px; font-weight: 600; color: var(--c-text-tertiary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .avs-value {
+    font-size: 14px; font-weight: 800; color: var(--c-text); letter-spacing: -0.01em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+
+  /* Stats grid 2x2 */
+  .vc-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 8px;
+  }
+  .vc-stat { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .avs-curr-pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.04); border-radius: 5px;
+    padding: 2px 7px; font-size: 10px; font-weight: 600;
+    color: #6e6e73; line-height: 1.4; flex-shrink: 0;
+  }
+  .avs-paid  { color: var(--c-success); }
+  .avs-remaining { color: var(--c-danger); }
+
+  .btn-view-history {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 4px; padding: 5px 11px;
+    background: var(--c-primary);
+    color: #fff; border: none; border-radius: 999px;
+    font-size: 11.5px; font-weight: 500;
+    cursor: pointer; transition: all 0.18s ease;
+    font-family: inherit; letter-spacing: -0.005em;
+    white-space: nowrap; line-height: 1.2;
+    box-shadow: 0 2px 6px rgba(23,53,89,0.22);
+  }
+  .btn-view-history i { font-size: 10px; }
+  .btn-view-history:active { transform: scale(0.97); }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: #fff;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding: 10px 0 0;
+    z-index: 40;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+  }
+  .nav-icon { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; }
+  .nav-icon svg { width: 24px; height: 24px; display: block; overflow: visible; }
+  .nav-label { font-size: 10px; font-weight: 500; color: #a0a0ab; letter-spacing: 0.01em; line-height: 1; }
+  .nav-item.active .nav-label { color: var(--c-primary); font-weight: 700; }
+  .nav-item.active .nav-icon svg { color: var(--c-primary); }
+  .nav-icon .icon-outline { display: block; color: #a0a0ab; }
+  .nav-icon .icon-filled  { display: none;  color: var(--c-primary); }
+  .nav-item.active .nav-icon .icon-outline { display: none; }
+  .nav-item.active .nav-icon .icon-filled  { display: block; }
+
+  /* SORT SHEET */
+  .sheet-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    border-radius: 43px;
+  }
+  .sheet-backdrop.show { opacity: 1; pointer-events: auto; }
+  .bottom-sheet {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    z-index: 300;
+    transform: translateY(100%);
+    transition: transform 0.38s cubic-bezier(0.32,0.72,0,1);
+    padding-bottom: 24px;
+  }
+  .bottom-sheet.show { transform: translateY(0); }
+  .sheet-handle {
+    width: 36px; height: 4px;
+    background: #e0e0e6;
+    border-radius: 2px;
+    margin: 10px auto 0;
+  }
+  .sheet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px 10px;
+  }
+  .sheet-title { font-size: 16px; font-weight: 700; color: var(--c-text); letter-spacing: -0.01em; }
+  .sheet-close-btn {
+    width: 30px; height: 30px;
+    background: var(--c-bg-app);
+    border: none;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .sheet-close-btn i { font-size: 16px; color: var(--c-text-muted); }
+  .sort-list { padding: 0 16px 8px; }
+  .sort-option {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--c-divider-soft);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--c-text);
+    transition: opacity 0.15s ease;
+  }
+  .sort-option:last-child { border-bottom: none; }
+  .sort-option i { font-size: 18px; color: var(--c-accent); opacity: 0; }
+  .sort-option.selected { color: var(--c-primary); font-weight: 600; }
+  .sort-option.selected i { opacity: 1; }
+
+  /* HISTORY DETAIL SHEET — full screen */
+  .history-screen {
+    position: absolute;
+    inset: 0;
+    background: var(--c-bg-app);
+    border-radius: 43px;
+    z-index: 400;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.38s cubic-bezier(0.32,0.72,0,1);
+    overflow: hidden;
+  }
+  .history-screen.open { transform: translateX(0); }
+
+  .hs-status-bar {
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 32px 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--c-text);
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+    background: var(--c-bg-app);
+  }
+  .hs-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 16px 10px;
+    flex-shrink: 0;
+    border-bottom: 0.5px solid var(--c-divider-soft);
+    background: #fff;
+  }
+  .hs-back-btn {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: var(--c-bg-app);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .hs-back-btn i { font-size: 19px; color: var(--c-text); }
+  .hs-nav-title { font-size: 16px; font-weight: 700; color: var(--c-text); letter-spacing: -0.015em; }
+  .hs-nav-spacer { width: 32px; }
+
+  .hs-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px 16px 32px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .hs-scroll::-webkit-scrollbar { display: none; }
+
+  /* Vehicle Hero */
+  .hs-vehicle-hero {
+    background: linear-gradient(135deg, #0a1628 0%, #1d3557 50%, #2a4a73 100%);
+    border-radius: 18px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hs-vehicle-hero::before {
+    content: '';
+    position: absolute;
+    top: -40%; right: -20%;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(43,166,255,0.2) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hs-veh-img-wrap {
+    width: 64px; height: 44px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .hs-veh-img-wrap i { font-size: 26px; color: rgba(255,255,255,0.7); }
+  .hs-veh-info { flex: 1; min-width: 0; z-index: 1; }
+  .hs-veh-name { font-size: 16px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+  .hs-veh-year { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+  .hs-veh-chassis {
+    z-index: 1;
+    text-align: right;
+    border-left: 1px solid rgba(255,255,255,0.12);
+    padding-left: 12px;
+    flex-shrink: 0;
+  }
+  .hs-chassis-label { font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
+  .hs-chassis-no { font-size: 9.5px; font-weight: 600; color: #fff; font-family: 'SF Mono', monospace; }
+
+  /* Amount summary cards */
+  .hs-amounts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .hs-amt-card {
+    border-radius: 14px;
+    padding: 12px 14px;
+    border: 1px solid transparent;
+  }
+  .hs-amt-card.full { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; }
+  .hs-amt-card.green { background: linear-gradient(135deg,#f0fdf6,#dcfce7); border-color: rgba(28,158,94,0.18); }
+  .hs-amt-card.blue  { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-color: rgba(0,113,227,0.18); }
+  .hs-amt-card.amber { background: linear-gradient(135deg,#fffbeb,#fef3c7); border-color: rgba(217,119,6,0.2); }
+  .hs-amt-label { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 5px; }
+  .hs-amt-card.green .hs-amt-label { color: rgba(22,101,52,0.7); }
+  .hs-amt-card.blue  .hs-amt-label { color: rgba(0,86,179,0.7); }
+  .hs-amt-card.amber .hs-amt-label { color: rgba(146,64,14,0.7); }
+  .hs-amt-val { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+  .hs-amt-card.green .hs-amt-val { color: #15803d; }
+  .hs-amt-card.blue  .hs-amt-val  { color: #0071e3; }
+  .hs-amt-card.amber .hs-amt-val { color: #b45309; }
+  .hs-curr-chip {
+    background: rgba(22,101,52,0.12);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(22,101,52,0.9);
+    letter-spacing: 0.02em;
+  }
+
+  /* History timeline */
+  .hs-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hs-section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--c-divider);
+  }
+
+  .hs-timeline { display: flex; flex-direction: column; }
+  .hs-item {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    padding-bottom: 12px;
+  }
+  .hs-dot-col {
+    display: flex; flex-direction: column; align-items: center;
+    padding-top: 16px; flex-shrink: 0;
+  }
+  .hs-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--c-green);
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(28,158,94,0.15);
+    z-index: 1;
+  }
+  .hs-line {
+    width: 2px; flex: 1;
+    background: linear-gradient(to bottom, rgba(28,158,94,0.3), var(--c-divider) 40%);
+    margin-top: 5px; min-height: 16px; border-radius: 2px;
+  }
+  .hs-item:last-child .hs-line { display: none; }
+
+  .hs-card {
+    flex: 1; min-width: 0;
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .hs-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 11px 13px;
+    background: linear-gradient(135deg, rgba(28,158,94,0.05), rgba(28,158,94,0.01));
+    border-bottom: 1px solid var(--c-divider-soft);
+  }
+  .hs-alloc-amt { font-size: 17px; font-weight: 800; color: var(--c-green); letter-spacing: -0.02em; }
+  .hs-alloc-date { font-size: 11px; color: var(--c-text-subtle); margin-top: 3px; display: flex; align-items: center; gap: 4px; }
+  .hs-alloc-date i { font-size: 11px; }
+  .hs-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10.5px; font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: rgba(28,158,94,0.1);
+    color: var(--c-green);
+    border: 1px solid rgba(28,158,94,0.18);
+    flex-shrink: 0;
+  }
+  .hs-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--c-green); }
+
+  .hs-meta { display: flex; flex-direction: column; }
+  .hs-meta-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; padding: 10px 13px;
+  }
+  .hs-meta-row + .hs-meta-row { border-top: 1px solid var(--c-divider-soft); }
+  .hs-meta-left { display: flex; align-items: center; gap: 7px; }
+  .hs-meta-ico {
+    width: 24px; height: 24px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .hs-meta-ico i { font-size: 13px; }
+  .hs-meta-ico.blue { background: rgba(0,113,227,0.1); color: #0071e3; }
+  .hs-meta-ico.green { background: rgba(28,158,94,0.1); color: var(--c-green); }
+  .hs-meta-key { font-size: 11.5px; font-weight: 500; color: var(--c-text-muted); }
+  .hs-meta-val { font-size: 12.5px; font-weight: 700; color: var(--c-text); text-align: right; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 55%; }
+  .hs-meta-val.blue { color: #0071e3; font-weight: 600; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 50px 24px; text-align: center;
+  }
+  .empty-state i { font-size: 48px; color: #d1d5db; margin-bottom: 14px; display: block; }
+  .empty-state .es-title { font-size: 15px; font-weight: 700; color: var(--c-text); margin-bottom: 6px; }
+  .empty-state .es-sub { font-size: 13px; color: var(--c-text-muted); }
+</style>
+</head>
+<body>
+
+<div class="device">
+  <div class="screen-wrapper">
+    <div class="home-indicator"></div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+      <div class="dot"></div>
+      <span id="toast-msg">Done!</span>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 7l4.5 4.5C7.9 9.1 10.8 8 14 8s6.1 1.1 8.5 3.5L24 10C21.1 6.9 17.3 5 13 5S4.9 6.9 2 10l-1-3z M14 12c-1.8 0-3.4.7-4.6 1.9L14 19l4.6-5.1c-1.2-1.2-2.8-1.9-4.6-1.9z M14 0C8.5 0 3.5 2.2 0 5.8l1.4 1.4C4.5 3.9 9 1.7 14 1.7s9.5 2.2 12.6 5.5L28 5.8C24.5 2.2 19.5 0 14 0z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="page-scroll" id="main-scroll">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-title-block">
+          <div class="page-title">Allocation History</div>
+          <div class="page-subtitle">Every allocation, fully tracked.</div>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon blue"><i class="ti ti-wallet"></i></div>
+          <div class="kpi-text">
+            <div class="kpi-label">Total Payment</div>
+            <div class="kpi-value"><span class="cur">$</span><span id="kpi-total">653,000</span></div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon indigo"><i class="ti ti-chart-pie-filled"></i></div>
+          <div class="kpi-text">
+            <div class="kpi-label">Allocated</div>
+            <div class="kpi-value"><span class="cur">$</span><span id="kpi-allocated">200,000</span></div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon green"><i class="ti ti-circle-plus"></i></div>
+          <div class="kpi-text">
+            <div class="kpi-label">Unallocated</div>
+            <div class="kpi-value"><span class="cur">$</span><span id="kpi-unallocated">453,000</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-wrap">
+        <button class="tab-btn active" id="tab-pending" onclick="switchTab('pending')">
+          <i class="ti ti-clock"></i>
+          Pending
+          <span class="tab-count" id="count-pending">20</span>
+        </button>
+        <button class="tab-btn" id="tab-completed" onclick="switchTab('completed')">
+          <i class="ti ti-circle-check"></i>
+          Completed
+          <span class="tab-count" id="count-completed">20</span>
+        </button>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="search-wrap">
+          <i class="ti ti-search"></i>
+          <input type="text" id="search-input" placeholder="Search vehicles..." oninput="onSearch(this.value)">
+        </div>
+      </div>
+
+      <!-- Section Label -->
+      <div class="section-label" id="section-label">Pending Allocation (20)</div>
+
+      <!-- Vehicle List -->
+      <div class="vehicle-list" id="vehicle-list"></div>
+
+    </div><!-- end page-scroll -->
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+      <a class="nav-item" href="home.html">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5L3 9.8V20a1 1 0 0 0 1 1h5.5v-5h5v5H20a1 1 0 0 0 1-1V9.8L12 2.5z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.8L12 2.5l9 7.3V20a1 1 0 0 1-1 1h-5.5v-5h-5v5H4a1 1 0 0 1-1-1V9.8z"/></svg>
+        </div>
+        <span class="nav-label">Home</span>
+      </a>
+      <a class="nav-item" href="payment.html">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="5" width="20" height="14" rx="2.5"/><rect x="2" y="9" width="20" height="3.5" fill="rgba(255,255,255,0.25)"/><rect x="5" y="14.5" width="3.5" height="2" rx="0.8" fill="white"/><rect x="10.5" y="14.5" width="5.5" height="2" rx="0.8" fill="white"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="5" y1="15" x2="8.5" y2="15"/><line x1="11" y1="15" x2="16" y2="15"/></svg>
+        </div>
+        <span class="nav-label">Payment</span>
+      </a>
+      <button class="nav-item active">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-4-5zm-1 5.5V3.5L17.5 7.5H14zM9 12h6v1H9zm0 2.5h4v1H9zm0-5h1.5v1H9z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><polyline points="15 2 15 7 19 7"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="15" x2="13" y2="15"/></svg>
+        </div>
+        <span class="nav-label">History</span>
+      </button>
+      <button class="nav-item" onclick="showToast('Notifications coming soon')">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7v3.59l-1.7 1.7A1 1 0 0 0 4 16h16a1 1 0 0 0 .7-1.71L19 12.59V9a7 7 0 0 0-7-7zm0 20a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0v4l-2 2v1h16v-1l-2-2V8"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+        </div>
+        <span class="nav-label">Notifications</span>
+      </button>
+      <button class="nav-item" onclick="showToast('More coming soon')">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
+        </div>
+        <span class="nav-label">More</span>
+      </button>
+    </nav>
+
+    <!-- Sort Sheet -->
+    <div class="sheet-backdrop" id="sort-backdrop" onclick="closeSortSheet()"></div>
+    <div class="bottom-sheet" id="sort-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <span></span>
+        <span class="sheet-title">Sort By</span>
+        <button class="sheet-close-btn" onclick="closeSortSheet()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="sort-list">
+        <div class="sort-option selected" onclick="selectSort('',this)">Default <i class="ti ti-check"></i></div>
+        <div class="sort-option" onclick="selectSort('total',this)">Purchase Price <i class="ti ti-check"></i></div>
+        <div class="sort-option" onclick="selectSort('paid',this)">Paid Amount <i class="ti ti-check"></i></div>
+        <div class="sort-option" onclick="selectSort('allocated',this)">Allocated Amount <i class="ti ti-check"></i></div>
+        <div class="sort-option" onclick="selectSort('remaining',this)">Remaining Balance <i class="ti ti-check"></i></div>
+      </div>
+    </div>
+
+    <!-- History Detail Screen -->
+    <div class="history-screen" id="history-screen">
+      <div class="hs-status-bar">
+        <span>9:41</span>
+        <div class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 7l4.5 4.5C7.9 9.1 10.8 8 14 8s6.1 1.1 8.5 3.5L24 10C21.1 6.9 17.3 5 13 5S4.9 6.9 2 10l-1-3z M14 12c-1.8 0-3.4.7-4.6 1.9L14 19l4.6-5.1c-1.2-1.2-2.8-1.9-4.6-1.9z M14 0C8.5 0 3.5 2.2 0 5.8l1.4 1.4C4.5 3.9 9 1.7 14 1.7s9.5 2.2 12.6 5.5L28 5.8C24.5 2.2 19.5 0 14 0z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+        </div>
+      </div>
+      <div class="hs-nav">
+        <button class="hs-back-btn" onclick="closeHistoryScreen()"><i class="ti ti-chevron-left"></i></button>
+        <div class="hs-nav-title">Payment History</div>
+        <span class="hs-nav-spacer"></span>
+      </div>
+      <div class="hs-scroll" id="hs-scroll-body"></div>
+    </div>
+
+  </div><!-- end screen-wrapper -->
+</div><!-- end device -->
+
+<script>
+  /* ─── DATA ─── */
+  const CURRENCIES = ['USD','JPY','USD','EUR','JPY','USD','JPY','USD','EUR','USD'];
+  const PORTS = ['Mombasa Port','Dar es Salaam','Durban','Lagos','Zimbabwe'];
+
+  const PENDING_RAW = Array.from({ length: 20 }, (_, i) => ({
+    id: i + 1,
+    make: 'Toyota', model: 'Raize', code: '5BA-A200A',
+    chassis: 'WDC2539052F422655',
+    year: 2022,
+    curr: CURRENCIES[i % CURRENCIES.length],
+    dest: PORTS[i % PORTS.length],
+    total: 32650,
+    paid: 20000,
+    allocated: i === 2 ? 20000 : 10000,
+    remaining: 12650,
+    history: [
+      { amount: 5000, date: 'Apr 28, 2026', time: '14:30', txn: 'ABOWATH ENTERPRIZES', payAmt: '32,640', curr: 'USD' },
+      { amount: 7000, date: 'Mar 15, 2026', time: '10:15', txn: 'KENMORE TRADING CO',  payAmt: '14,420', curr: 'GBP' },
+      { amount: 3000, date: 'Feb 03, 2026', time: '16:45', txn: 'AL SUWAIDI MOTORS',   payAmt: '91,100', curr: 'AED' },
+      { amount: 5000, date: 'Jan 10, 2026', time: '09:00', txn: 'ZIM TRANSPORT LTD',   payAmt: '28,975', curr: 'USD' },
+    ]
+  }));
+
+  const COMPLETED_RAW = Array.from({ length: 20 }, (_, i) => ({
+    id: i + 1,
+    make: 'Toyota', model: 'Raize', code: '5BA-A200A',
+    chassis: 'WDC2539052F422655',
+    year: 2022,
+    curr: CURRENCIES[i % CURRENCIES.length],
+    dest: PORTS[i % PORTS.length],
+    total: 32650,
+    paid: 32650,
+    allocated: 32650,
+    remaining: 0,
+    history: [
+      { amount: 10000, date: 'Apr 28, 2026', time: '14:30', txn: 'ABOWATH ENTERPRIZES', payAmt: '32,640', curr: 'USD' },
+      { amount: 10000, date: 'Mar 15, 2026', time: '10:15', txn: 'AL SUWAIDI MOTORS',   payAmt: '91,100', curr: 'AED' },
+      { amount: 7650,  date: 'Feb 03, 2026', time: '16:45', txn: 'PACIFIC AUTO IMPORTS', payAmt: '6,070,000', curr: 'JPY' },
+      { amount: 5000,  date: 'Jan 10, 2026', time: '09:00', txn: 'ZIM TRANSPORT LTD',   payAmt: '28,975', curr: 'USD' },
+    ]
+  }));
+
+  let activeTab = 'pending';
+  let searchQ = '';
+  let sortKey = '';
+  let currentData = [...PENDING_RAW];
+  let filteredData = [...PENDING_RAW];
+
+  document.getElementById('count-pending').textContent = PENDING_RAW.length;
+  document.getElementById('count-completed').textContent = COMPLETED_RAW.length;
+
+  /* ─── TAB ─── */
+  function switchTab(tab) {
+    activeTab = tab;
+    document.getElementById('tab-pending').classList.toggle('active', tab === 'pending');
+    document.getElementById('tab-completed').classList.toggle('active', tab === 'completed');
+    currentData = tab === 'pending' ? [...PENDING_RAW] : [...COMPLETED_RAW];
+    searchQ = '';
+    document.getElementById('search-input').value = '';
+    applyFilters();
+  }
+
+  /* ─── SEARCH ─── */
+  function onSearch(q) {
+    searchQ = q;
+    applyFilters();
+  }
+
+  /* ─── SORT ─── */
+  function openSortSheet() {
+    document.getElementById('sort-backdrop').classList.add('show');
+    document.getElementById('sort-sheet').classList.add('show');
+  }
+  function closeSortSheet() {
+    document.getElementById('sort-backdrop').classList.remove('show');
+    document.getElementById('sort-sheet').classList.remove('show');
+  }
+  function selectSort(key, el) {
+    sortKey = key;
+    document.querySelectorAll('.sort-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('sort-btn').classList.toggle('active', !!key);
+    applyFilters();
+    setTimeout(closeSortSheet, 200);
+  }
+
+  /* ─── FILTER + SORT + RENDER ─── */
+  function applyFilters() {
+    let data = [...currentData];
+    const q = searchQ.trim().toLowerCase();
+    if (q) {
+      data = data.filter(r =>
+        (r.make + ' ' + r.model).toLowerCase().includes(q) ||
+        r.chassis.toLowerCase().includes(q) ||
+        r.dest.toLowerCase().includes(q)
+      );
+    }
+    if (sortKey) {
+      data.sort((a, b) => b[sortKey] - a[sortKey]);
+    }
+    filteredData = data;
+    renderList();
+  }
+
+  function renderList() {
+    const list = document.getElementById('vehicle-list');
+    const label = document.getElementById('section-label');
+    const tabName = activeTab === 'pending' ? 'Pending Allocation' : 'Completed Payments';
+    label.textContent = `${tabName} (${filteredData.length})`;
+
+    if (!filteredData.length) {
+      list.innerHTML = `<div class="empty-state">
+        <i class="ti ti-search-off"></i>
+        <div class="es-title">No results found</div>
+        <div class="es-sub">Try a different search or filter</div>
+      </div>`;
+      return;
+    }
+
+    list.innerHTML = filteredData.map(r => renderCard(r)).join('');
+  }
+
+  function renderCard(r) {
+    const isPending = activeTab === 'pending';
+    const remClass = r.remaining === 0 ? 'avs-paid' : 'avs-remaining';
+
+    const pendingStats = `
+        <div class="vc-stat">
+          <span class="avs-label">Purchase Price</span>
+          <span class="avs-value"><span class="avs-curr-pill">${r.curr}</span>${r.total.toLocaleString()}</span>
+        </div>
+        <div class="vc-stat">
+          <span class="avs-label">Total Paid</span>
+          <span class="avs-value avs-paid">$${r.paid.toLocaleString()}</span>
+        </div>
+        <div class="vc-stat">
+          <span class="avs-label">Allocated Amount</span>
+          <span class="avs-value">$${r.allocated.toLocaleString()}</span>
+        </div>
+        <div class="vc-stat">
+          <span class="avs-label">Remaining</span>
+          <span class="avs-value ${remClass}">$${r.remaining.toLocaleString()}</span>
+        </div>`;
+
+    const completedStats = `
+        <div class="vc-stat">
+          <span class="avs-label">Purchase Price</span>
+          <span class="avs-value"><span class="avs-curr-pill">${r.curr}</span>${r.total.toLocaleString()}</span>
+        </div>
+        <div class="vc-stat">
+          <span class="avs-label">Total Paid</span>
+          <span class="avs-value avs-paid">$${r.paid.toLocaleString()}</span>
+        </div>`;
+
+    return `<div class="vc-card">
+
+      <div class="vc-top">
+        <div class="vc-top-info">
+          <div class="vc-name">${r.make} ${r.model} <span class="vc-year">· ${r.year}</span></div>
+          <div class="vc-code">${r.code}</div>
+          <div class="vc-dest"><i class="ti ti-map-pin"></i>${r.dest}</div>
+        </div>
+        <button class="btn-view-history" onclick="openHistoryScreen(${r.id})">
+          <i class="ti ti-history"></i> View History
+        </button>
+      </div>
+
+      <div class="vc-chassis-row">
+        <span class="avs-label">Chassis No.</span>
+        <span class="avs-value">${r.chassis}</span>
+      </div>
+
+      <div class="vc-stats">
+        ${isPending ? pendingStats : completedStats}
+      </div>
+    </div>`;
+  }
+
+  /* ─── HISTORY DETAIL SCREEN ─── */
+  function openHistoryScreen(id) {
+    const data = activeTab === 'pending'
+      ? PENDING_RAW.find(r => r.id === id)
+      : COMPLETED_RAW.find(r => r.id === id);
+    if (!data) return;
+
+    const isPending = activeTab === 'pending';
+    const CURR_SIGNS = { USD:'$', JPY:'¥', EUR:'€', GBP:'£', AED:'د.إ ' };
+
+    const sorted = [...data.history].sort((a, b) =>
+      new Date(b.date + ' ' + b.time) - new Date(a.date + ' ' + a.time)
+    );
+
+    const remainingCard = isPending ? `
+      <div class="hs-amt-card amber">
+        <div class="hs-amt-label">Remaining</div>
+        <div class="hs-amt-val">$${data.remaining.toLocaleString()}</div>
+      </div>` : '';
+
+    const timelineHTML = sorted.map((h, i) => {
+      const sign = CURR_SIGNS[h.curr] || (h.curr + ' ');
+      return `
+      <div class="hs-item">
+        <div class="hs-dot-col">
+          <div class="hs-dot"></div>
+          ${i < sorted.length - 1 ? '<div class="hs-line"></div>' : ''}
+        </div>
+        <div class="hs-card">
+          <div class="hs-card-head">
+            <div>
+              <div class="hs-alloc-amt">+ $${h.amount.toLocaleString()}</div>
+              <div class="hs-alloc-date"><i class="ti ti-clock"></i>${h.date} at ${h.time}</div>
+            </div>
+            <span class="hs-badge">Allocated</span>
+          </div>
+          <div class="hs-meta">
+            <div class="hs-meta-row">
+              <div class="hs-meta-left">
+                <div class="hs-meta-ico blue"><i class="ti ti-credit-card"></i></div>
+                <span class="hs-meta-key">Transaction</span>
+              </div>
+              <span class="hs-meta-val blue">${h.txn || '—'}</span>
+            </div>
+            <div class="hs-meta-row">
+              <div class="hs-meta-left">
+                <div class="hs-meta-ico green"><i class="ti ti-currency-dollar"></i></div>
+                <span class="hs-meta-key">Amount</span>
+              </div>
+              <span class="hs-meta-val">${sign}${h.payAmt}</span>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('hs-scroll-body').innerHTML = `
+      <div class="hs-vehicle-hero">
+        <div class="hs-veh-img-wrap"><i class="ti ti-car"></i></div>
+        <div class="hs-veh-info">
+          <div class="hs-veh-name">${data.make} ${data.model}</div>
+          <div class="hs-veh-year">${data.year} · ${data.code}</div>
+        </div>
+        <div class="hs-veh-chassis">
+          <div class="hs-chassis-label">Chassis No.</div>
+          <div class="hs-chassis-no">${data.chassis.slice(-10)}</div>
+        </div>
+      </div>
+
+      <div class="hs-amounts">
+        <div class="hs-amt-card green full">
+          <div>
+            <div class="hs-amt-label">Purchase Price</div>
+            <div class="hs-amt-val">$${data.total.toLocaleString()}</div>
+          </div>
+          <div class="hs-curr-chip">${data.curr}</div>
+        </div>
+        <div class="hs-amt-card blue">
+          <div class="hs-amt-label">Total Paid</div>
+          <div class="hs-amt-val">$${data.paid.toLocaleString()}</div>
+        </div>
+        ${remainingCard}
+      </div>
+
+      <div class="hs-section-label">Payment History</div>
+      <div class="hs-timeline">${timelineHTML}</div>
+    `;
+
+    document.getElementById('history-screen').classList.add('open');
+  }
+
+  function closeHistoryScreen() {
+    document.getElementById('history-screen').classList.remove('open');
+  }
+
+  /* ─── TOAST ─── */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  /* ─── INIT ─── */
+  applyFilters();
+</script>
+
+</body>
+</html>
