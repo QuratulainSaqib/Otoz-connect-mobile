@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otoz Connect · Customer Invoices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+  :root {
+    --c-primary: #173559;
+    --c-accent:  #2BA6FF;
+    --c-text:    #1d1d1f;
+    --c-text-muted:    #6e6e73;
+    --c-text-subtle:   #86868b;
+    --c-text-tertiary: #a1a1a6;
+    --c-bg-app:      #f5f5f7;
+    --c-bg-soft:     #fafafb;
+    --c-divider:     #e8e8ed;
+    --c-divider-soft:#f1f5f9;
+    --c-success: #30c46d;
+    --c-danger:  #ff3b30;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: #e8e8ed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .device {
+    width: 380px; height: 800px;
+    background: #1d1d1f;
+    border-radius: 54px; padding: 11px;
+    position: relative;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.08);
+  }
+  .home-indicator {
+    position: absolute; bottom: 9px; left: 50%;
+    transform: translateX(-50%);
+    width: 140px; height: 5px;
+    background: #1d1d1f; border-radius: 3px;
+    opacity: 0.9; z-index: 100; pointer-events: none;
+  }
+  .screen-wrapper {
+    width: 100%; height: 100%;
+    background: var(--c-bg-app);
+    border-radius: 43px; overflow: hidden;
+    position: relative; display: flex; flex-direction: column;
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 64px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding: 0 32px 8px;
+    font-size: 16px; font-weight: 600; color: var(--c-text);
+    letter-spacing: -0.02em; flex-shrink: 0;
+    background: var(--c-bg-app);
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; }
+
+  /* Toast */
+  .toast {
+    position: absolute; top: -100px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--c-text); color: #fff;
+    padding: 12px 18px; border-radius: 14px;
+    font-size: 13.5px; font-weight: 500;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    z-index: 1000; transition: top 0.4s cubic-bezier(0.32,0.72,0,1);
+    white-space: nowrap;
+  }
+  .toast.show { top: 75px; }
+  .toast .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-success); flex-shrink: 0; }
+
+  /* ── Header (same as home.html dash-header) ── */
+  .page-header {
+    background: var(--c-bg-app);
+    flex-shrink: 0;
+  }
+  .header-top {
+    padding: 8px 20px 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 12px;
+  }
+  .header-left {
+    display: flex; flex-direction: column;
+    min-width: 0; flex: 1 1 auto; overflow: hidden;
+  }
+  .header-greeting {
+    font-size: 22px; font-weight: 700; color: var(--c-text);
+    letter-spacing: -0.025em; line-height: 1.15;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .header-greeting .name { color: var(--c-primary); }
+  .header-subtitle { font-size: 13px; color: var(--c-text-muted); margin-top: 3px; }
+
+  /* Create btn — same badge style as home.html total-cars-badge */
+  .create-btn {
+    display: flex; align-items: center; gap: 6px;
+    background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+    border: 1px solid var(--c-divider);
+    border-radius: 12px; padding: 6px 10px;
+    flex-shrink: 0; cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: all 0.18s ease; font-family: inherit;
+  }
+  .create-btn:active { transform: scale(0.97); }
+  .create-btn-icon {
+    font-size: 15px; color: #fff;
+    background: linear-gradient(135deg, #2BA6FF 0%, #00a3ff 100%);
+    width: 26px; height: 26px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(43,166,255,0.28);
+  }
+  .create-btn-icon i { font-size: 14px; color: #fff; }
+  .create-btn-text { display: flex; flex-direction: column; line-height: 1.15; }
+  .create-btn-value { font-size: 13px; font-weight: 700; color: var(--c-text); letter-spacing: -0.02em; }
+  .create-btn-label { font-size: 9px; color: var(--c-text-muted); font-weight: 500; white-space: nowrap; }
+
+  /* KPI — exactly home.html stat-card */
+  .kpi-wrap { margin: 0 20px 14px; }
+  .kpi-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+    border: 1px solid var(--c-divider);
+    border-radius: 14px; padding: 11px 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    display: flex; align-items: center; gap: 10px;
+    transition: all 0.18s ease;
+  }
+  .kpi-card:active { transform: scale(0.97); }
+  .kpi-icon {
+    width: 38px; height: 38px; border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #2BA6FF 0%, #00a3ff 100%);
+    box-shadow: 0 4px 12px rgba(43,166,255,0.28);
+  }
+  .kpi-icon i { font-size: 19px; color: #fff; }
+  .kpi-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .kpi-label { font-size: 10px; color: var(--c-text-muted); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kpi-value { font-size: 20px; font-weight: 700; color: var(--c-text); letter-spacing: -0.025em; line-height: 1.2; }
+
+  /* Controls */
+  .controls-row {
+    display: flex; gap: 8px;
+    padding: 0 20px 10px;
+    background: var(--c-bg-app); flex-shrink: 0;
+  }
+  .search-wrap {
+    flex: 1; background: #fff;
+    border-radius: 12px; padding: 9px 12px;
+    display: flex; align-items: center; gap: 8px;
+    border: 1px solid transparent; transition: all 0.2s ease;
+  }
+  .search-wrap:focus-within { border-color: var(--c-accent); }
+  .search-wrap i { font-size: 16px; color: var(--c-text-subtle); flex-shrink: 0; }
+  .search-wrap input {
+    flex: 1; border: none; outline: none;
+    background: transparent; font-size: 13px;
+    color: var(--c-text); font-family: inherit;
+  }
+  .search-wrap input::placeholder { color: var(--c-text-subtle); }
+  .icon-btn {
+    width: 38px; height: 38px; background: #fff;
+    border: 1px solid transparent; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.18s; flex-shrink: 0;
+  }
+  .icon-btn:active { transform: scale(0.95); }
+  .icon-btn i { font-size: 17px; color: var(--c-text); }
+
+  /* Type chips */
+  .type-chips {
+    display: flex; gap: 6px;
+    padding: 0 20px 10px;
+    overflow-x: auto; scrollbar-width: none; flex-shrink: 0;
+  }
+  .type-chips::-webkit-scrollbar { display: none; }
+  .type-chip {
+    flex-shrink: 0; padding: 5px 12px;
+    border-radius: 999px; background: #fff;
+    border: 1px solid var(--c-divider);
+    font-size: 12px; font-weight: 600; color: var(--c-text-muted);
+    cursor: pointer; transition: all 0.15s; font-family: inherit;
+  }
+  .type-chip.active-all { background: var(--c-primary); color: #fff; border-color: var(--c-primary); }
+  .type-chip.active-commercial { background: #e8f1ff; color: #0058c7; border-color: rgba(43,166,255,0.3); }
+  .type-chip.active-deposit { background: #e3f7ec; color: #0a7a3b; border-color: rgba(48,196,109,0.3); }
+
+  .results-count {
+    padding: 0 20px 8px;
+    font-size: 11.5px; color: var(--c-text-muted); font-weight: 500;
+    flex-shrink: 0;
+  }
+  .results-count strong { color: var(--c-text); font-weight: 700; }
+
+  /* Scroll area */
+  .inv-scroll {
+    flex: 1; overflow-y: auto; overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 20px 100px;
+  }
+  .inv-list { display: flex; flex-direction: column; gap: 10px; }
+
+  /* ── Invoice Card ── */
+  .inv-card {
+    background: #fff; border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    cursor: pointer; transition: all 0.18s ease;
+  }
+  .inv-card:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.06); transform: translateY(-1px); }
+  .inv-card:active { transform: scale(0.99); }
+
+  /* card top row: badge + date */
+  .inv-card-header {
+    padding: 11px 14px;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    border-bottom: 1px solid var(--c-divider-soft);
+  }
+  .inv-type-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px 4px 8px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.01em;
+    border: 1px solid transparent;
+  }
+  .inv-type-badge::before {
+    content: ""; width: 6px; height: 6px;
+    border-radius: 50%; flex-shrink: 0;
+  }
+  .inv-type-badge.commercial {
+    background: linear-gradient(180deg, #e8f1ff 0%, #dbeafe 100%);
+    color: #0058c7; border-color: rgba(43,166,255,0.3);
+  }
+  .inv-type-badge.commercial::before { background: #2BA6FF; }
+  .inv-type-badge.deposit {
+    background: linear-gradient(180deg, #e3f7ec 0%, #d1fae5 100%);
+    color: #0a7a3b; border-color: rgba(48,196,109,0.3);
+  }
+  .inv-type-badge.deposit::before { background: #30c46d; }
+  .inv-date { font-size: 11px; color: var(--c-text-subtle); font-weight: 500; }
+
+  /* card body */
+  .inv-card-body { padding: 11px 14px 10px; }
+  .inv-customer-name {
+    font-size: 14px; font-weight: 700; color: var(--c-text);
+    letter-spacing: -0.01em; margin-bottom: 8px;
+  }
+
+  /* info rows — icon only, no label */
+  .inv-info-row {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 4px;
+  }
+  .inv-info-row:last-child { margin-bottom: 0; }
+  .inv-info-icon i { font-size: 13px; color: var(--c-text-tertiary); flex-shrink: 0; }
+  .inv-info-value { font-size: 12px; font-weight: 500; color: var(--c-text-muted); word-break: break-all; }
+
+  /* chassis — label top grey, number bold dark below */
+  .inv-chassis-row {
+    margin-top: 8px; padding-top: 8px;
+    border-top: 1px solid var(--c-divider-soft);
+  }
+  .inv-chassis-label {
+    font-size: 11px; color: var(--c-text-subtle);
+    font-weight: 500; margin-bottom: 2px;
+  }
+  .inv-chassis-val {
+    font-size: 14px; font-weight: 700;
+    color: var(--c-text);
+    font-family: 'SF Mono', Menlo, monospace;
+    letter-spacing: 0.01em;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  /* FAB — payment.html style */
+  .fab {
+    position: absolute;
+    bottom: 90px; right: 20px;
+    height: 42px; padding: 0 16px 0 14px;
+    background: linear-gradient(135deg, var(--c-primary) 0%, #2a4a73 100%);
+    color: #fff; border: none; border-radius: 999px;
+    display: flex; align-items: center; gap: 6px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(23,53,89,0.34), 0 2px 5px rgba(23,53,89,0.18);
+    transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 35; font-family: inherit;
+  }
+  .fab:active { transform: scale(0.95); box-shadow: 0 3px 8px rgba(23,53,89,0.28); }
+  .fab i { font-size: 16px; }
+  .fab span { font-size: 12.5px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
+
+  /* card footer */
+  .inv-card-footer {
+    padding: 9px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--c-divider-soft);
+    background: var(--c-bg-soft);
+  }
+  .inv-amount-wrap { display: flex; align-items: baseline; gap: 4px; }
+  .inv-curr-pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.04);
+    border-radius: 5px; padding: 3px 8px;
+    font-size: 11px; font-weight: 600;
+    color: #6e6e73; line-height: 1; flex-shrink: 0;
+  }
+  .inv-amount { font-size: 16px; font-weight: 800; color: var(--c-text); letter-spacing: -0.025em; }
+  .inv-actions { display: flex; gap: 6px; }
+  .inv-act-btn {
+    width: 30px; height: 30px;
+    border: 1px solid var(--c-divider); border-radius: 8px;
+    background: #fff; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.15s; flex-shrink: 0;
+  }
+  .inv-act-btn:active { transform: scale(0.93); }
+  .inv-act-btn i { font-size: 14px; color: var(--c-text-muted); }
+  .inv-act-btn.primary { background: var(--c-primary); border-color: var(--c-primary); }
+  .inv-act-btn.primary i { color: #fff; }
+
+  /* Empty state */
+  .empty-state {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 60px 20px; gap: 12px; text-align: center;
+  }
+  .empty-state i { font-size: 44px; color: var(--c-text-subtle); }
+  .empty-state p { font-size: 14px; color: var(--c-text-muted); font-weight: 500; }
+
+  /* ── Bottom Nav ── */
+  .bottom-nav {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--c-divider-soft);
+    display: flex; align-items: flex-start; justify-content: space-around;
+    padding: 10px 0 0; z-index: 40;
+  }
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-start;
+    gap: 4px; cursor: pointer; background: none; border: none;
+    font-family: inherit; padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-icon { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; }
+  .nav-icon svg { width: 24px; height: 24px; display: block; overflow: visible; }
+  .nav-label { font-size: 10px; font-weight: 500; color: #a0a0ab; letter-spacing: 0.01em; line-height: 1; }
+  .nav-item.active .nav-label { color: var(--c-primary); font-weight: 700; }
+  .nav-icon .icon-outline { display: block; color: #a0a0ab; }
+  .nav-icon .icon-filled  { display: none;  color: var(--c-primary); }
+  .nav-item.active .nav-icon .icon-outline { display: none; }
+  .nav-item.active .nav-icon .icon-filled  { display: block; }
+
+  /* ── Detail Screen ── */
+  .detail-screen {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--c-bg-app); border-radius: 43px;
+    z-index: 200; display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.32,0.72,0,1);
+  }
+  .detail-screen.open { transform: translateX(0); }
+  .detail-header {
+    background: #fff; padding: 0 20px 14px;
+    border-bottom: 1px solid var(--c-divider-soft); flex-shrink: 0;
+  }
+  .detail-header-top {
+    display: flex; align-items: center; gap: 10px;
+    padding-top: 10px; margin-bottom: 2px;
+  }
+  .detail-title { font-size: 17px; font-weight: 700; color: var(--c-text); letter-spacing: -0.02em; }
+  .detail-sub { font-size: 12px; color: var(--c-text-muted); font-weight: 500; }
+  .detail-body { flex: 1; overflow-y: auto; padding: 16px 16px 24px; }
+  .detail-section {
+    background: #fff; border-radius: 14px;
+    border: 1px solid var(--c-divider); overflow: hidden;
+    margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .detail-section-title {
+    font-size: 10.5px; font-weight: 700; color: var(--c-text-subtle);
+    text-transform: uppercase; letter-spacing: 0.07em; padding: 10px 14px 0;
+  }
+  .detail-row {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    padding: 11px 14px; border-bottom: 1px solid var(--c-divider-soft);
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-key { font-size: 12.5px; color: var(--c-text-muted); font-weight: 500; flex-shrink: 0; }
+  .detail-val { font-size: 13px; color: var(--c-text); font-weight: 600; text-align: right; word-break: break-all; }
+  .detail-val.mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11.5px; letter-spacing: 0.02em; }
+  .detail-val.amount { font-size: 18px; font-weight: 800; color: var(--c-text); letter-spacing: -0.025em; }
+  .detail-dl-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 13px;
+    background: var(--c-primary); color: #fff; border: none;
+    border-radius: 13px; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: inherit; transition: all 0.15s;
+    margin-top: 16px; box-shadow: 0 4px 14px rgba(23,53,89,0.25);
+  }
+  .detail-dl-btn:active { transform: scale(0.98); }
+  .detail-dl-btn i { font-size: 16px; }
+
+  /* ── Full Screen Page (home.html style) ── */
+  .full-screen-page {
+    position: absolute;
+    top: 0; left: 100%; right: -100%; bottom: 0;
+    background: #f5f5f7;
+    z-index: 350;
+    display: flex; flex-direction: column;
+    transition: left 0.35s cubic-bezier(0.32,0.72,0,1), right 0.35s cubic-bezier(0.32,0.72,0,1);
+  }
+  .full-screen-page.show { left: 0; right: 0; }
+  .full-screen-page .status-bar { background: #fff; }
+  .full-page-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 16px 10px; flex-shrink: 0;
+    border-bottom: 0.5px solid var(--c-divider-soft);
+    background: #fff;
+  }
+  .full-page-title {
+    font-size: 16px; font-weight: 700;
+    color: var(--c-text); letter-spacing: -0.015em;
+  }
+  .full-page-body {
+    flex: 1; overflow-y: auto;
+    padding: 20px 16px 120px;
+    background: #f5f5f7;
+    -webkit-overflow-scrolling: touch;
+  }
+  .full-page-body::-webkit-scrollbar { display: none; }
+  .sheet-back-btn {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: var(--c-bg-app); border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .sheet-back-btn svg { width: 18px; height: 18px; color: var(--c-text); }
+
+  /* con-form cards */
+  .con-form-card {
+    background: #fff; border: 1px solid var(--c-divider);
+    border-radius: 16px; margin-bottom: 16px;
+    overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .con-form-card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px;
+    background: linear-gradient(180deg, #fafbfd 0%, #f5f6f9 100%);
+    border-bottom: 1px solid var(--c-divider);
+  }
+  .con-form-card-title {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 14px; font-weight: 700; color: var(--c-text); letter-spacing: -0.01em;
+  }
+  .con-icon-sq {
+    width: 26px; height: 26px; border-radius: 7px; color: #fff;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .con-icon-sq svg { width: 14px; height: 14px; }
+  .con-form-body { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .con-field { display: flex; flex-direction: column; gap: 6px; }
+  .con-field label { font-size: 12px; font-weight: 500; color: var(--c-text-muted); }
+  .con-req { color: var(--c-danger); margin-left: 2px; }
+  .con-input {
+    width: 100%; height: 42px; padding: 0 14px;
+    background: #fff; border: 1px solid var(--c-divider);
+    border-radius: 12px; font-family: inherit;
+    font-size: 14px; color: var(--c-text); outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box; appearance: none; -webkit-appearance: none;
+  }
+  .con-input:focus { border-color: var(--c-accent); box-shadow: 0 0 0 3px rgba(43,166,255,0.12); }
+  .con-input::placeholder { color: #c5c5c7; }
+  .con-select-wrap { position: relative; }
+  .con-select {
+    width: 100%; height: 42px; padding: 0 36px 0 14px;
+    background: #fff; border: 1px solid var(--c-divider);
+    border-radius: 12px; font-family: inherit; font-size: 14px;
+    color: var(--c-text); outline: none; appearance: none; cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .con-select:focus { border-color: var(--c-accent); box-shadow: 0 0 0 3px rgba(43,166,255,0.12); }
+  .con-chev {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 14px; color: var(--c-text-subtle); pointer-events: none;
+  }
+  .con-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .con-phone-wrap {
+    display: flex; align-items: center;
+    border: 1px solid var(--c-divider); border-radius: 12px;
+    overflow: hidden; background: #fff;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .con-phone-wrap:focus-within { border-color: var(--c-accent); box-shadow: 0 0 0 3px rgba(43,166,255,0.12); }
+  .con-phone-prefix {
+    display: flex; align-items: center; gap: 4px;
+    padding: 0 10px 0 12px; border-right: 1px solid var(--c-divider);
+    height: 42px; flex-shrink: 0; background: var(--c-bg-app);
+  }
+  .con-phone-flag { font-size: 16px; line-height: 1; }
+  .con-phone-code { font-size: 12px; color: var(--c-text-muted); font-weight: 600; }
+  .con-phone-input { border: none !important; border-radius: 0 !important; box-shadow: none !important; flex: 1; height: 42px; padding: 0 14px; font-family: inherit; font-size: 14px; outline: none; }
+  .con-curr-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .con-curr-btn {
+    padding: 7px 12px; background: var(--c-bg-app);
+    border: 1.5px solid var(--c-divider); border-radius: 8px;
+    font-size: 12px; font-weight: 700; color: var(--c-text-muted);
+    cursor: pointer; font-family: inherit; transition: all 0.15s;
+  }
+  .con-curr-btn.active { background: var(--c-primary); color: #fff; border-color: var(--c-primary); }
+
+  /* filter-row-btn — Country/City selector */
+  .filter-row-btn {
+    width: 100%; display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px; background: var(--c-bg-app);
+    border: 1px solid transparent; border-radius: 12px;
+    font-family: inherit; cursor: pointer; transition: background 0.15s ease;
+  }
+  .filter-row-btn:active { background: var(--c-divider); }
+  .filter-row-btn svg { width: 16px; height: 16px; color: var(--c-text-subtle); flex-shrink: 0; }
+  .filter-row-value { font-size: 14px; color: var(--c-text); text-align: left; flex: 1; }
+  .filter-row-value.placeholder { color: var(--c-text-subtle); }
+
+  /* Sheets inside full-screen-page */
+  .inv-sheet-backdrop {
+    position: absolute; inset: 0; z-index: 500;
+    background: rgba(0,0,0,0.35);
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  .inv-sheet-backdrop.show { opacity: 1; pointer-events: auto; }
+  .inv-bottom-sheet {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: #fff; border-radius: 24px 24px 0 0;
+    max-height: 88%; z-index: 600;
+    display: flex; flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.32,0.72,0,1);
+  }
+  .inv-bottom-sheet.show { transform: translateY(0); }
+  .sheet-header {
+    display: grid; grid-template-columns: 44px 1fr 44px;
+    align-items: center; padding: 4px 16px 12px; flex-shrink: 0;
+  }
+  .sheet-title { font-size: 16px; font-weight: 700; color: var(--c-text); letter-spacing: -0.015em; text-align: center; }
+  .sheet-action-btn {
+    background: none; border: none; color: var(--c-accent);
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: inherit; padding: 4px 0; justify-self: end; white-space: nowrap;
+  }
+  .sheet-action-btn:active { opacity: 0.6; }
+  .picker-search-wrap { padding: 0 16px 10px; flex-shrink: 0; }
+  .picker-search-box {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--c-bg-app); border-radius: 12px; padding: 10px 12px;
+    border: 1.5px solid transparent; transition: border-color 0.15s;
+  }
+  .picker-search-box:focus-within { border-color: var(--c-accent); background: #fff; }
+  .picker-search-box > svg { width: 16px; height: 16px; color: var(--c-text-subtle); flex-shrink: 0; }
+  .picker-search-input { flex: 1; border: none; background: transparent; font-size: 15px; color: var(--c-text); font-family: inherit; outline: none; min-width: 0; }
+  .picker-search-input::placeholder { color: var(--c-text-subtle); }
+  .picker-search-clear { background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; color: var(--c-text-subtle); flex-shrink: 0; }
+  .picker-search-clear svg { width: 16px; height: 16px; }
+  .picker-empty { padding: 40px 20px; text-align: center; color: var(--c-text-muted); font-size: 14px; }
+  .stage-list { display: flex; flex-direction: column; }
+  .stage-list-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 11px 20px; border: none; background: none;
+    font-family: inherit; cursor: pointer; text-align: left;
+    transition: background 0.12s ease; position: relative; width: 100%;
+  }
+  .stage-list-item::after { content: ''; position: absolute; bottom: 0; left: 20px; right: 20px; height: 0.5px; background: var(--c-divider); }
+  .stage-list-item:active { background: var(--c-bg-app); }
+  .stage-list-label { flex: 1; font-size: 15px; color: var(--c-text); font-weight: 500; }
+  .stage-check { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--c-accent); }
+  .stage-check svg { width: 18px; height: 18px; }
+  .con-footer {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 12px 16px 28px;
+    background: #fff; border-top: 0.5px solid var(--c-divider);
+    z-index: 10;
+  }
+  .btn-primary {
+    background: var(--c-primary); color: #fff; border: none;
+    border-radius: 14px; padding: 15px;
+    font-size: 15px; font-weight: 600; letter-spacing: -0.01em;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    cursor: pointer; font-family: inherit; transition: all 0.15s ease; width: 100%;
+  }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary svg { width: 17px; height: 17px; }
+</style>
+</head>
+<body>
+
+<div class="device">
+  <div class="screen-wrapper">
+
+    <div class="toast" id="toast">
+      <span class="dot"></span>
+      <span id="toast-text"></span>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <span class="status-icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686-4.687 12.284-4.687 16.97 0"/></svg>
+        <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+      </span>
+    </div>
+
+    <!-- Header — home.html dash-header style -->
+    <div class="page-header">
+      <div class="header-top">
+        <div class="header-left">
+          <div class="header-greeting">Customer <span class="name">Invoices</span></div>
+          <div class="header-subtitle">Manage and track all customer invoices.</div>
+        </div>
+      </div>
+
+      <!-- KPI — home.html stat-card style -->
+      <div class="kpi-wrap">
+        <div class="kpi-card">
+          <div class="kpi-icon"><i class="ti ti-file-invoice"></i></div>
+          <div class="kpi-label" style="font-size:14px;">Total Invoices</div>
+          <div class="kpi-value" id="kpi-total" style="margin-left:auto;">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-row">
+      <div class="search-wrap">
+        <i class="ti ti-search"></i>
+        <input type="text" id="search-input" placeholder="Search name, phone, amount…" oninput="applyFilters()">
+      </div>
+      <button class="icon-btn" onclick="toggleSortOrder()">
+        <i class="ti ti-arrows-sort"></i>
+      </button>
+    </div>
+
+    <!-- Type chips -->
+    <div class="type-chips">
+      <button class="type-chip active-all" data-type="" onclick="selectType(this, '')">All</button>
+      <button class="type-chip" data-type="Commercial" onclick="selectType(this, 'Commercial')">Commercial</button>
+      <button class="type-chip" data-type="Deposit" onclick="selectType(this, 'Deposit')">Deposit</button>
+    </div>
+
+    <div class="results-count" id="results-count"></div>
+
+    <!-- Invoice list -->
+    <div class="inv-scroll">
+      <div class="inv-list" id="inv-list"></div>
+    </div>
+
+    <!-- FAB — Create Invoice -->
+    <button class="fab" onclick="openCreatePage()">
+      <i class="ti ti-plus"></i>
+      <span>Create Invoice</span>
+    </button>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+      <button class="nav-item" onclick="window.location.href='home.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5L3 9.8V20a1 1 0 0 0 1 1h5.5v-5h5v5H20a1 1 0 0 0 1-1V9.8L12 2.5z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.8L12 2.5l9 7.3V20a1 1 0 0 1-1 1h-5.5v-5h-5v5H4a1 1 0 0 1-1-1V9.8z"/></svg>
+        </div>
+        <span class="nav-label">Home</span>
+      </button>
+      <button class="nav-item" onclick="window.location.href='payment.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="5" width="20" height="14" rx="2.5"/><rect x="2" y="9" width="20" height="3.5" fill="rgba(255,255,255,0.25)"/><rect x="5" y="14.5" width="3.5" height="2" rx="0.8" fill="white"/><rect x="10.5" y="14.5" width="5.5" height="2" rx="0.8" fill="white"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="5" y1="15" x2="8.5" y2="15"/><line x1="11" y1="15" x2="16" y2="15"/></svg>
+        </div>
+        <span class="nav-label">Payment</span>
+      </button>
+      <button class="nav-item" onclick="window.location.href='allocation-history.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-4-5zm-1 5.5V3.5L17.5 7.5H14zM9 12h6v1H9zm0 2.5h4v1H9zm0-5h1.5v1H9z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><polyline points="15 2 15 7 19 7"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="15" x2="13" y2="15"/></svg>
+        </div>
+        <span class="nav-label">History</span>
+      </button>
+      <button class="nav-item" onclick="showToast('Notifications coming soon')">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7v3.59l-1.7 1.7A1 1 0 0 0 4 16h16a1 1 0 0 0 .7-1.71L19 12.59V9a7 7 0 0 0-7-7zm0 20a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0v4l-2 2v1h16v-1l-2-2V8"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+        </div>
+        <span class="nav-label">Notifications</span>
+      </button>
+      <button class="nav-item active" onclick="window.location.href='more.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
+        </div>
+        <span class="nav-label">More</span>
+      </button>
+    </nav>
+
+    <!-- ── Detail Screen ── -->
+    <div class="detail-screen" id="detail-screen">
+      <div class="status-bar" style="background:#fff;">
+        <span>9:41</span>
+        <span class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+        </span>
+      </div>
+      <div class="detail-header">
+        <div class="detail-header-top">
+          <button class="create-btn" style="padding:6px 8px;" onclick="closeDetail()">
+            <div class="create-btn-icon" style="background:linear-gradient(135deg,#6e6e73,#a1a1a6);box-shadow:none;">
+              <i class="ti ti-chevron-left"></i>
+            </div>
+          </button>
+          <div>
+            <div class="detail-title" id="detail-title">Invoice</div>
+            <div class="detail-sub" id="detail-sub"></div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-body" id="detail-body"></div>
+    </div>
+
+    <!-- ── Create Invoice Full Screen Page ── -->
+    <div class="full-screen-page" id="create-invoice-page">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686-4.687 12.284-4.687 16.97 0"/></svg>
+          <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+        </span>
+      </div>
+      <div class="full-page-nav">
+        <button class="sheet-back-btn" onclick="closeCreatePage()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        </button>
+        <div class="full-page-title">Create Invoice</div>
+        <span style="width:32px;"></span>
+      </div>
+      <div class="full-page-body">
+
+        <!-- Card 1: Customer Details -->
+        <div class="con-form-card">
+          <div class="con-form-card-header">
+            <div class="con-form-card-title">
+              <span class="con-icon-sq" style="background:linear-gradient(135deg,#2BA6FF 0%,#00c6ff 100%);box-shadow:0 2px 6px rgba(43,166,255,0.3);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              Customer Details
+            </div>
+          </div>
+          <div class="con-form-body">
+            <div class="con-field">
+              <label>Customer Name <span class="con-req">*</span></label>
+              <input type="text" class="con-input" id="f-name" autocomplete="off" placeholder="Enter customer name">
+            </div>
+            <div class="con-field">
+              <label>Address <span class="con-req">*</span></label>
+              <input type="text" class="con-input" id="f-address" autocomplete="off" placeholder="Enter address">
+            </div>
+            <div class="con-field">
+              <label>Country <span class="con-req">*</span></label>
+              <button class="filter-row-btn" onclick="openInvCountrySheet()">
+                <span id="inv-country-label" class="filter-row-value placeholder">Select Country</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <div class="con-field">
+              <label>City <span class="con-req">*</span></label>
+              <button class="filter-row-btn" onclick="openInvCitySheet()">
+                <span id="inv-city-label" class="filter-row-value placeholder">Select City</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <div class="con-field">
+              <label>Postal Code</label>
+              <input type="text" class="con-input" id="f-postal" placeholder="Enter postal code">
+            </div>
+            <div class="con-field">
+              <label>Email <span class="con-req">*</span></label>
+              <input type="email" class="con-input" id="f-email" autocomplete="off" placeholder="Enter email">
+            </div>
+            <div class="con-field">
+              <label>Phone Number <span class="con-req">*</span></label>
+              <div class="con-phone-wrap">
+                <div class="con-phone-prefix">
+                  <span class="con-phone-flag" id="f-phone-flag">🌐</span>
+                  <span class="con-phone-code" id="f-phone-code">+</span>
+                </div>
+                <input type="tel" class="con-phone-input" id="f-phone" placeholder="Phone number">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Amount Details -->
+        <div class="con-form-card">
+          <div class="con-form-card-header">
+            <div class="con-form-card-title">
+              <span class="con-icon-sq" style="background:linear-gradient(135deg,#30c46d 0%,#4adf86 100%);box-shadow:0 2px 6px rgba(48,196,109,0.3);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </span>
+              Amount Details
+            </div>
+          </div>
+          <div class="con-form-body">
+            <div class="con-field">
+              <label>Invoice Type <span class="con-req">*</span></label>
+              <div class="con-select-wrap">
+                <select class="con-select" id="f-type">
+                  <option value="">Select type</option>
+                  <option value="Deposit">Deposit Invoice</option>
+                  <option value="Commercial">Commercial Invoice</option>
+                </select>
+                <i class="ti ti-chevron-down con-chev"></i>
+              </div>
+            </div>
+            <div class="con-field">
+              <label>Chassis No. <span style="color:var(--c-text-tertiary);font-weight:400;">(Commercial only)</span></label>
+              <input type="text" class="con-input" id="f-chassis" placeholder="e.g. JN1BNE8E2HM345678">
+            </div>
+            <div class="con-field">
+              <label>Currency <span class="con-req">*</span></label>
+              <div class="con-curr-row">
+                <button class="con-curr-btn active" data-curr="USD" onclick="selectCurr(this)">USD</button>
+                <button class="con-curr-btn" data-curr="EUR" onclick="selectCurr(this)">EUR</button>
+                <button class="con-curr-btn" data-curr="AED" onclick="selectCurr(this)">AED</button>
+                <button class="con-curr-btn" data-curr="GBP" onclick="selectCurr(this)">GBP</button>
+                <button class="con-curr-btn" data-curr="JPY" onclick="selectCurr(this)">JPY</button>
+              </div>
+            </div>
+            <div class="con-field">
+              <label>Amount <span class="con-req">*</span></label>
+              <input type="number" class="con-input" id="f-amount" placeholder="0.00" min="0" step="0.01">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Fixed Footer Button -->
+      <div class="con-footer">
+        <button class="btn-primary" onclick="submitInvoice()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Create Invoice
+        </button>
+      </div>
+
+      <!-- Country Sheet -->
+      <div class="inv-sheet-backdrop" id="inv-country-backdrop" onclick="closeInvCountrySheet()"></div>
+      <div class="inv-bottom-sheet" id="inv-country-sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <button class="sheet-back-btn" onclick="closeInvCountrySheet()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+          </button>
+          <div class="sheet-title">Select Country</div>
+          <button class="sheet-action-btn" onclick="clearInvCountry()">Clear</button>
+        </div>
+        <div class="picker-search-wrap">
+          <div class="picker-search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="inv-country-search" class="picker-search-input" placeholder="Search countries…" oninput="filterInvCountryList(this.value)" autocomplete="off">
+            <button class="picker-search-clear" id="inv-country-search-clear" onclick="clearInvCountrySearch()" style="display:none">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div style="flex:1;overflow-y:auto;"><div class="stage-list" id="inv-country-list"></div></div>
+      </div>
+
+      <!-- City Sheet -->
+      <div class="inv-sheet-backdrop" id="inv-city-backdrop" onclick="closeInvCitySheet()"></div>
+      <div class="inv-bottom-sheet" id="inv-city-sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <button class="sheet-back-btn" onclick="closeInvCitySheet()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+          </button>
+          <div class="sheet-title" id="inv-city-sheet-title">Select City</div>
+          <button class="sheet-action-btn" onclick="clearInvCity()">Clear</button>
+        </div>
+        <div style="flex:1;overflow-y:auto;"><div class="stage-list" id="inv-city-list"></div></div>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="home-indicator"></div>
+</div>
+
+<script>
+  const COUNTRY_DATA = {
+    "Pakistan":       { code: "+92",  flag: "🇵🇰" },
+    "Zimbabwe":       { code: "+263", flag: "🇿🇼" },
+    "Kenya":          { code: "+254", flag: "🇰🇪" },
+    "Tanzania":       { code: "+255", flag: "🇹🇿" },
+    "Uganda":         { code: "+256", flag: "🇺🇬" },
+    "South Africa":   { code: "+27",  flag: "🇿🇦" },
+    "Nigeria":        { code: "+234", flag: "🇳🇬" },
+    "UAE":            { code: "+971", flag: "🇦🇪" },
+    "Saudi Arabia":   { code: "+966", flag: "🇸🇦" },
+    "India":          { code: "+91",  flag: "🇮🇳" },
+    "Japan":          { code: "+81",  flag: "🇯🇵" },
+    "United Kingdom": { code: "+44",  flag: "🇬🇧" },
+    "United States":  { code: "+1",   flag: "🇺🇸" },
+    "Jamaica":        { code: "+1",   flag: "🇯🇲" },
+    "Ghana":          { code: "+233", flag: "🇬🇭" },
+    "Somalia":        { code: "+252", flag: "🇸🇴" },
+  };
+
+  const invoices = [
+    { type:"Commercial", chassis:"WBA8B9C50GK100001", name:"Haroon Mahmood",                  country:"Pakistan",    city:"Lahore",       phone:"+92 322 5557902",  address:"2-10-13-301, Minami Azabu, Minato-ku, Tokyo", amount:10000,  date:"06/05/2026" },
+    { type:"Deposit",    chassis:null,                name:"Adeel Khan",                       country:"Pakistan",    city:"Lahore",       phone:"+92 312 3456789",  address:"Lahore Cantt",                                amount:100000, date:"09/04/2026" },
+    { type:"Commercial", chassis:"JF1GE6L64AG101234", name:"Blessing Kaseke",                  country:"Zimbabwe",    city:"Harare",       phone:"+263 77 335 2541", address:"blessingkaseke92@gmail.com",                  amount:4500,   date:"07/11/2025" },
+    { type:"Commercial", chassis:"MR0FB8CD500123001", name:"Jamieson Logistics",               country:"Jamaica",     city:"Kingston",     phone:"+1 876 496 7273",  address:"romainejamieson876@yahoo.com",                amount:27500,  date:"07/11/2025" },
+    { type:"Deposit",    chassis:null,                name:"Troy Montique",                    country:"Jamaica",     city:"St Catherine", phone:"+1 876 557 2606",  address:"Troymontique93@gmail.com",                    amount:4500,   date:"06/11/2025" },
+    { type:"Commercial", chassis:"5YJSA1E26HF200456", name:"Jamieson Logistics",               country:"Jamaica",     city:"St Catherine", phone:"+1 876 496 7273",  address:"romainejamieson876@yahoo.com",                amount:7500,   date:"05/11/2025" },
+    { type:"Deposit",    chassis:null,                name:"Peter Macherure",                  country:"Zimbabwe",    city:"Harare",       phone:"+263 77 304 6898", address:"9B Amby Drive Greendale",                     amount:5000,   date:"30/10/2025" },
+    { type:"Commercial", chassis:"KMHD84LF8HU100789", name:"Lawrence Bvunzawabaya",            country:"Zimbabwe",    city:"Harare",       phone:"+263 77 295 4015", address:"17 Chapungu Drive Msasa Park",                amount:3200,   date:"20/10/2025" },
+    { type:"Deposit",    chassis:null,                name:"Ahmed Al-Rashidi",                 country:"UAE",         city:"Dubai",        phone:"+971 50 123 4567", address:"Jumeirah Lake Towers, Tower 3",               amount:15000,  date:"15/10/2025" },
+    { type:"Commercial", chassis:"WDDGF8AB8EA901234", name:"Fatima Al-Zahra",                  country:"Saudi Arabia",city:"Riyadh",       phone:"+966 50 123 4567", address:"King Fahd Road, Block 5",                     amount:22000,  date:"08/10/2025" },
+    { type:"Deposit",    chassis:null,                name:"Samuel Okonkwo",                   country:"Nigeria",     city:"Lagos",        phone:"+234 80 123 4567", address:"Victoria Island, Plot 12",                    amount:6500,   date:"04/10/2025" },
+    { type:"Commercial", chassis:"JTDKB20U993300456", name:"James Ochieng",                    country:"Kenya",       city:"Nairobi",      phone:"+254 71 234 5678", address:"Westlands, Sarit Centre",                     amount:9200,   date:"25/09/2025" },
+    { type:"Deposit",    chassis:null,                name:"Mohammed Al-Hassan",               country:"UAE",         city:"Doha",         phone:"+974 30 012 345",  address:"Al Sadd Street, West Bay",                    amount:34000,  date:"18/09/2025" },
+    { type:"Commercial", chassis:"SB1EB3BE50E100678", name:"Grace Wanjiku",                    country:"Kenya",       city:"Nairobi",      phone:"+254 73 234 5678", address:"Karen, Langata Road, House 6",                amount:8900,   date:"25/08/2025" },
+    { type:"Deposit",    chassis:null,                name:"Khalid Bin Sultan",                country:"UAE",         city:"Abu Dhabi",    phone:"+971 56 123 4567", address:"Corniche Road, Tower A, Flat 502",            amount:45000,  date:"04/08/2025" },
+    { type:"Commercial", chassis:"JTMRFREV8HJ100123", name:"Rania Aziz",                       country:"Saudi Arabia",city:"Cairo",        phone:"+20 10 123 45678", address:"Zamalek, 26th of July Street",                amount:12700,  date:"10/07/2025" },
+    { type:"Deposit",    chassis:null,                name:"Tariq Hussain",                    country:"Pakistan",    city:"Karachi",      phone:"+92 300 123 4567", address:"Clifton, Block 8, Street 12",                 amount:21000,  date:"15/06/2025" },
+    { type:"Commercial", chassis:"KNDJP3A52J7400890", name:"Ama Asante",                       country:"Ghana",       city:"Kumasi",       phone:"+233 24 123 4567", address:"Adum, Harper Road, House 3",                  amount:4700,   date:"20/06/2025" },
+  ];
+
+  let filteredData = [...invoices];
+  let activeType = '';
+  let sortAsc = false;
+  let selectedCurr = 'USD';
+
+  function fmt(n) { return Number(n).toLocaleString(); }
+
+  function applyFilters() {
+    const q = document.getElementById('search-input').value.toLowerCase();
+    filteredData = invoices.filter(r => {
+      const matchQ = !q || r.name.toLowerCase().includes(q) || r.phone.includes(q)
+        || String(r.amount).includes(q) || r.country.toLowerCase().includes(q)
+        || r.city.toLowerCase().includes(q);
+      const matchT = !activeType || r.type === activeType;
+      return matchQ && matchT;
+    });
+    filteredData.sort((a, b) => {
+      const da = parseDate(a.date), db = parseDate(b.date);
+      return sortAsc ? da - db : db - da;
+    });
+    render();
+  }
+
+  function parseDate(d) {
+    const [dd, mm, yy] = d.split('/');
+    return new Date(`${yy}-${mm}-${dd}`);
+  }
+
+  function selectType(btn, type) {
+    activeType = type;
+    document.querySelectorAll('.type-chip').forEach(c => c.className = 'type-chip');
+    if (type === '') btn.classList.add('active-all');
+    else if (type === 'Commercial') btn.classList.add('active-commercial');
+    else btn.classList.add('active-deposit');
+    applyFilters();
+  }
+
+  function toggleSortOrder() {
+    sortAsc = !sortAsc;
+    showToast(sortAsc ? 'Sorted: Oldest first' : 'Sorted: Newest first');
+    applyFilters();
+  }
+
+  function render() {
+    document.getElementById('kpi-total').textContent = invoices.length;
+    const count = document.getElementById('results-count');
+    count.innerHTML = `Showing <strong>${filteredData.length}</strong> of <strong>${invoices.length}</strong> invoices`;
+
+    const list = document.getElementById('inv-list');
+    if (!filteredData.length) {
+      list.innerHTML = `<div class="empty-state"><i class="ti ti-file-off"></i><p>No invoices found</p></div>`;
+      return;
+    }
+
+    list.innerHTML = filteredData.map(r => {
+      const idx = invoices.indexOf(r);
+      const tc = r.type === 'Commercial' ? 'commercial' : 'deposit';
+      const badgeLabel = r.type === 'Commercial' ? 'Commercial Invoice' : 'Deposit Invoice';
+      return `
+      <div class="inv-card" onclick="openDetail(${idx})">
+        <div class="inv-card-header">
+          <span class="inv-type-badge ${tc}">${badgeLabel}</span>
+          <span class="inv-date">${r.date}</span>
+        </div>
+        <div class="inv-card-body">
+          <div class="inv-customer-name">${r.name}</div>
+
+          <div class="inv-info-row">
+            <i class="ti ti-map-pin inv-info-icon"></i>
+            <span class="inv-info-value">${r.country}, ${r.city}</span>
+          </div>
+
+          <div class="inv-info-row">
+            <i class="ti ti-phone inv-info-icon"></i>
+            <span class="inv-info-value">${r.phone}</span>
+          </div>
+
+          <div class="inv-info-row">
+            <i class="ti ti-home inv-info-icon"></i>
+            <span class="inv-info-value">${r.address}</span>
+          </div>
+
+          ${r.chassis ? `
+          <div class="inv-chassis-row">
+            <div class="inv-chassis-label">Chassis No.</div>
+            <div class="inv-chassis-val">${r.chassis}</div>
+          </div>` : ''}
+        </div>
+        <div class="inv-card-footer">
+          <div class="inv-amount-wrap">
+            <span class="inv-curr-pill">USD</span>
+            <span class="inv-amount">${fmt(r.amount)}</span>
+          </div>
+          <div class="inv-actions">
+            <button class="inv-act-btn" onclick="event.stopPropagation(); openDetail(${idx})">
+              <i class="ti ti-eye"></i>
+            </button>
+            <button class="inv-act-btn primary" onclick="event.stopPropagation(); showToast('Downloading invoice…')">
+              <i class="ti ti-download"></i>
+            </button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function openDetail(idx) {
+    const r = invoices[idx];
+    const tc = r.type === 'Commercial' ? 'commercial' : 'deposit';
+    document.getElementById('detail-title').textContent = `${r.type} Invoice`;
+    document.getElementById('detail-sub').textContent = r.name;
+    document.getElementById('detail-body').innerHTML = `
+      <div style="margin-bottom:14px;">
+        <span class="inv-type-badge ${tc}">${r.type} Invoice</span>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Customer Details</div>
+        <div class="detail-row"><span class="detail-key">Name</span><span class="detail-val">${r.name}</span></div>
+        <div class="detail-row"><span class="detail-key">Country</span><span class="detail-val">${r.country}</span></div>
+        <div class="detail-row"><span class="detail-key">City</span><span class="detail-val">${r.city}</span></div>
+        <div class="detail-row"><span class="detail-key">Phone</span><span class="detail-val">${r.phone}</span></div>
+        <div class="detail-row"><span class="detail-key">Address</span><span class="detail-val">${r.address}</span></div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Invoice Details</div>
+        <div class="detail-row"><span class="detail-key">Type</span><span class="detail-val">${r.type}</span></div>
+        <div class="detail-row"><span class="detail-key">Date</span><span class="detail-val">${r.date}</span></div>
+        ${r.chassis ? `<div class="detail-row"><span class="detail-key">Chassis No.</span><span class="detail-val mono">${r.chassis}</span></div>` : ''}
+        <div class="detail-row"><span class="detail-key">Currency</span><span class="detail-val">USD</span></div>
+        <div class="detail-row"><span class="detail-key">Amount</span><span class="detail-val amount">$${fmt(r.amount)}</span></div>
+      </div>
+      <button class="detail-dl-btn" onclick="showToast('Downloading invoice…')">
+        <i class="ti ti-download"></i> Download Invoice
+      </button>
+    `;
+    document.getElementById('detail-screen').classList.add('open');
+  }
+
+  function closeDetail() {
+    document.getElementById('detail-screen').classList.remove('open');
+  }
+
+  const INV_COUNTRY_DATA = {
+    'Australia':     { code:'+61',  flag:'🇦🇺', cities:['Sydney','Melbourne','Brisbane','Perth','Adelaide'] },
+    'Ghana':         { code:'+233', flag:'🇬🇭', cities:['Accra','Kumasi','Tamale'] },
+    'India':         { code:'+91',  flag:'🇮🇳', cities:['Mumbai','Delhi','Bangalore','Chennai','Kolkata'] },
+    'Jamaica':       { code:'+1',   flag:'🇯🇲', cities:['Kingston','Montego Bay','Spanish Town'] },
+    'Japan':         { code:'+81',  flag:'🇯🇵', cities:['Tokyo','Osaka','Nagoya','Yokohama'] },
+    'Kenya':         { code:'+254', flag:'🇰🇪', cities:['Nairobi','Mombasa','Kisumu','Nakuru'] },
+    'Nigeria':       { code:'+234', flag:'🇳🇬', cities:['Lagos','Abuja','Kano','Port Harcourt'] },
+    'Pakistan':      { code:'+92',  flag:'🇵🇰', cities:['Karachi','Lahore','Islamabad','Rawalpindi','Faisalabad'] },
+    'Saudi Arabia':  { code:'+966', flag:'🇸🇦', cities:['Riyadh','Jeddah','Dammam','Mecca'] },
+    'Somalia':       { code:'+252', flag:'🇸🇴', cities:['Mogadishu','Hargeisa','Kismayo'] },
+    'South Africa':  { code:'+27',  flag:'🇿🇦', cities:['Johannesburg','Cape Town','Durban','Pretoria'] },
+    'Tanzania':      { code:'+255', flag:'🇹🇿', cities:['Dar es Salaam','Dodoma','Mwanza','Arusha'] },
+    'UAE':           { code:'+971', flag:'🇦🇪', cities:['Dubai','Abu Dhabi','Sharjah','Ajman'] },
+    'Uganda':        { code:'+256', flag:'🇺🇬', cities:['Kampala','Entebbe','Gulu','Mbarara'] },
+    'United Kingdom':{ code:'+44',  flag:'🇬🇧', cities:['London','Birmingham','Manchester','Glasgow','Leeds'] },
+    'United States': { code:'+1',   flag:'🇺🇸', cities:['New York','Los Angeles','Chicago','Houston','Miami'] },
+    'Zimbabwe':      { code:'+263', flag:'🇿🇼', cities:['Harare','Bulawayo','Mutare','Gweru'] },
+  };
+  const INV_COUNTRIES = Object.keys(INV_COUNTRY_DATA).sort();
+  let invSelectedCountry = '';
+  let invSelectedCity = '';
+
+  function openInvCountrySheet() {
+    document.getElementById('inv-country-search').value = '';
+    document.getElementById('inv-country-search-clear').style.display = 'none';
+    renderInvCountryList('');
+    document.getElementById('inv-country-backdrop').classList.add('show');
+    document.getElementById('inv-country-sheet').classList.add('show');
+  }
+  function closeInvCountrySheet() {
+    document.getElementById('inv-country-backdrop').classList.remove('show');
+    document.getElementById('inv-country-sheet').classList.remove('show');
+  }
+  function filterInvCountryList(val) {
+    document.getElementById('inv-country-search-clear').style.display = val ? 'flex' : 'none';
+    renderInvCountryList(val);
+  }
+  function clearInvCountrySearch() {
+    document.getElementById('inv-country-search').value = '';
+    document.getElementById('inv-country-search-clear').style.display = 'none';
+    renderInvCountryList('');
+  }
+  function renderInvCountryList(q) {
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    const filtered = q ? INV_COUNTRIES.filter(c => c.toLowerCase().includes(q.toLowerCase())) : INV_COUNTRIES;
+    document.getElementById('inv-country-list').innerHTML = filtered.length
+      ? filtered.map(c => `<button class="stage-list-item" onclick="selectInvCountry('${c}')">
+          <span style="font-size:18px;flex-shrink:0;">${INV_COUNTRY_DATA[c].flag}</span>
+          <span class="stage-list-label">${c}</span>
+          <span class="stage-check">${invSelectedCountry===c?checkSVG:''}</span>
+        </button>`).join('')
+      : `<div class="picker-empty">No countries found</div>`;
+  }
+  function selectInvCountry(country) {
+    invSelectedCountry = country;
+    invSelectedCity = '';
+    const label = document.getElementById('inv-country-label');
+    label.textContent = `${INV_COUNTRY_DATA[country].flag} ${country}`;
+    label.classList.remove('placeholder');
+    const cityLabel = document.getElementById('inv-city-label');
+    cityLabel.textContent = 'Select City'; cityLabel.classList.add('placeholder');
+    document.getElementById('f-phone-flag').textContent = INV_COUNTRY_DATA[country].flag;
+    document.getElementById('f-phone-code').textContent = INV_COUNTRY_DATA[country].code;
+    setTimeout(() => closeInvCountrySheet(), 180);
+  }
+  function clearInvCountry() {
+    invSelectedCountry = ''; invSelectedCity = '';
+    const lbl = document.getElementById('inv-country-label');
+    lbl.textContent = 'Select Country'; lbl.classList.add('placeholder');
+    const cLbl = document.getElementById('inv-city-label');
+    cLbl.textContent = 'Select City'; cLbl.classList.add('placeholder');
+    document.getElementById('f-phone-flag').textContent = '🌐';
+    document.getElementById('f-phone-code').textContent = '+';
+    renderInvCountryList('');
+  }
+
+  function openInvCitySheet() {
+    if (!invSelectedCountry) { showToast('Please select a country first'); return; }
+    document.getElementById('inv-city-sheet-title').textContent = `Cities — ${invSelectedCountry}`;
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    const cities = INV_COUNTRY_DATA[invSelectedCountry]?.cities || [];
+    document.getElementById('inv-city-list').innerHTML = cities.length
+      ? cities.map(c => `<button class="stage-list-item" onclick="selectInvCity('${c}')">
+          <span class="stage-list-label">${c}</span>
+          <span class="stage-check">${invSelectedCity===c?checkSVG:''}</span>
+        </button>`).join('')
+      : `<div class="picker-empty">No cities available</div>`;
+    document.getElementById('inv-city-backdrop').classList.add('show');
+    document.getElementById('inv-city-sheet').classList.add('show');
+  }
+  function closeInvCitySheet() {
+    document.getElementById('inv-city-backdrop').classList.remove('show');
+    document.getElementById('inv-city-sheet').classList.remove('show');
+  }
+  function selectInvCity(city) {
+    invSelectedCity = city;
+    const el = document.getElementById('inv-city-label');
+    el.textContent = city; el.classList.remove('placeholder');
+    setTimeout(() => closeInvCitySheet(), 180);
+  }
+  function clearInvCity() {
+    invSelectedCity = '';
+    const el = document.getElementById('inv-city-label');
+    el.textContent = 'Select City'; el.classList.add('placeholder');
+    closeInvCitySheet();
+  }
+
+  function openCreatePage() {
+    document.getElementById('create-invoice-page').classList.add('show');
+  }
+  function closeCreatePage() {
+    document.getElementById('create-invoice-page').classList.remove('show');
+  }
+
+  function selectCurr(btn) {
+    document.querySelectorAll('.con-curr-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedCurr = btn.dataset.curr;
+  }
+
+  function submitInvoice() {
+    const name = document.getElementById('f-name').value.trim();
+    const type = document.getElementById('f-type').value;
+    const amount = document.getElementById('f-amount').value;
+    if (!name || !type || !amount) { showToast('Please fill required fields'); return; }
+    const address = document.getElementById('f-address').value.trim();
+    const postal = document.getElementById('f-postal').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const chassis = document.getElementById('f-chassis').value.trim() || null;
+    const phoneCode = document.getElementById('f-phone-code').textContent;
+    const today = new Date();
+    const dateStr = `${String(today.getDate()).padStart(2,'0')}/${String(today.getMonth()+1).padStart(2,'0')}/${today.getFullYear()}`;
+    invoices.unshift({
+      type, chassis, name,
+      country: invSelectedCountry || '—',
+      city: invSelectedCity || '—',
+      phone: phoneCode && phoneCode !== '+' ? `${phoneCode} ${phone}` : phone,
+      address: address || '—',
+      amount: parseFloat(amount), date: dateStr
+    });
+    closeCreatePage();
+    applyFilters();
+    showToast('Invoice created successfully');
+    // Reset form
+    ['f-name','f-address','f-postal','f-email','f-phone','f-chassis','f-amount'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    document.getElementById('f-type').value = '';
+    document.getElementById('f-phone-flag').textContent = '🌐';
+    document.getElementById('f-phone-code').textContent = '+';
+    invSelectedCountry = ''; invSelectedCity = '';
+    const cl = document.getElementById('inv-country-label');
+    if (cl) { cl.textContent = 'Select Country'; cl.classList.add('placeholder'); }
+    const cityL = document.getElementById('inv-city-label');
+    if (cityL) { cityL.textContent = 'Select City'; cityL.classList.add('placeholder'); }
+    document.querySelectorAll('.con-curr-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.con-curr-btn[data-curr="USD"]').classList.add('active');
+  }
+  let _toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-text').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  applyFilters();
+</script>
+</body>
+</html>
