@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otoz Connect · About Us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+  :root {
+    --c-primary: #173559;
+    --c-primary-dark: #0f2540;
+    --c-accent:  #2BA6FF;
+    --c-text:    #1d1d1f;
+    --c-text-muted:    #6e6e73;
+    --c-text-subtle:   #86868b;
+    --c-text-tertiary: #a1a1a6;
+    --c-bg-app:      #f5f5f7;
+    --c-divider:     #e8e8ed;
+    --c-divider-soft:#f1f5f9;
+    --c-success: #30c46d;
+    --c-danger:  #ff3b30;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: #e8e8ed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .device {
+    width: 380px;
+    height: 800px;
+    background: #1d1d1f;
+    border-radius: 54px;
+    padding: 11px;
+    position: relative;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.08);
+  }
+  .home-indicator {
+    position: absolute;
+    bottom: 9px; left: 50%;
+    transform: translateX(-50%);
+    width: 140px; height: 5px;
+    background: #1d1d1f; border-radius: 3px;
+    opacity: 0.9; z-index: 100; pointer-events: none;
+  }
+  .screen-wrapper {
+    width: 100%; height: 100%;
+    background: var(--c-bg-app);
+    border-radius: 43px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 64px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding: 0 32px 8px;
+    font-size: 16px; font-weight: 600; color: var(--c-text);
+    letter-spacing: -0.02em; flex-shrink: 0;
+    background: #fff;
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; }
+
+  /* Page nav header */
+  .cv-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 16px 10px;
+    flex-shrink: 0;
+    border-bottom: 0.5px solid var(--c-divider-soft);
+    background: #fff;
+  }
+  .cv-back-btn {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: var(--c-bg-app);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .cv-back-btn i { font-size: 19px; color: var(--c-text); }
+  .cv-nav-title { font-size: 16px; font-weight: 700; color: var(--c-text); letter-spacing: -0.015em; }
+  .cv-nav-spacer { width: 32px; flex-shrink: 0; }
+
+  /* Scroll area */
+  .page-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 0 100px;
+  }
+
+  /* ── HERO GRADIENT CARD ── */
+  .hero-card {
+    margin: 14px 14px 18px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #173559 0%, #1d4276 50%, #2BA6FF 130%);
+    padding: 22px 20px 22px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 30px -10px rgba(23,53,89,0.45);
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -30px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(43,166,255,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.16);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 999px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    position: relative; z-index: 2;
+  }
+  .hero-eyebrow i { font-size: 11px; }
+  .hero-title {
+    font-size: 24px; font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    position: relative; z-index: 2;
+  }
+  .hero-title em {
+    font-style: normal;
+    background: linear-gradient(135deg, #4adf86 0%, #2BA6FF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.82);
+    line-height: 1.5;
+    position: relative; z-index: 2;
+    margin-bottom: 14px;
+  }
+  .commit-chips {
+    display: flex; flex-wrap: wrap;
+    gap: 6px;
+    position: relative; z-index: 2;
+  }
+  .commit-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 9px;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 999px;
+    font-size: 10.5px; font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.01em;
+  }
+  .commit-chip i { font-size: 11px; color: #4adf86; }
+
+  /* ── Section label ── */
+  .section-label {
+    display: flex; align-items: center;
+    font-size: 11px; font-weight: 700;
+    color: var(--c-text-subtle);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 4px 18px 12px;
+  }
+  .section-label .accent-line {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--c-divider) 0%, transparent 100%);
+    margin-left: 10px;
+  }
+
+  /* ── Story card ── */
+  .story-card {
+    margin: 0 14px 16px;
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .story-text {
+    font-size: 13px;
+    color: var(--c-text);
+    line-height: 1.6;
+    letter-spacing: -0.005em;
+  }
+  .story-text strong { color: var(--c-primary); font-weight: 700; }
+  .story-text + .story-text { margin-top: 12px; }
+
+  /* ── Highlight blockquote card ── */
+  .highlight-card {
+    margin: 0 14px 16px;
+    background: linear-gradient(135deg, rgba(43,166,255,0.06) 0%, rgba(48,196,109,0.04) 100%);
+    border: 1px solid rgba(43,166,255,0.18);
+    border-radius: 18px;
+    padding: 16px;
+    position: relative;
+  }
+  .highlight-quote-mark {
+    position: absolute; top: 10px; left: 14px;
+    font-size: 36px; font-weight: 800;
+    color: var(--c-accent);
+    line-height: 1; opacity: 0.25;
+    pointer-events: none;
+  }
+  .highlight-text {
+    font-size: 13px;
+    color: var(--c-text);
+    line-height: 1.6;
+    padding-left: 18px;
+    position: relative; z-index: 2;
+  }
+  .highlight-text strong { color: var(--c-primary); font-weight: 700; }
+
+  /* ── Milestone strip ── */
+  .milestone-strip {
+    margin: 0 14px 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .milestone-card {
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .milestone-value {
+    font-size: 20px; font-weight: 800;
+    color: var(--c-text);
+    letter-spacing: -0.025em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .milestone-value .unit {
+    font-size: 12px; font-weight: 700;
+    color: var(--c-accent);
+    margin-left: 1px;
+  }
+  .milestone-label {
+    font-size: 10.5px; font-weight: 600;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Stats grid (3 cards) ── */
+  .stats-grid {
+    margin: 0 14px 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .stat-card {
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 14px;
+    padding: 14px 8px 12px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 40%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--c-accent), transparent);
+    opacity: 0.6;
+  }
+  .stat-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    margin: 0 auto 8px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, rgba(43,166,255,0.10) 0%, rgba(43,166,255,0.04) 100%);
+    border: 1px solid rgba(43,166,255,0.18);
+  }
+  .stat-icon i { font-size: 19px; color: var(--c-accent); }
+  .stat-value {
+    font-size: 18px; font-weight: 800;
+    color: var(--c-text); letter-spacing: -0.02em;
+    line-height: 1; margin-bottom: 3px;
+  }
+  .stat-label {
+    font-size: 10.5px; font-weight: 600;
+    color: var(--c-text-muted);
+  }
+
+  /* ── Purpose card (closing) ── */
+  .purpose-card {
+    margin: 0 14px;
+    background: linear-gradient(135deg, #173559 0%, #2a4a73 100%);
+    border-radius: 18px;
+    padding: 18px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 24px -10px rgba(23,53,89,0.4);
+  }
+  .purpose-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(74,223,134,0.20) 0%, transparent 70%);
+  }
+  .purpose-eyebrow {
+    font-size: 10px; font-weight: 700;
+    color: #4adf86;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    position: relative; z-index: 2;
+  }
+  .purpose-title {
+    font-size: 15px; font-weight: 700;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    position: relative; z-index: 2;
+  }
+  .purpose-title strong {
+    background: linear-gradient(135deg, #4adf86 0%, #2BA6FF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+  }
+
+  /* Bottom Nav */
+  .bottom-nav {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 76px; background: #fff;
+    border-top: 0.5px solid var(--c-divider);
+    display: flex; justify-content: space-around;
+    align-items: flex-start; padding: 10px 0 0;
+    z-index: 40;
+  }
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-start;
+    gap: 4px; cursor: pointer;
+    background: none; border: none;
+    font-family: inherit; padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-icon {
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-icon svg { width: 24px; height: 24px; display: block; overflow: visible; }
+  .nav-label {
+    font-size: 10px; font-weight: 500;
+    color: #a0a0ab; letter-spacing: 0.01em; line-height: 1;
+  }
+  .nav-item.active .nav-label { color: var(--c-primary); font-weight: 700; }
+  .nav-item.active .nav-icon svg { color: var(--c-primary); }
+  .nav-icon .icon-outline { display: block; color: #a0a0ab; }
+  .nav-icon .icon-filled  { display: none;  color: var(--c-primary); }
+  .nav-item.active .nav-icon .icon-outline { display: none; }
+  .nav-item.active .nav-icon .icon-filled  { display: block; }
+</style>
+</head>
+<body>
+
+<div class="device">
+  <div class="screen-wrapper">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <span class="status-icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686-4.687 12.284-4.687 16.97 0"/></svg>
+        <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+      </span>
+    </div>
+
+    <!-- Header -->
+    <div class="cv-nav">
+      <button class="cv-back-btn" onclick="window.location.href='more.html'">
+        <i class="ti ti-chevron-left"></i>
+      </button>
+      <div class="cv-nav-title">About Us</div>
+      <span class="cv-nav-spacer"></span>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="page-scroll">
+
+      <!-- HERO -->
+      <div class="hero-card">
+        <span class="hero-eyebrow">
+          <i class="ti ti-sparkles"></i>
+          Why otoz.ai
+        </span>
+        <div class="hero-title">Our Commitments to <em>Speed &amp; Trust</em></div>
+        <div class="hero-sub">
+          Speed, Reliability, Quality &amp; Affordability — the four pillars driving how we transform cross-border car trade.
+        </div>
+        <div class="commit-chips">
+          <span class="commit-chip"><i class="ti ti-bolt"></i> Speed</span>
+          <span class="commit-chip"><i class="ti ti-shield-check"></i> Reliability</span>
+          <span class="commit-chip"><i class="ti ti-award"></i> Quality</span>
+          <span class="commit-chip"><i class="ti ti-coin"></i> Affordability</span>
+        </div>
+      </div>
+
+      <!-- STORY (first paragraph) -->
+      <div class="section-label">Our Story <span class="accent-line"></span></div>
+      <div class="story-card">
+        <p class="story-text">
+          Otoz.ai is building the <strong>world's first AI-powered cross-border automobile marketplace</strong>, connecting trusted sellers in developed markets with eager buyers across emerging economies.
+        </p>
+      </div>
+
+      <!-- HIGHLIGHT — second paragraph -->
+      <div class="highlight-card">
+        <span class="highlight-quote-mark">"</span>
+        <p class="highlight-text">
+          With over <strong>17 years</strong> of hands-on experience in Japanese car exports to more than <strong>20 countries</strong>, our team has seen every inefficiency in the industry. Traditional methods demand <strong>18 hours of manual work per car</strong> and inflate costs by <strong>40% through middlemen</strong>. We created Otoz.ai to change that.
+        </p>
+      </div>
+
+      <!-- MILESTONE — first 90 days -->
+      <div class="section-label">First 90 Days <span class="accent-line"></span></div>
+      <div class="milestone-strip">
+        <div class="milestone-card">
+          <div class="milestone-value">$2.9<span class="unit">M</span></div>
+          <div class="milestone-label">GMV Processed</div>
+        </div>
+        <div class="milestone-card">
+          <div class="milestone-value">9,000<span class="unit">+</span></div>
+          <div class="milestone-label">Units Listed</div>
+        </div>
+        <div class="milestone-card">
+          <div class="milestone-value">30<span class="unit"> min</span></div>
+          <div class="milestone-label">Admin Time</div>
+        </div>
+        <div class="milestone-card">
+          <div class="milestone-value">40<span class="unit">%</span></div>
+          <div class="milestone-label">Cost Reduction</div>
+        </div>
+      </div>
+
+      <!-- STORY — third paragraph -->
+      <div class="story-card">
+        <p class="story-text">
+          By combining <strong>AI, smart auctions, and real-time data</strong>, we reduce admin work to 30 minutes, empower buyers with transparent insights, and help sellers expand globally at lower cost — proving both demand and scalability in one of the world's toughest markets, Japan.
+        </p>
+      </div>
+
+      <!-- GLOBAL REACH STATS -->
+      <div class="section-label">Global Reach <span class="accent-line"></span></div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="ti ti-world"></i></div>
+          <div class="stat-value">100+</div>
+          <div class="stat-label">Countries</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="ti ti-car"></i></div>
+          <div class="stat-value">10K+</div>
+          <div class="stat-label">Inventory</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="ti ti-clipboard-list"></i></div>
+          <div class="stat-value">500+</div>
+          <div class="stat-label">Inquiries</div>
+        </div>
+      </div>
+
+      <!-- PURPOSE -->
+      <div class="purpose-card">
+        <div class="purpose-eyebrow">Our Purpose</div>
+        <div class="purpose-title">
+          To become the <strong>operating system for global used-car trade</strong> — unlocking fair prices, faster deals, and sustainable growth for millions of buyers and sellers worldwide.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+
+      <button class="nav-item" onclick="window.location.href='home.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5L3 9.8V20a1 1 0 0 0 1 1h5.5v-5h5v5H20a1 1 0 0 0 1-1V9.8L12 2.5z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.8L12 2.5l9 7.3V20a1 1 0 0 1-1 1h-5.5v-5h-5v5H4a1 1 0 0 1-1-1V9.8z"/></svg>
+        </div>
+        <span class="nav-label">Home</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='payment.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="5" width="20" height="14" rx="2.5"/><rect x="2" y="9" width="20" height="3.5" fill="rgba(255,255,255,0.25)"/><rect x="5" y="14.5" width="3.5" height="2" rx="0.8" fill="white"/><rect x="10.5" y="14.5" width="5.5" height="2" rx="0.8" fill="white"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="5" y1="15" x2="8.5" y2="15"/><line x1="11" y1="15" x2="16" y2="15"/></svg>
+        </div>
+        <span class="nav-label">Payment</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='allocation-history.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-4-5zm-1 5.5V3.5L17.5 7.5H14zM9 12h6v1H9zm0 2.5h4v1H9zm0-5h1.5v1H9z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><polyline points="15 2 15 7 19 7"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="15" x2="13" y2="15"/></svg>
+        </div>
+        <span class="nav-label">History</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='more.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7v3.59l-1.7 1.7A1 1 0 0 0 4 16h16a1 1 0 0 0 .7-1.71L19 12.59V9a7 7 0 0 0-7-7zm0 20a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0v4l-2 2v1h16v-1l-2-2V8"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+        </div>
+        <span class="nav-label">Notifications</span>
+      </button>
+
+      <button class="nav-item active" onclick="window.location.href='more.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><line x1="17.25" y1="13.5" x2="17.25" y2="21"/><line x1="13.5" y1="17.25" x2="21" y2="17.25"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><line x1="17.25" y1="13.5" x2="17.25" y2="21"/><line x1="13.5" y1="17.25" x2="21" y2="17.25"/></svg>
+        </div>
+        <span class="nav-label">More</span>
+      </button>
+
+    </nav>
+
+  </div>
+  <div class="home-indicator"></div>
+</div>
+
+</body>
+</html>
