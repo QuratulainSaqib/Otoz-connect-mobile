@@ -213,14 +213,19 @@
   }
   .kpi-value .cur { font-size: 12px; font-weight: 600; opacity: 0.7; margin-right: 2px; }
 
+  /* Sticky wrapper — tabs + toolbar stay together on top when scrolling */
+  .sticky-header-group {
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    background: var(--c-bg-app);
+  }
+
   /* TABS */
   .tabs-wrap {
     display: flex;
     background: var(--c-bg-app);
     padding: 10px 16px 0;
-    position: sticky;
-    top: 0;
-    z-index: 6;
   }
   .tabs-inner {
     display: flex;
@@ -282,9 +287,6 @@
     display: flex;
     gap: 8px;
     align-items: center;
-    position: sticky;
-    top: 54px;
-    z-index: 5;
     background: var(--c-bg-app);
   }
   .search-wrap {
@@ -821,27 +823,30 @@
         </div>
       </div>
 
-      <!-- Tabs -->
-      <div class="tabs-wrap">
-        <div class="tabs-inner">
-          <button class="tab-btn active" id="tab-pending" onclick="switchTab('pending')">
-            <i class="ti ti-clock"></i>
-            <span class="tab-label">Pending Allocation</span>
-            <span class="tab-count" id="count-pending">20</span>
-          </button>
-          <button class="tab-btn" id="tab-completed" onclick="switchTab('completed')">
-            <i class="ti ti-circle-check"></i>
-            <span class="tab-label">Completed Payments</span>
-            <span class="tab-count" id="count-completed">20</span>
-          </button>
+      <!-- Sticky group — Tabs + Search stay fixed together on scroll -->
+      <div class="sticky-header-group">
+        <!-- Tabs -->
+        <div class="tabs-wrap">
+          <div class="tabs-inner">
+            <button class="tab-btn active" id="tab-pending" onclick="switchTab('pending')">
+              <i class="ti ti-clock"></i>
+              <span class="tab-label">Pending Allocation</span>
+              <span class="tab-count" id="count-pending">20</span>
+            </button>
+            <button class="tab-btn" id="tab-completed" onclick="switchTab('completed')">
+              <i class="ti ti-circle-check"></i>
+              <span class="tab-label">Completed Payments</span>
+              <span class="tab-count" id="count-completed">20</span>
+            </button>
+          </div>
         </div>
-      </div>
 
-      <!-- Toolbar -->
-      <div class="toolbar">
-        <div class="search-wrap">
-          <i class="ti ti-search"></i>
-          <input type="text" id="search-input" placeholder="Search vehicles..." oninput="onSearch(this.value)">
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div class="search-wrap">
+            <i class="ti ti-search"></i>
+            <input type="text" id="search-input" placeholder="Search vehicles..." oninput="onSearch(this.value)">
+          </div>
         </div>
       </div>
 
