@@ -65,7 +65,7 @@
     padding: 0 32px 8px;
     font-size: 16px; font-weight: 600; color: var(--c-text);
     letter-spacing: -0.02em; flex-shrink: 0;
-    background: var(--c-bg-app);
+    background: #fff;
   }
   .status-icons { display: flex; gap: 6px; align-items: center; }
   .status-icons svg { width: 16px; height: 16px; }
@@ -85,27 +85,33 @@
   .toast.show { top: 75px; }
   .toast .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-success); flex-shrink: 0; }
 
-  /* ── Header (same as home.html dash-header) ── */
+  /* ── Header (same as completed-vehicles cv-nav) ── */
+  .cv-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 16px 10px;
+    flex-shrink: 0;
+    border-bottom: 0.5px solid var(--c-divider-soft);
+    background: #fff;
+  }
+  .cv-back-btn {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: var(--c-bg-app);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .cv-back-btn i { font-size: 19px; color: var(--c-text); }
+  .cv-nav-title { font-size: 16px; font-weight: 700; color: var(--c-text); letter-spacing: -0.015em; }
+  .cv-nav-spacer { width: 32px; flex-shrink: 0; }
+
   .page-header {
     background: var(--c-bg-app);
     flex-shrink: 0;
   }
-  .header-top {
-    padding: 8px 20px 14px;
-    display: flex; justify-content: space-between; align-items: center;
-    gap: 12px;
-  }
-  .header-left {
-    display: flex; flex-direction: column;
-    min-width: 0; flex: 1 1 auto; overflow: hidden;
-  }
-  .header-greeting {
-    font-size: 22px; font-weight: 700; color: var(--c-text);
-    letter-spacing: -0.025em; line-height: 1.15;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .header-greeting .name { color: var(--c-primary); }
-  .header-subtitle { font-size: 13px; color: var(--c-text-muted); margin-top: 3px; }
 
   /* Create btn — same badge style as home.html total-cars-badge */
   .create-btn {
@@ -132,7 +138,7 @@
   .create-btn-label { font-size: 9px; color: var(--c-text-muted); font-weight: 500; white-space: nowrap; }
 
   /* KPI — exactly home.html stat-card */
-  .kpi-wrap { margin: 0 20px 14px; }
+  .kpi-wrap { margin: 14px 20px; }
   .kpi-card {
     background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
     border: 1px solid var(--c-divider);
@@ -626,14 +632,15 @@
     </div>
 
     <!-- Header — home.html dash-header style -->
-    <div class="page-header">
-      <div class="header-top">
-        <div class="header-left">
-          <div class="header-greeting">Customer <span class="name">Invoices</span></div>
-          <div class="header-subtitle">Manage and track all customer invoices.</div>
-        </div>
-      </div>
+    <div class="cv-nav">
+      <button class="cv-back-btn" onclick="window.location.href='more.html'">
+        <i class="ti ti-chevron-left"></i>
+      </button>
+      <div class="cv-nav-title">Customer Invoices</div>
+      <span class="cv-nav-spacer"></span>
+    </div>
 
+    <div class="page-header">
       <!-- KPI — home.html stat-card style -->
       <div class="kpi-wrap">
         <div class="kpi-card">
