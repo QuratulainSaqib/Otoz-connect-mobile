@@ -157,8 +157,13 @@
     color: var(--c-text); letter-spacing: -0.01em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
+  .more-profile-label {
+    font-size: 11px; color: var(--c-text-subtle); font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 2px;
+  }
   .more-profile-email {
-    font-size: 13px; color: var(--c-text-muted); font-weight: 500;
+    font-size: 15px; color: var(--c-text); font-weight: 500;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .more-profile-chev i { font-size: 16px; color: var(--c-text-tertiary); }
@@ -288,12 +293,15 @@
     <div class="more-scroll">
 
       <!-- ── Profile Card ── -->
-      <div class="more-profile-card" onclick="showToast('Edit Profile coming soon')">
-        <div class="more-avatar">
-          <i class="ti ti-user"></i>
-        </div>
-        <div class="more-profile-info">
-          <div class="more-profile-email">ahmed.khan@otoz.ai</div>
+      <div class="more-group" style="margin-bottom: 24px;">
+        <div class="more-row" style="cursor:default;">
+          <span class="more-row-icon">
+            <i class="ti ti-mail"></i>
+          </span>
+          <div class="more-profile-info">
+            <div class="more-profile-label">Email</div>
+            <div class="more-profile-email">ahmed.khan@otoz.ai</div>
+          </div>
         </div>
       </div>
 
