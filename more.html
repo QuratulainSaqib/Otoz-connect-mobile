@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otoz Connect · More</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+  :root {
+    --c-primary: #173559;
+    --c-accent:  #2BA6FF;
+    --c-text:    #1d1d1f;
+    --c-text-muted:    #6e6e73;
+    --c-text-subtle:   #86868b;
+    --c-text-tertiary: #a1a1a6;
+    --c-bg-app:      #f5f5f7;
+    --c-divider:     #e8e8ed;
+    --c-divider-soft:#f1f5f9;
+    --c-success: #30c46d;
+    --c-danger:  #ff3b30;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: #e8e8ed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Device shell ── */
+  .device {
+    width: 380px;
+    height: 800px;
+    background: #1d1d1f;
+    border-radius: 54px;
+    padding: 11px;
+    position: relative;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.08);
+  }
+  .home-indicator {
+    position: absolute;
+    bottom: 9px; left: 50%;
+    transform: translateX(-50%);
+    width: 140px; height: 5px;
+    background: #1d1d1f;
+    border-radius: 3px;
+    opacity: 0.9;
+    z-index: 100;
+    pointer-events: none;
+  }
+  .screen-wrapper {
+    width: 100%; height: 100%;
+    background: var(--c-bg-app);
+    border-radius: 43px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Status bar ── */
+  .status-bar {
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 32px 8px;
+    font-size: 16px; font-weight: 600;
+    color: var(--c-text);
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+    background: #fff;
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; }
+
+  /* ── Toast ── */
+  .toast {
+    position: absolute;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--c-text);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-size: 13.5px; font-weight: 500;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    z-index: 1000;
+    transition: top 0.4s cubic-bezier(0.32,0.72,0,1);
+    white-space: nowrap;
+  }
+  .toast.show { top: 75px; }
+  .toast .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-success); flex-shrink: 0; }
+
+  /* ── Header ── */
+  .more-header {
+    background: #fff;
+    padding: 10px 20px 12px;
+    border-bottom: 1px solid var(--c-divider-soft);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+  .more-logo {
+    height: 26px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* ── Scroll area ── */
+  .more-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 16px 100px;
+  }
+
+  /* ── Profile card ── */
+  .more-profile-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 18px;
+    padding: 14px 14px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .more-profile-card:active { transform: scale(0.98); }
+
+  .more-avatar {
+    width: 50px; height: 50px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--c-primary) 0%, #2a4a73 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(23,53,89,0.3);
+  }
+  .more-avatar i { font-size: 24px; color: #fff; }
+  .more-profile-info { flex: 1; min-width: 0; }
+  .more-profile-name {
+    font-size: 15px; font-weight: 700;
+    color: var(--c-text); letter-spacing: -0.01em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .more-profile-email {
+    font-size: 13px; color: var(--c-text-muted); font-weight: 500;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .more-profile-chev i { font-size: 16px; color: var(--c-text-tertiary); }
+
+  /* ── Section label ── */
+  .more-section-label {
+    font-size: 11px; font-weight: 600;
+    color: var(--c-text-subtle);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+
+  /* ── Group card ── */
+  .more-group {
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  /* ── Row ── */
+  .more-row {
+    width: 100%;
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 14px;
+    background: none; border: none;
+    cursor: pointer; font-family: inherit;
+    text-align: left;
+    transition: background 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .more-row:active { background: var(--c-bg-app); }
+
+  .more-row-icon {
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .more-row-icon i { font-size: 20px; color: var(--c-text); }
+
+  .more-row-text {
+    flex: 1;
+    font-size: 15px; font-weight: 400;
+    color: var(--c-text); letter-spacing: -0.005em;
+  }
+  .more-row-chev i { font-size: 15px; color: var(--c-text-tertiary); }
+
+  .more-divider {
+    height: 1px;
+    background: var(--c-divider);
+    margin-left: 52px;
+  }
+
+  /* logout row */
+  .more-logout-text { color: var(--c-danger) !important; }
+  .more-logout-icon i { color: var(--c-danger) !important; }
+
+  /* ── Bottom nav ── */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: #fff;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding: 10px 0 0;
+    z-index: 40;
+  }
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-start;
+    gap: 4px; cursor: pointer;
+    background: none; border: none;
+    font-family: inherit; padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-icon {
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-icon svg { width: 24px; height: 24px; display: block; overflow: visible; }
+  .nav-label {
+    font-size: 10px; font-weight: 500;
+    color: #a0a0ab; letter-spacing: 0.01em; line-height: 1;
+  }
+  .nav-item.active .nav-label { color: var(--c-primary); font-weight: 700; }
+  .nav-item.active .nav-icon svg { color: var(--c-primary); }
+  .nav-icon .icon-outline { display: block; color: #a0a0ab; }
+  .nav-icon .icon-filled  { display: none;  color: var(--c-primary); }
+  .nav-item.active .nav-icon .icon-outline { display: none; }
+  .nav-item.active .nav-icon .icon-filled  { display: block; }
+
+</style>
+</head>
+<body>
+
+<div class="device">
+  <div class="screen-wrapper">
+
+    <div class="toast" id="toast">
+      <span class="dot"></span>
+      <span id="toast-text"></span>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <span class="status-icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686-4.687 12.284-4.687 16.97 0"/></svg>
+        <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+      </span>
+    </div>
+
+    <!-- Header with Logo -->
+    <div class="more-header">
+      <img src="otoz_connect_logo.png" alt="Otoz Connect" class="more-logo">
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="more-scroll">
+
+      <!-- ── Profile Card ── -->
+      <div class="more-profile-card" onclick="showToast('Edit Profile coming soon')">
+        <div class="more-avatar">
+          <i class="ti ti-user"></i>
+        </div>
+        <div class="more-profile-info">
+          <div class="more-profile-email">ahmed.khan@otoz.ai</div>
+        </div>
+      </div>
+
+      <!-- ── Profile Section ── -->
+      <div class="more-section-label">My Account</div>
+      <div class="more-group">
+        <button class="more-row" onclick="showToast('Completed Vehicles coming soon')">
+          <span class="more-row-icon">
+            <i class="ti ti-circle-check"></i>
+          </span>
+          <span class="more-row-text">Completed Vehicles</span>
+          <span class="more-row-chev"><i class="ti ti-chevron-right"></i></span>
+        </button>
+        <div class="more-divider"></div>
+        <button class="more-row" onclick="showToast('Customer Invoices coming soon')">
+          <span class="more-row-icon">
+            <i class="ti ti-file-invoice"></i>
+          </span>
+          <span class="more-row-text">Customer Invoices</span>
+          <span class="more-row-chev"><i class="ti ti-chevron-right"></i></span>
+        </button>
+      </div>
+
+      <!-- ── Help & Support Section ── -->
+      <div class="more-section-label">Help &amp; Support</div>
+      <div class="more-group">
+        <button class="more-row" onclick="showToast('Contact Us coming soon')">
+          <span class="more-row-icon">
+            <i class="ti ti-headset"></i>
+          </span>
+          <span class="more-row-text">Contact Us</span>
+          <span class="more-row-chev"><i class="ti ti-chevron-right"></i></span>
+        </button>
+        <div class="more-divider"></div>
+        <button class="more-row" onclick="showToast('How It Works coming soon')">
+          <span class="more-row-icon">
+            <i class="ti ti-list-numbers"></i>
+          </span>
+          <span class="more-row-text">How It Works</span>
+          <span class="more-row-chev"><i class="ti ti-chevron-right"></i></span>
+        </button>
+        <div class="more-divider"></div>
+        <button class="more-row" onclick="showToast('FAQ coming soon')">
+          <span class="more-row-icon">
+            <i class="ti ti-help-circle"></i>
+          </span>
+          <span class="more-row-text">FAQ's</span>
+          <span class="more-row-chev"><i class="ti ti-chevron-right"></i></span>
+        </button>
+      </div>
+
+      <!-- ── About otoz.ai Section ── -->
+      <div class="more-section-label">About otoz.ai</div>
+      <div class="more-group">
+        <button class="more-row" onclick="showToast('About Us coming soon')">
+          <span class="more-row-icon">
+            <i class="ti ti-info-circle"></i>
+          </span>
+          <span class="more-row-text">About Us</span>
+          <span class="more-row-chev"><i class="ti ti-chevron-right"></i></span>
+        </button>
+        <div class="more-divider"></div>
+        <button class="more-row" onclick="showToast('Privacy Policy coming soon')">
+          <span class="more-row-icon">
+            <i class="ti ti-shield-lock"></i>
+          </span>
+          <span class="more-row-text">Privacy Policy</span>
+          <span class="more-row-chev"><i class="ti ti-chevron-right"></i></span>
+        </button>
+      </div>
+
+      <!-- ── Logout ── -->
+      <div class="more-group">
+        <button class="more-row" onclick="showToast('Logging out...')">
+          <span class="more-row-icon more-logout-icon">
+            <i class="ti ti-logout"></i>
+          </span>
+          <span class="more-row-text more-logout-text">Logout</span>
+          <span class="more-row-chev"><i class="ti ti-chevron-right"></i></span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+
+      <button class="nav-item" onclick="window.location.href='home.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5L3 9.8V20a1 1 0 0 0 1 1h5.5v-5h5v5H20a1 1 0 0 0 1-1V9.8L12 2.5z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.8L12 2.5l9 7.3V20a1 1 0 0 1-1 1h-5.5v-5h-5v5H4a1 1 0 0 1-1-1V9.8z"/></svg>
+        </div>
+        <span class="nav-label">Home</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='payment.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="5" width="20" height="14" rx="2.5"/><rect x="2" y="9" width="20" height="3.5" fill="rgba(255,255,255,0.25)"/><rect x="5" y="14.5" width="3.5" height="2" rx="0.8" fill="white"/><rect x="10.5" y="14.5" width="5.5" height="2" rx="0.8" fill="white"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="5" y1="15" x2="8.5" y2="15"/><line x1="11" y1="15" x2="16" y2="15"/></svg>
+        </div>
+        <span class="nav-label">Payment</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='allocation-history.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-4-5zm-1 5.5V3.5L17.5 7.5H14zM9 12h6v1H9zm0 2.5h4v1H9zm0-5h1.5v1H9z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><polyline points="15 2 15 7 19 7"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="15" x2="13" y2="15"/></svg>
+        </div>
+        <span class="nav-label">History</span>
+      </button>
+
+      <button class="nav-item" onclick="showToast('Notifications coming soon')">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7v3.59l-1.7 1.7A1 1 0 0 0 4 16h16a1 1 0 0 0 .7-1.71L19 12.59V9a7 7 0 0 0-7-7zm0 20a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0v4l-2 2v1h16v-1l-2-2V8"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+        </div>
+        <span class="nav-label">Notifications</span>
+      </button>
+
+      <button class="nav-item active">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><line x1="17.25" y1="13.5" x2="17.25" y2="21"/><line x1="13.5" y1="17.25" x2="21" y2="17.25"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><line x1="17.25" y1="13.5" x2="17.25" y2="21"/><line x1="13.5" y1="17.25" x2="21" y2="17.25"/></svg>
+        </div>
+        <span class="nav-label">More</span>
+      </button>
+
+    </nav>
+
+  </div>
+  <div class="home-indicator"></div>
+</div>
+
+<script>
+  let _toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-text').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+</script>
+
+</body>
+</html>
