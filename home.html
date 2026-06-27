@@ -4206,8 +4206,8 @@
       </div>
 
       <!-- Footer -->
-      <div class="vw-footer">
-        <div class="vw-footer-note">
+      <div class="vw-footer" id="vw-footer">
+        <div class="vw-footer-note" id="vw-footer-note">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           These details are reflected on the Bill of Lading
         </div>
@@ -5023,7 +5023,7 @@
         { title: 'Port Handling Revision', amount: 850,  date: '10 / 06 / 2026', note: 'Revised port handling and documentation fees at Lagos destination port.' },
       ]
     },
-    { id: 8, stage: 8, make: 'Toyota',     model: 'Raize',     code: '5BA-A200A', year: 2022, chassis: '5YJSA1E26HF200012', port: 'Zimbabwe',      purchaseDate: '02/08/2026', purchCurr: 'USD', purchPrice: 24205,   saleCurr: 'JPY', salePrice: 4150000, bcn: 'BCN',                            updated: false },
+    { id: 8, stage: 8, make: 'Toyota',     model: 'Raize',     code: '5BA-A200A', year: 2022, chassis: '5YJSA1E26HF200012', port: 'Zimbabwe',      purchaseDate: '02/08/2026', purchCurr: 'USD', purchPrice: 24205,   saleCurr: 'JPY', salePrice: 4150000, bcn: 'BCN',                            updated: true },
   ];
 
   let state = { stage: 'all', search: '', filters: { stage: '', make: '', model: '', port: '' }, sort: 'stage_order' };
@@ -5386,20 +5386,26 @@
       buyerEl.innerHTML = buildVwRows(data.buyer);
     }
 
-    // Smart footer button: if change-requested → show "View Change Request", else → "Request Change"
+    // Smart footer: hide completely for stage 8 (Unit Received), show for all other stages
+    const vwFooter = document.getElementById('vw-footer');
     const btnArea = document.getElementById('vw-footer-btn-area');
-    if (v.state === 'change-requested') {
-      btnArea.innerHTML = `
-        <button class="btn-danger-outline" style="background:#ff9500;box-shadow:0 2px 8px rgba(255,149,0,0.28);" onclick="openChangeView(${numId})">
-          <i class="ti ti-eye" style="font-size:16px;color:#fff;"></i>
-          View Change Request
-        </button>`;
+    if (v.stage === 8) {
+      if (vwFooter) vwFooter.style.display = 'none';
     } else {
-      btnArea.innerHTML = `
-        <button class="btn-danger-outline" onclick="openRequestChangePage()">
-          <i class="ti ti-edit" style="font-size:16px;color:#fff;"></i>
-          Request Consignee Change
-        </button>`;
+      if (vwFooter) vwFooter.style.display = '';
+      if (v.state === 'change-requested') {
+        btnArea.innerHTML = `
+          <button class="btn-danger-outline" style="background:#ff9500;box-shadow:0 2px 8px rgba(255,149,0,0.28);" onclick="openChangeView(${numId})">
+            <i class="ti ti-eye" style="font-size:16px;color:#fff;"></i>
+            View Change Request
+          </button>`;
+      } else {
+        btnArea.innerHTML = `
+          <button class="btn-danger-outline" onclick="openRequestChangePage()">
+            <i class="ti ti-edit" style="font-size:16px;color:#fff;"></i>
+            Request Consignee Change
+          </button>`;
+      }
     }
 
     document.getElementById('view-consignee-page').classList.add('show');
