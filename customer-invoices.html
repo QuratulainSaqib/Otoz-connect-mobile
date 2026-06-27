@@ -454,8 +454,19 @@
     background: var(--c-bg-app); border: none;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
+    justify-self: start;
   }
   .sheet-back-btn svg { width: 18px; height: 18px; color: var(--c-text); }
+
+  /* Sheet drag handle — same as home.html */
+  .sheet-handle {
+    width: 36px;
+    height: 4px;
+    background: #d1d5db;
+    border-radius: 4px;
+    margin: 10px auto;
+    flex-shrink: 0;
+  }
 
   /* con-form cards */
   .con-form-card {
@@ -529,6 +540,21 @@
     cursor: pointer; font-family: inherit; transition: all 0.15s;
   }
   .con-curr-btn.active { background: var(--c-primary); color: #fff; border-color: var(--c-primary); }
+
+  /* Currency code badge — used inside bottom sheet list */
+  .sale-curr-code {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.04);
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6e6e73;
+    line-height: 1;
+    flex-shrink: 0;
+  }
 
   /* filter-row-btn — Country/City selector */
   .filter-row-btn {
@@ -831,14 +857,11 @@
           <div class="con-form-body">
             <div class="con-field">
               <label>Invoice Type <span class="con-req">*</span></label>
-              <div class="con-select-wrap">
-                <select class="con-select" id="f-type">
-                  <option value="">Select type</option>
-                  <option value="Deposit">Deposit Invoice</option>
-                  <option value="Commercial">Commercial Invoice</option>
-                </select>
-                <i class="ti ti-chevron-down con-chev"></i>
-              </div>
+              <button class="filter-row-btn" onclick="openInvTypeSheet()">
+                <span id="inv-type-label" class="filter-row-value placeholder">Select Type</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+              <input type="hidden" id="f-type" value="">
             </div>
             <div class="con-field">
               <label>Chassis No. <span style="color:var(--c-text-tertiary);font-weight:400;">(Commercial only)</span></label>
@@ -846,13 +869,10 @@
             </div>
             <div class="con-field">
               <label>Currency <span class="con-req">*</span></label>
-              <div class="con-curr-row">
-                <button class="con-curr-btn active" data-curr="USD" onclick="selectCurr(this)">USD</button>
-                <button class="con-curr-btn" data-curr="EUR" onclick="selectCurr(this)">EUR</button>
-                <button class="con-curr-btn" data-curr="AED" onclick="selectCurr(this)">AED</button>
-                <button class="con-curr-btn" data-curr="GBP" onclick="selectCurr(this)">GBP</button>
-                <button class="con-curr-btn" data-curr="JPY" onclick="selectCurr(this)">JPY</button>
-              </div>
+              <button class="filter-row-btn" onclick="openInvCurrSheet()">
+                <span id="inv-curr-label" class="filter-row-value">USD</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
             </div>
             <div class="con-field">
               <label>Amount <span class="con-req">*</span></label>
@@ -908,6 +928,34 @@
         <div style="flex:1;overflow-y:auto;"><div class="stage-list" id="inv-city-list"></div></div>
       </div>
 
+      <!-- Invoice Type Sheet -->
+      <div class="inv-sheet-backdrop" id="inv-type-backdrop" onclick="closeInvTypeSheet()"></div>
+      <div class="inv-bottom-sheet" id="inv-type-sheet" style="height:50%;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <button class="sheet-back-btn" onclick="closeInvTypeSheet()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+          </button>
+          <div class="sheet-title">Select Invoice Type</div>
+          <button class="sheet-action-btn" onclick="clearInvType()">Clear</button>
+        </div>
+        <div style="flex:1;overflow-y:auto;"><div class="stage-list" id="inv-type-list"></div></div>
+      </div>
+
+      <!-- Currency Sheet -->
+      <div class="inv-sheet-backdrop" id="inv-curr-backdrop" onclick="closeInvCurrSheet()"></div>
+      <div class="inv-bottom-sheet" id="inv-curr-sheet" style="max-height:60%;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <button class="sheet-back-btn" onclick="closeInvCurrSheet()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+          </button>
+          <div class="sheet-title">Select Currency</div>
+          <button class="sheet-action-btn" onclick="clearInvCurr()">Clear</button>
+        </div>
+        <div style="flex:1;overflow-y:auto;"><div class="stage-list" id="inv-curr-list"></div></div>
+      </div>
+
     </div>
 
   </div>
@@ -958,7 +1006,6 @@
   let filteredData = [...invoices];
   let activeType = '';
   let sortAsc = false;
-  let selectedCurr = 'USD';
 
   function fmt(n) { return Number(n).toLocaleString(); }
 
@@ -1212,10 +1259,74 @@
     document.getElementById('create-invoice-page').classList.remove('show');
   }
 
-  function selectCurr(btn) {
-    document.querySelectorAll('.con-curr-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    selectedCurr = btn.dataset.curr;
+  // ── Invoice Type Sheet ──
+  const INV_TYPES = [
+    { value: 'Deposit',    label: 'Deposit Invoice' },
+    { value: 'Commercial', label: 'Commercial Invoice' }
+  ];
+  function openInvTypeSheet() {
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    const current = document.getElementById('f-type').value;
+    document.getElementById('inv-type-list').innerHTML = INV_TYPES.map(t => `
+      <button class="stage-list-item" onclick="selectInvType('${t.value}','${t.label}')">
+        <span class="stage-list-label">${t.label}</span>
+        <span class="stage-check">${current === t.value ? checkSVG : ''}</span>
+      </button>`).join('');
+    document.getElementById('inv-type-backdrop').classList.add('show');
+    document.getElementById('inv-type-sheet').classList.add('show');
+  }
+  function closeInvTypeSheet() {
+    document.getElementById('inv-type-backdrop').classList.remove('show');
+    document.getElementById('inv-type-sheet').classList.remove('show');
+  }
+  function selectInvType(value, label) {
+    document.getElementById('f-type').value = value;
+    const lbl = document.getElementById('inv-type-label');
+    lbl.textContent = label;
+    lbl.classList.remove('placeholder');
+    setTimeout(() => closeInvTypeSheet(), 180);
+  }
+  function clearInvType() {
+    document.getElementById('f-type').value = '';
+    const lbl = document.getElementById('inv-type-label');
+    lbl.textContent = 'Select Type';
+    lbl.classList.add('placeholder');
+    openInvTypeSheet();
+  }
+
+  // ── Currency Sheet ──
+  const INV_CURRENCIES = [
+    { code: 'USD', name: 'US Dollar' },
+    { code: 'JPY', name: 'Japanese Yen' },
+    { code: 'EUR', name: 'Euro' },
+    { code: 'GBP', name: 'British Pound' },
+    { code: 'AED', name: 'UAE Dirham' }
+  ];
+  let selectedCurr = 'USD';
+  function openInvCurrSheet() {
+    const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10-10"/></svg>`;
+    document.getElementById('inv-curr-list').innerHTML = INV_CURRENCIES.map(c => `
+      <button class="stage-list-item" onclick="selectInvCurr('${c.code}')">
+        <span class="sale-curr-code">${c.code}</span>
+        <span class="stage-list-label">${c.name}</span>
+        <span class="stage-check">${selectedCurr === c.code ? checkSVG : ''}</span>
+      </button>`).join('');
+    document.getElementById('inv-curr-backdrop').classList.add('show');
+    document.getElementById('inv-curr-sheet').classList.add('show');
+  }
+  function closeInvCurrSheet() {
+    document.getElementById('inv-curr-backdrop').classList.remove('show');
+    document.getElementById('inv-curr-sheet').classList.remove('show');
+  }
+  function selectInvCurr(code) {
+    selectedCurr = code;
+    document.getElementById('inv-curr-label').textContent = code;
+    setTimeout(() => closeInvCurrSheet(), 180);
+  }
+  function clearInvCurr() {
+    selectedCurr = 'USD';
+    document.getElementById('inv-curr-label').textContent = 'USD';
+    openInvCurrSheet();
   }
 
   function submitInvoice() {
@@ -1247,6 +1358,11 @@
       const el = document.getElementById(id); if (el) el.value = '';
     });
     document.getElementById('f-type').value = '';
+    const typeLbl = document.getElementById('inv-type-label');
+    if (typeLbl) { typeLbl.textContent = 'Select Type'; typeLbl.classList.add('placeholder'); }
+    selectedCurr = 'USD';
+    const currLbl = document.getElementById('inv-curr-label');
+    if (currLbl) currLbl.textContent = 'USD';
     document.getElementById('f-phone-flag').textContent = '🌐';
     document.getElementById('f-phone-code').textContent = '+';
     invSelectedCountry = ''; invSelectedCity = '';
@@ -1254,8 +1370,6 @@
     if (cl) { cl.textContent = 'Select Country'; cl.classList.add('placeholder'); }
     const cityL = document.getElementById('inv-city-label');
     if (cityL) { cityL.textContent = 'Select City'; cityL.classList.add('placeholder'); }
-    document.querySelectorAll('.con-curr-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector('.con-curr-btn[data-curr="USD"]').classList.add('active');
   }
   let _toastTimer;
   function showToast(msg) {
