@@ -2847,9 +2847,9 @@
   }
   .stg-bl-card input { display: none; }
   .stg-bl-card.selected {
-    border-color: #30c46d;
-    background: linear-gradient(180deg, #f0fdf4 0%, #ecfdf5 100%);
-    box-shadow: 0 0 0 3px rgba(48,196,109,0.12);
+    border-color: #2BA6FF;
+    background: linear-gradient(180deg, #e8f4ff 0%, #dff0ff 100%);
+    box-shadow: 0 0 0 3px rgba(43,166,255,0.12);
   }
   .stg-bl-radio {
     width: 20px; height: 20px; border-radius: 50%;
@@ -2862,14 +2862,14 @@
     width: 9px; height: 9px; border-radius: 50%;
     background: transparent; transition: all 0.18s;
   }
-  .stg-bl-card.selected .stg-bl-radio { border-color: #30c46d; }
+  .stg-bl-card.selected .stg-bl-radio { border-color: #2BA6FF; }
   .stg-bl-card.selected .stg-bl-radio-dot {
-    background: #30c46d;
-    box-shadow: 0 0 0 3px rgba(48,196,109,0.16);
+    background: #2BA6FF;
+    box-shadow: 0 0 0 3px rgba(43,166,255,0.16);
   }
   .stg-bl-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
   .stg-bl-title { font-size: 13px; font-weight: 700; color: var(--c-text); letter-spacing: -0.01em; }
-  .stg-bl-card.selected .stg-bl-title { color: #047857; }
+  .stg-bl-card.selected .stg-bl-title { color: #173559; }
   .stg-bl-sub { font-size: 10px; color: var(--c-text-muted); font-weight: 500; }
 
   /* Dispatch details card */
@@ -5090,11 +5090,11 @@
       ]
     },
     { id: 8,  stage: 8, make: 'Toyota',  model: 'Raize',   code: '5BA-A200A', year: 2022, chassis: '5YJSA1E26HF200012', port: 'Zimbabwe',      purchaseDate: '02/08/2026', purchCurr: 'USD', purchPrice: 24205,  saleCurr: 'JPY', salePrice: 4150000, bcn: 'BCN', updated: true },
-    { id: 10, stage: 8, make: 'Honda',   model: 'Vezel',   code: 'RU3',       year: 2023, chassis: 'JHMRU3H50DC234567', port: 'Nairobi',       purchaseDate: '01/10/2026', purchCurr: 'USD', purchPrice: 22500,  saleCurr: 'USD', salePrice: 26000,   bcn: 'BC',  updated: true },
-    { id: 11, stage: 8, make: 'Nissan',  model: 'Note',    code: 'HE12',      year: 2022, chassis: 'JN1BNE8E2HM345678', port: 'Mombasa Port',  purchaseDate: '01/18/2026', purchCurr: 'JPY', purchPrice: 1650000,saleCurr: 'USD', salePrice: 14500,   bcn: 'BCN', updated: true },
-    { id: 12, stage: 8, make: 'Mazda',   model: 'Demio',   code: 'DJ5FS',     year: 2021, chassis: 'MZDJ52021FS00456', port: 'Dar es Salaam', purchaseDate: '02/14/2026', purchCurr: 'USD', purchPrice: 13800,  saleCurr: 'USD', salePrice: 16500,   bcn: 'C',   updated: true },
-    { id: 13, stage: 8, make: 'Subaru',  model: 'Impreza', code: 'GT2',       year: 2022, chassis: 'SBFGT2022GT200789', port: 'Durban',        purchaseDate: '03/05/2026', purchCurr: 'USD', purchPrice: 19200,  saleCurr: 'USD', salePrice: 22800,   bcn: 'BC',  updated: true },
-    { id: 14, stage: 8, make: 'Toyota',  model: 'Aqua',    code: 'NHP10',     year: 2023, chassis: 'AQUA2023NHP10901', port: 'Lagos',         purchaseDate: '02/22/2026', purchCurr: 'USD', purchPrice: 18700,  saleCurr: 'EUR', salePrice: 21000,   bcn: 'BCN', updated: true },
+    { id: 10, stage: 8, make: 'Honda',   model: 'Vezel',   code: 'RU3',       year: 2023, chassis: 'JHMRU3H50DC234567', port: 'Nairobi',       purchaseDate: '01/10/2026', purchCurr: 'USD', purchPrice: 22500,  saleCurr: 'USD', salePrice: 26000,   bcn: 'BC',  updated: true, blMethod: 'surrender' },
+    { id: 11, stage: 8, make: 'Nissan',  model: 'Note',    code: 'HE12',      year: 2022, chassis: 'JN1BNE8E2HM345678', port: 'Mombasa Port',  purchaseDate: '01/18/2026', purchCurr: 'JPY', purchPrice: 1650000,saleCurr: 'USD', salePrice: 14500,   bcn: 'BCN', updated: true, blMethod: 'dispatch', dispatch: { name: 'Ali Hassan', address: '22 Nyerere Rd', country: 'Kenya', city: 'Nairobi', postalCode: '00100', email: 'ali.hassan@mail.com', phone: '+254 712 345678' } },
+    { id: 12, stage: 8, make: 'Mazda',   model: 'Demio',   code: 'DJ5FS',     year: 2021, chassis: 'MZDJ52021FS00456', port: 'Dar es Salaam', purchaseDate: '02/14/2026', purchCurr: 'USD', purchPrice: 13800,  saleCurr: 'USD', salePrice: 16500,   bcn: 'C',   updated: true, blMethod: 'surrender' },
+    { id: 13, stage: 8, make: 'Subaru',  model: 'Impreza', code: 'GT2',       year: 2022, chassis: 'SBFGT2022GT200789', port: 'Durban',        purchaseDate: '03/05/2026', purchCurr: 'USD', purchPrice: 19200,  saleCurr: 'USD', salePrice: 22800,   bcn: 'BC',  updated: true, blMethod: 'dispatch', dispatch: { name: 'Sipho Dlamini', address: '5 OR Tambo St', country: 'South Africa', city: 'Durban', postalCode: '4001', email: 'sipho@za.com', phone: '+27 81 234 5678' } },
+    { id: 14, stage: 8, make: 'Toyota',  model: 'Aqua',    code: 'NHP10',     year: 2023, chassis: 'AQUA2023NHP10901', port: 'Lagos',         purchaseDate: '02/22/2026', purchCurr: 'USD', purchPrice: 18700,  saleCurr: 'EUR', salePrice: 21000,   bcn: 'BCN', updated: true, blMethod: 'dispatch', dispatch: { name: 'Emeka Obi', address: '10 Adeola Hopewell St', country: 'Nigeria', city: 'Lagos', postalCode: '101001', email: 'emeka.obi@ng.com', phone: '+234 803 456 7890' } },
   ];
 
   let state = { stage: 'all', search: '', filters: { stage: '', make: '', model: '', port: '' }, sort: 'stage_order' };
@@ -6862,6 +6862,11 @@
       let data  = STAGE_DATA[n] || {};
       const color = STAGE_COLORS[n];
 
+      // Override stage 8 BL method from vehicle object
+      if (n === 8 && v && v.blMethod) {
+        data = { ...data, blMethod: v.blMethod, dispatch: v.dispatch || data.dispatch || {} };
+      }
+
       if (n === 4 && v && v.inspectionResult === 'Fail') {
         data = {
           ...data,
@@ -6984,95 +6989,57 @@
         </div>
       </div>`;
 
-      // 4. BL Method selector
+      // 4. BL Method — VIEW ONLY (completed vehicles — submitted data, no editing)
       const method = data.blMethod || 'surrender';
-      const blUid = `bl-${n}`;
-      // Pre-populate BL country/city state if dispatch data already exists
-      if (d.country) { _blSelectedCountry[blUid] = d.country; }
-      if (d.city)    { _blSelectedCity[blUid]    = d.city; }
+
       html += `<div class="stg-body-section" style="margin-top:16px;">Bill of Lading Method</div>`;
-      html += `<div class="stg-bl-method-grid">
-        <label class="stg-bl-card ${method === 'surrender' ? 'selected' : ''}" onclick="event.stopPropagation(); selectBlMethodMobile('surrender','${blUid}')">
-          <input type="radio" name="bl-method-${blUid}" value="surrender" ${method === 'surrender' ? 'checked' : ''}>
-          <span class="stg-bl-radio"><span class="stg-bl-radio-dot"></span></span>
-          <span class="stg-bl-text">
-            <span class="stg-bl-title">Surrender</span>
-            <span class="stg-bl-sub">Buyer collects from origin</span>
-          </span>
-        </label>
-        <label class="stg-bl-card ${method === 'dispatch' ? 'selected' : ''}" onclick="event.stopPropagation(); selectBlMethodMobile('dispatch','${blUid}')">
-          <input type="radio" name="bl-method-${blUid}" value="dispatch" ${method === 'dispatch' ? 'checked' : ''}>
-          <span class="stg-bl-radio"><span class="stg-bl-radio-dot"></span></span>
-          <span class="stg-bl-text">
-            <span class="stg-bl-title">Dispatch</span>
-            <span class="stg-bl-sub">Courier to buyer's address</span>
-          </span>
-        </label>
-      </div>`;
 
-      // 5. Dispatch details form (collapsible — shown when dispatch is selected)
-      const dispatchOpen = method === 'dispatch';
-      html += `<div class="stg-dispatch-form ${dispatchOpen ? 'open' : ''}" id="${blUid}-dispatch-form">
-        <div class="stg-dispatch-hint-text">Dispatch details — filled by agent</div>
-        <div class="stg-dispatch-form-body">
-          <div class="con-field">
-            <label class="con-label">Name <span class="con-req">*</span></label>
-            <input type="text" class="con-input" id="${blUid}-bl-name" placeholder="Recipient name" value="${d.name || ''}" onclick="event.stopPropagation()">
-          </div>
-          <div class="con-field">
-            <label class="con-label">Address <span class="con-req">*</span></label>
-            <input type="text" class="con-input" id="${blUid}-bl-address" placeholder="Street address" value="${d.address || ''}" onclick="event.stopPropagation()">
-          </div>
-          <div class="con-field">
-            <label class="con-label">Country <span class="con-req">*</span></label>
-            <button class="con-picker-btn" onclick="event.stopPropagation(); openBlCountrySheet('${blUid}')" type="button">
-              <span class="con-picker-label ${d.country ? '' : 'placeholder'}" id="${blUid}-bl-country-label">${d.country ? (CON_COUNTRY_DATA[d.country] ? CON_COUNTRY_DATA[d.country].flag + ' ' : '') + d.country : 'Select Country'}</span>
-              <svg class="con-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-          </div>
-          <div class="con-field">
-            <label class="con-label">City <span class="con-req">*</span></label>
-            <button class="con-picker-btn" onclick="event.stopPropagation(); openBlCitySheet('${blUid}')" type="button">
-              <span class="con-picker-label ${d.city ? '' : 'placeholder'}" id="${blUid}-bl-city-label">${d.city || 'Select City'}</span>
-              <svg class="con-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-          </div>
-          <div class="con-field">
-            <label class="con-label">Postal Code</label>
-            <input type="text" class="con-input" id="${blUid}-bl-postal" placeholder="Enter postal code" value="${d.postalCode || ''}" onclick="event.stopPropagation()">
-          </div>
-          <div class="con-field">
-            <label class="con-label">Email <span class="con-req">*</span></label>
-            <input type="email" class="con-input" id="${blUid}-bl-email" placeholder="email@example.com" value="${d.email || ''}" onclick="event.stopPropagation()">
-          </div>
-          <div class="con-field">
-            <label class="con-label">Phone Number <span class="con-req">*</span></label>
-            <div class="con-phone-wrap">
-              <div class="con-phone-prefix">
-                <span class="con-phone-flag" id="${blUid}-bl-phone-flag">${d.country && CON_COUNTRY_DATA[d.country] ? CON_COUNTRY_DATA[d.country].flag : '🌐'}</span>
-                <span class="con-phone-code" id="${blUid}-bl-phone-code">${d.country && CON_COUNTRY_DATA[d.country] ? CON_COUNTRY_DATA[d.country].code : '+'}</span>
-              </div>
-              <input type="tel" class="con-input con-phone-input" id="${blUid}-bl-phone" placeholder="Phone number" value="${d.phoneLocal || ''}" onclick="event.stopPropagation()">
-            </div>
-          </div>
-        </div>
-      </div>`;
+      // Show only the selected method as a read-only card
+      if (method === 'surrender') {
+        html += `
+          <div class="stg-bl-card selected" style="pointer-events:none;">
+            <span class="stg-bl-radio"><span class="stg-bl-radio-dot"></span></span>
+            <span class="stg-bl-text">
+              <span class="stg-bl-title">Surrender</span>
+              <span class="stg-bl-sub">Buyer collects from origin</span>
+            </span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2BA6FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0;margin-left:auto;"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>`;
+      } else {
+        html += `
+          <div class="stg-bl-card selected" style="pointer-events:none;">
+            <span class="stg-bl-radio"><span class="stg-bl-radio-dot"></span></span>
+            <span class="stg-bl-text">
+              <span class="stg-bl-title">Dispatch</span>
+              <span class="stg-bl-sub">Courier to buyer's address</span>
+            </span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2BA6FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0;margin-left:auto;"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>`;
 
-      // 6. Confirm Surrender button (shown only when surrender is selected)
-      html += `<div class="stg-surrender-actions ${dispatchOpen ? 'stg-hidden' : ''}" id="${blUid}-surrender-actions">
-        <button class="stg-bl-send-btn" onclick="event.stopPropagation(); showToast('Surrender confirmed!')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          Confirm Surrender
-        </button>
-      </div>`;
+        // Show dispatch details as read-only rows
+        const dispRows = [
+          ['Recipient Name', d.name],
+          ['Address',        d.address],
+          ['Country',        d.country],
+          ['City',           d.city],
+          ['Postal Code',    d.postalCode],
+          ['Email',          d.email],
+          ['Phone',          d.phone],
+        ].filter(([, v]) => v);
 
-      // 7. Confirm Dispatch button (shown only when dispatch is selected)
-      html += `<div class="stg-dispatch-actions ${dispatchOpen ? '' : 'stg-hidden'}" id="${blUid}-dispatch-actions">
-        <button class="stg-bl-send-btn" onclick="event.stopPropagation(); showToast('Dispatch confirmed!')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          Confirm Dispatch
-        </button>
-      </div>`;
+        if (dispRows.length) {
+          html += `<div class="stg-dispatch-card" style="margin-top:10px;">
+            <div class="stg-dispatch-hint">Dispatch Details</div>
+            <div class="stg-fields">`;
+          dispRows.forEach(([k, v]) => {
+            html += `<div class="stg-field-row">
+              <span class="stg-field-key">${k}</span>
+              <span class="stg-field-val">${v}</span>
+            </div>`;
+          });
+          html += `</div></div>`;
+        }
+      }
 
       return html;
     }
