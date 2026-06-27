@@ -160,6 +160,16 @@
   .kpi-label { font-size: 10px; color: var(--c-text-muted); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .kpi-value { font-size: 20px; font-weight: 700; color: var(--c-text); letter-spacing: -0.025em; line-height: 1.2; }
 
+  /* Sticky filter wrapper — controls + chips stick to top on scroll */
+  .sticky-filters {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--c-bg-app);
+    padding-top: 10px;
+    flex-shrink: 0;
+  }
+
   /* Controls */
   .controls-row {
     display: flex; gap: 8px;
@@ -208,7 +218,7 @@
   .type-chip.active-deposit { background: #e3f7ec; color: #0a7a3b; border-color: rgba(48,196,109,0.3); }
 
   .results-count {
-    padding: 0 20px 8px;
+    padding: 8px 20px;
     font-size: 11.5px; color: var(--c-text-muted); font-weight: 500;
     flex-shrink: 0;
   }
@@ -218,9 +228,9 @@
   .inv-scroll {
     flex: 1; overflow-y: auto; overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    padding: 0 20px 100px;
+    padding: 0 0 100px;
   }
-  .inv-list { display: flex; flex-direction: column; gap: 10px; }
+  .inv-list { display: flex; flex-direction: column; gap: 10px; padding: 0 20px; }
 
   /* ── Invoice Card ── */
   .inv-card {
@@ -657,17 +667,19 @@
       </span>
     </div>
 
-    <!-- Header — home.html dash-header style -->
-    <div class="cv-nav">
-      <button class="cv-back-btn" onclick="window.location.href='more.html'">
-        <i class="ti ti-chevron-left"></i>
-      </button>
-      <div class="cv-nav-title">Customer Invoices</div>
-      <span class="cv-nav-spacer"></span>
-    </div>
+    <!-- Invoice list (scrollable area) -->
+    <div class="inv-scroll">
 
-    <div class="page-header">
-      <!-- KPI — home.html stat-card style -->
+      <!-- Header — scrolls away on scroll -->
+      <div class="cv-nav">
+        <button class="cv-back-btn" onclick="window.location.href='more.html'">
+          <i class="ti ti-chevron-left"></i>
+        </button>
+        <div class="cv-nav-title">Customer Invoices</div>
+        <span class="cv-nav-spacer"></span>
+      </div>
+
+      <!-- KPI — scrolls away on scroll -->
       <div class="kpi-wrap">
         <div class="kpi-card">
           <div class="kpi-icon"><i class="ti ti-file-invoice"></i></div>
@@ -675,30 +687,28 @@
           <div class="kpi-value" id="kpi-total" style="margin-left:auto;">0</div>
         </div>
       </div>
-    </div>
 
-    <!-- Controls -->
-    <div class="controls-row">
-      <div class="search-wrap">
-        <i class="ti ti-search"></i>
-        <input type="text" id="search-input" placeholder="Search name, phone, amount…" oninput="applyFilters()">
+      <!-- Sticky filter group — search + sort + type chips -->
+      <div class="sticky-filters">
+        <div class="controls-row">
+          <div class="search-wrap">
+            <i class="ti ti-search"></i>
+            <input type="text" id="search-input" placeholder="Search name, phone, amount…" oninput="applyFilters()">
+          </div>
+          <button class="icon-btn" onclick="toggleSortOrder()">
+            <i class="ti ti-arrows-sort"></i>
+          </button>
+        </div>
+
+        <div class="type-chips">
+          <button class="type-chip active-all" data-type="" onclick="selectType(this, '')">All</button>
+          <button class="type-chip" data-type="Commercial" onclick="selectType(this, 'Commercial')">Commercial</button>
+          <button class="type-chip" data-type="Deposit" onclick="selectType(this, 'Deposit')">Deposit</button>
+        </div>
       </div>
-      <button class="icon-btn" onclick="toggleSortOrder()">
-        <i class="ti ti-arrows-sort"></i>
-      </button>
-    </div>
 
-    <!-- Type chips -->
-    <div class="type-chips">
-      <button class="type-chip active-all" data-type="" onclick="selectType(this, '')">All</button>
-      <button class="type-chip" data-type="Commercial" onclick="selectType(this, 'Commercial')">Commercial</button>
-      <button class="type-chip" data-type="Deposit" onclick="selectType(this, 'Deposit')">Deposit</button>
-    </div>
+      <div class="results-count" id="results-count"></div>
 
-    <div class="results-count" id="results-count"></div>
-
-    <!-- Invoice list -->
-    <div class="inv-scroll">
       <div class="inv-list" id="inv-list"></div>
     </div>
 
