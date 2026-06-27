@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otoz Connect · Contact Us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+  :root {
+    --c-primary: #173559;
+    --c-primary-dark: #0f2540;
+    --c-accent:  #2BA6FF;
+    --c-text:    #1d1d1f;
+    --c-text-muted:    #6e6e73;
+    --c-text-subtle:   #86868b;
+    --c-text-tertiary: #a1a1a6;
+    --c-bg-app:      #f5f5f7;
+    --c-divider:     #e8e8ed;
+    --c-divider-soft:#f1f5f9;
+    --c-success: #30c46d;
+    --c-danger:  #ff3b30;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: #e8e8ed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .device {
+    width: 380px;
+    height: 800px;
+    background: #1d1d1f;
+    border-radius: 54px;
+    padding: 11px;
+    position: relative;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.08);
+  }
+  .home-indicator {
+    position: absolute;
+    bottom: 9px; left: 50%;
+    transform: translateX(-50%);
+    width: 140px; height: 5px;
+    background: #1d1d1f; border-radius: 3px;
+    opacity: 0.9; z-index: 100; pointer-events: none;
+  }
+  .screen-wrapper {
+    width: 100%; height: 100%;
+    background: var(--c-bg-app);
+    border-radius: 43px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 64px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding: 0 32px 8px;
+    font-size: 16px; font-weight: 600; color: var(--c-text);
+    letter-spacing: -0.02em; flex-shrink: 0;
+    background: #fff;
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; }
+
+  /* Page nav header */
+  .cv-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 16px 10px;
+    flex-shrink: 0;
+    border-bottom: 0.5px solid var(--c-divider-soft);
+    background: #fff;
+  }
+  .cv-back-btn {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: var(--c-bg-app);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .cv-back-btn i { font-size: 19px; color: var(--c-text); }
+  .cv-nav-title { font-size: 16px; font-weight: 700; color: var(--c-text); letter-spacing: -0.015em; }
+  .cv-nav-spacer { width: 32px; flex-shrink: 0; }
+
+  /* Scroll area */
+  .page-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 0 100px;
+  }
+
+  /* ── HERO GRADIENT CARD ── */
+  .hero-card {
+    margin: 14px 14px 18px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #173559 0%, #1d4276 50%, #2BA6FF 130%);
+    padding: 22px 20px 24px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 30px -10px rgba(23,53,89,0.45);
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -30px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(43,166,255,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-status-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.16);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 999px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    position: relative; z-index: 2;
+  }
+  .hero-status-pill .pulse-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #4adf86;
+    box-shadow: 0 0 0 3px rgba(74,223,134,0.3);
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+  .hero-title {
+    font-size: 26px; font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 10px;
+    position: relative; z-index: 2;
+  }
+  .hero-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.78);
+    line-height: 1.55;
+    position: relative; z-index: 2;
+    max-width: 260px;
+  }
+
+  /* ── Section label ── */
+  .section-label {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 11px; font-weight: 700;
+    color: var(--c-text-subtle);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 4px 18px 12px;
+  }
+  .section-label .accent-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--c-divider) 0%, transparent 100%);
+    margin-left: 10px;
+  }
+
+  /* ── 2×2 Quick Connect Grid ── */
+  .quick-grid {
+    margin: 0 14px 22px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .quick-card {
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 18px;
+    padding: 14px;
+    display: flex; flex-direction: column;
+    gap: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    min-height: 116px;
+  }
+  .quick-card:active { transform: scale(0.97); }
+  .quick-card-icon {
+    width: 38px; height: 38px;
+    border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .quick-card-icon svg { width: 19px; height: 19px; color: #fff; }
+  .quick-card-icon.phone {
+    background: linear-gradient(135deg, #30c46d 0%, #4adf86 100%);
+    box-shadow: 0 5px 14px rgba(48,196,109,0.32);
+  }
+  .quick-card-icon.whatsapp {
+    background: linear-gradient(135deg, #25D366 0%, #128c44 100%);
+    box-shadow: 0 5px 14px rgba(37,211,102,0.32);
+  }
+  .quick-card-icon.email {
+    background: linear-gradient(135deg, #2BA6FF 0%, #0070c0 100%);
+    box-shadow: 0 5px 14px rgba(43,166,255,0.32);
+  }
+  .quick-card-icon.web {
+    background: linear-gradient(135deg, #173559 0%, #2a4a73 100%);
+    box-shadow: 0 5px 14px rgba(23,53,89,0.32);
+  }
+  .quick-card-text { flex: 1; display: flex; flex-direction: column; }
+  .quick-card-label {
+    font-size: 10.5px; font-weight: 600;
+    color: var(--c-text-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 3px;
+  }
+  .quick-card-value {
+    font-size: 13px; font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    word-break: break-word;
+  }
+  .quick-card-arrow {
+    position: absolute; top: 14px; right: 14px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--c-bg-app);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.18s, transform 0.18s;
+  }
+  .quick-card:active .quick-card-arrow { background: var(--c-divider); }
+  .quick-card-arrow i { font-size: 11px; color: var(--c-text-muted); }
+
+  /* ── Business Hours Strip ── */
+  .hours-strip {
+    margin: 0 14px 22px;
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 16px;
+    padding: 12px 14px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .hours-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(48,196,109,0.12) 0%, rgba(48,196,109,0.06) 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .hours-icon i { font-size: 18px; color: var(--c-success); }
+  .hours-text { flex: 1; }
+  .hours-title {
+    font-size: 13px; font-weight: 700;
+    color: var(--c-text);
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 1px;
+  }
+  .hours-title .live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--c-success);
+    box-shadow: 0 0 0 3px rgba(48,196,109,0.18);
+    animation: pulse 2s ease infinite;
+  }
+  .hours-sub {
+    font-size: 11px; color: var(--c-text-muted);
+  }
+  .hours-pill {
+    padding: 4px 9px;
+    background: rgba(48,196,109,0.10);
+    color: #1c9e5e;
+    border-radius: 999px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+
+  /* ── Office Cards — Modern ── */
+  .office-list {
+    margin: 0 14px;
+    display: flex; flex-direction: column;
+    gap: 12px;
+  }
+  .office-card {
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04), 0 0 0 1px var(--c-divider);
+    position: relative;
+    display: flex;
+  }
+  .office-accent {
+    width: 5px;
+    flex-shrink: 0;
+  }
+  .office-card.japan .office-accent { background: linear-gradient(180deg, #ff3b30 0%, #ff7a72 100%); }
+  .office-card.dubai .office-accent { background: linear-gradient(180deg, #00a651 0%, #34d399 100%); }
+  .office-card.usa   .office-accent { background: linear-gradient(180deg, #2BA6FF 0%, #0070c0 100%); }
+
+  .office-body { flex: 1; padding: 14px 14px 14px 12px; }
+  .office-top {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+  }
+  .office-flag-chip {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 10px 4px 6px;
+    background: var(--c-bg-app);
+    border-radius: 999px;
+    font-size: 11px; font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: 0.02em;
+  }
+  .office-flag-chip .flag { font-size: 14px; line-height: 1; }
+  .office-tz {
+    margin-left: auto;
+    font-size: 10px; font-weight: 700;
+    color: var(--c-text-muted);
+    background: rgba(0,0,0,0.04);
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.04em;
+  }
+  .office-name {
+    font-size: 15px; font-weight: 700;
+    color: var(--c-text); letter-spacing: -0.015em;
+    margin-bottom: 8px;
+  }
+  .office-name .region-tag {
+    display: inline-block;
+    font-size: 10px; font-weight: 600;
+    color: var(--c-text-muted);
+    background: none;
+    margin-left: 6px;
+    letter-spacing: 0.03em;
+  }
+  .office-address-row {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--c-divider-soft);
+  }
+  .office-address-row i {
+    font-size: 15px; color: var(--c-accent);
+    margin-top: 1px; flex-shrink: 0;
+  }
+  .office-address {
+    font-size: 12.5px;
+    color: var(--c-text-muted);
+    line-height: 1.55;
+  }
+
+  /* ── Footer note ── */
+  .foot-note {
+    text-align: center;
+    margin: 22px 14px 4px;
+    font-size: 11px;
+    color: var(--c-text-tertiary);
+    letter-spacing: 0.02em;
+  }
+  .foot-note .heart { color: #ff3b30; }
+
+  /* Bottom Nav */
+  .bottom-nav {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 76px; background: #fff;
+    border-top: 0.5px solid var(--c-divider);
+    display: flex; justify-content: space-around;
+    align-items: flex-start; padding: 10px 0 0;
+    z-index: 40;
+  }
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-start;
+    gap: 4px; cursor: pointer;
+    background: none; border: none;
+    font-family: inherit; padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-icon {
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-icon svg { width: 24px; height: 24px; display: block; overflow: visible; }
+  .nav-label {
+    font-size: 10px; font-weight: 500;
+    color: #a0a0ab; letter-spacing: 0.01em; line-height: 1;
+  }
+  .nav-item.active .nav-label { color: var(--c-primary); font-weight: 700; }
+  .nav-item.active .nav-icon svg { color: var(--c-primary); }
+  .nav-icon .icon-outline { display: block; color: #a0a0ab; }
+  .nav-icon .icon-filled  { display: none;  color: var(--c-primary); }
+  .nav-item.active .nav-icon .icon-outline { display: none; }
+  .nav-item.active .nav-icon .icon-filled  { display: block; }
+</style>
+</head>
+<body>
+
+<div class="device">
+  <div class="screen-wrapper">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <span class="status-icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686-4.687 12.284-4.687 16.97 0"/></svg>
+        <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+      </span>
+    </div>
+
+    <!-- Header -->
+    <div class="cv-nav">
+      <button class="cv-back-btn" onclick="window.location.href='more.html'">
+        <i class="ti ti-chevron-left"></i>
+      </button>
+      <div class="cv-nav-title">Contact Us</div>
+      <span class="cv-nav-spacer"></span>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="page-scroll">
+
+      <!-- HERO GRADIENT -->
+      <div class="hero-card">
+        <span class="hero-status-pill">
+          <span class="pulse-dot"></span>
+          24 / 7 Support
+        </span>
+        <div class="hero-title">Let's talk —<br>we're listening.</div>
+        <div class="hero-sub">
+          Choose any way to reach us. Our team responds within minutes during business hours.
+        </div>
+      </div>
+
+      <!-- QUICK CONNECT GRID -->
+      <div class="section-label">
+        Quick Connect
+        <span class="accent-line"></span>
+      </div>
+      <div class="quick-grid">
+
+        <a class="quick-card" href="tel:+81364352269">
+          <span class="quick-card-arrow"><i class="ti ti-arrow-up-right"></i></span>
+          <span class="quick-card-icon phone">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.73a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"/>
+            </svg>
+          </span>
+          <div class="quick-card-text">
+            <div class="quick-card-label">Call Us</div>
+            <div class="quick-card-value">+81 3 6435 2269</div>
+          </div>
+        </a>
+
+        <a class="quick-card" href="https://wa.me/81364352269" target="_blank">
+          <span class="quick-card-arrow"><i class="ti ti-arrow-up-right"></i></span>
+          <span class="quick-card-icon whatsapp">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/>
+            </svg>
+          </span>
+          <div class="quick-card-text">
+            <div class="quick-card-label">WhatsApp</div>
+            <div class="quick-card-value">+81 3 6435 2269</div>
+          </div>
+        </a>
+
+        <a class="quick-card" href="mailto:info@Otoz.AI">
+          <span class="quick-card-arrow"><i class="ti ti-arrow-up-right"></i></span>
+          <span class="quick-card-icon email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </span>
+          <div class="quick-card-text">
+            <div class="quick-card-label">Email</div>
+            <div class="quick-card-value">info@Otoz.AI</div>
+          </div>
+        </a>
+
+        <a class="quick-card" href="https://www.otoz.ai" target="_blank">
+          <span class="quick-card-arrow"><i class="ti ti-arrow-up-right"></i></span>
+          <span class="quick-card-icon web">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </span>
+          <div class="quick-card-text">
+            <div class="quick-card-label">Website</div>
+            <div class="quick-card-value">www.otoz.ai</div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- BUSINESS HOURS STRIP -->
+      <div class="hours-strip">
+        <div class="hours-icon"><i class="ti ti-clock-hour-4"></i></div>
+        <div class="hours-text">
+          <div class="hours-title">
+            <span class="live-dot"></span>
+            Office Hours
+          </div>
+          <div class="hours-sub">Mon – Fri · 9:00 AM – 6:00 PM</div>
+        </div>
+        <span class="hours-pill">OPEN NOW</span>
+      </div>
+
+      <!-- OFFICES -->
+      <div class="section-label">
+        Our Offices
+        <span class="accent-line"></span>
+      </div>
+
+      <div class="office-list">
+
+        <div class="office-card japan">
+          <div class="office-accent"></div>
+          <div class="office-body">
+            <div class="office-top">
+              <div class="office-flag-chip">
+                <span class="flag">🇯🇵</span>
+                Japan
+              </div>
+            </div>
+            <div class="office-name">Tokyo HQ <span class="region-tag">· Asia Pacific</span></div>
+            <div class="office-address-row">
+              <i class="ti ti-map-pin"></i>
+              <div class="office-address">2-10-13-301, Minami Azabu, Minato-ku, Tokyo, Japan, 106-0047</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="office-card dubai">
+          <div class="office-accent"></div>
+          <div class="office-body">
+            <div class="office-top">
+              <div class="office-flag-chip">
+                <span class="flag">🇦🇪</span>
+                UAE
+              </div>
+            </div>
+            <div class="office-name">Dubai Office <span class="region-tag">· Middle East</span></div>
+            <div class="office-address-row">
+              <i class="ti ti-map-pin"></i>
+              <div class="office-address">Meydan Grandstand, 6th floor, Meydan Road, Nad Al Sheba, Dubai, U.A.E.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="office-card usa">
+          <div class="office-accent"></div>
+          <div class="office-body">
+            <div class="office-top">
+              <div class="office-flag-chip">
+                <span class="flag">🇺🇸</span>
+                USA
+              </div>
+            </div>
+            <div class="office-name">San Francisco <span class="region-tag">· North America</span></div>
+            <div class="office-address-row">
+              <i class="ti ti-map-pin"></i>
+              <div class="office-address">28 Geary St STE 650 Suite 37, San Francisco, California, 94108, USA</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+
+      <button class="nav-item" onclick="window.location.href='home.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5L3 9.8V20a1 1 0 0 0 1 1h5.5v-5h5v5H20a1 1 0 0 0 1-1V9.8L12 2.5z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.8L12 2.5l9 7.3V20a1 1 0 0 1-1 1h-5.5v-5h-5v5H4a1 1 0 0 1-1-1V9.8z"/></svg>
+        </div>
+        <span class="nav-label">Home</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='payment.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="5" width="20" height="14" rx="2.5"/><rect x="2" y="9" width="20" height="3.5" fill="rgba(255,255,255,0.25)"/><rect x="5" y="14.5" width="3.5" height="2" rx="0.8" fill="white"/><rect x="10.5" y="14.5" width="5.5" height="2" rx="0.8" fill="white"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="5" y1="15" x2="8.5" y2="15"/><line x1="11" y1="15" x2="16" y2="15"/></svg>
+        </div>
+        <span class="nav-label">Payment</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='allocation-history.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-4-5zm-1 5.5V3.5L17.5 7.5H14zM9 12h6v1H9zm0 2.5h4v1H9zm0-5h1.5v1H9z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><polyline points="15 2 15 7 19 7"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="15" x2="13" y2="15"/></svg>
+        </div>
+        <span class="nav-label">History</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='more.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7v3.59l-1.7 1.7A1 1 0 0 0 4 16h16a1 1 0 0 0 .7-1.71L19 12.59V9a7 7 0 0 0-7-7zm0 20a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0v4l-2 2v1h16v-1l-2-2V8"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+        </div>
+        <span class="nav-label">Notifications</span>
+      </button>
+
+      <button class="nav-item active" onclick="window.location.href='more.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><line x1="17.25" y1="13.5" x2="17.25" y2="21"/><line x1="13.5" y1="17.25" x2="21" y2="17.25"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><line x1="17.25" y1="13.5" x2="17.25" y2="21"/><line x1="13.5" y1="17.25" x2="21" y2="17.25"/></svg>
+        </div>
+        <span class="nav-label">More</span>
+      </button>
+
+    </nav>
+
+  </div>
+  <div class="home-indicator"></div>
+</div>
+
+</body>
+</html>

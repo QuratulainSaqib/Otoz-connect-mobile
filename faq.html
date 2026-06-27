@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otoz Connect · FAQ's</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+  :root {
+    --c-primary: #173559;
+    --c-accent:  #2BA6FF;
+    --c-text:    #1d1d1f;
+    --c-text-muted:    #6e6e73;
+    --c-text-subtle:   #86868b;
+    --c-text-tertiary: #a1a1a6;
+    --c-bg-app:      #f5f5f7;
+    --c-divider:     #e8e8ed;
+    --c-divider-soft:#f1f5f9;
+    --c-success: #30c46d;
+    --c-danger:  #ff3b30;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: #e8e8ed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .device {
+    width: 380px;
+    height: 800px;
+    background: #1d1d1f;
+    border-radius: 54px;
+    padding: 11px;
+    position: relative;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.08);
+  }
+  .home-indicator {
+    position: absolute;
+    bottom: 9px; left: 50%;
+    transform: translateX(-50%);
+    width: 140px; height: 5px;
+    background: #1d1d1f; border-radius: 3px;
+    opacity: 0.9; z-index: 100; pointer-events: none;
+  }
+  .screen-wrapper {
+    width: 100%; height: 100%;
+    background: var(--c-bg-app);
+    border-radius: 43px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 64px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding: 0 32px 8px;
+    font-size: 16px; font-weight: 600; color: var(--c-text);
+    letter-spacing: -0.02em; flex-shrink: 0;
+    background: #fff;
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; }
+
+  /* Page nav header */
+  .cv-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 16px 10px;
+    flex-shrink: 0;
+    border-bottom: 0.5px solid var(--c-divider-soft);
+    background: #fff;
+  }
+  .cv-back-btn {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: var(--c-bg-app);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .cv-back-btn i { font-size: 19px; color: var(--c-text); }
+  .cv-nav-title { font-size: 16px; font-weight: 700; color: var(--c-text); letter-spacing: -0.015em; }
+  .cv-nav-spacer { width: 32px; flex-shrink: 0; }
+
+  /* Scroll area */
+  .page-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 18px 16px 100px;
+  }
+
+  /* Hero badge */
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px;
+    background: rgba(43,166,255,0.08);
+    border: 1px solid rgba(43,166,255,0.22);
+    border-radius: 999px;
+    font-size: 10.5px; font-weight: 700;
+    color: var(--c-accent);
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+  }
+  .hero-badge i { font-size: 12px; }
+
+  .hero-title {
+    font-size: 22px; font-weight: 700;
+    color: var(--c-text); letter-spacing: -0.025em;
+    line-height: 1.2; margin-bottom: 6px;
+  }
+  .hero-title em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 12.5px; color: var(--c-text-muted);
+    line-height: 1.5; margin-bottom: 18px;
+  }
+
+  /* Search box */
+  .faq-search-wrap {
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 16px;
+    transition: border-color 0.15s;
+  }
+  .faq-search-wrap:focus-within { border-color: var(--c-accent); box-shadow: 0 0 0 3px rgba(43,166,255,0.10); }
+  .faq-search-wrap i { font-size: 17px; color: var(--c-text-subtle); flex-shrink: 0; }
+  .faq-search-wrap input {
+    flex: 1; border: none; outline: none; background: transparent;
+    font-size: 13.5px; color: var(--c-text); font-family: inherit;
+  }
+  .faq-search-wrap input::placeholder { color: var(--c-text-subtle); }
+
+  /* FAQ list */
+  .faq-list {
+    display: flex; flex-direction: column;
+    gap: 10px;
+  }
+  .faq-item {
+    background: #fff;
+    border: 1px solid var(--c-divider);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .faq-item.open {
+    border-color: rgba(43,166,255,0.35);
+    box-shadow: 0 4px 16px rgba(43,166,255,0.08);
+  }
+  .faq-q {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 14px;
+    background: none; border: none;
+    width: 100%;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .faq-q-text {
+    flex: 1;
+    font-size: 13.5px; font-weight: 600;
+    color: var(--c-text);
+    letter-spacing: -0.005em;
+    line-height: 1.35;
+  }
+  .faq-q-chev {
+    width: 24px; height: 24px;
+    border-radius: 7px;
+    background: var(--c-bg-app);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.25s ease, background 0.18s ease;
+  }
+  .faq-q-chev i { font-size: 14px; color: var(--c-text-muted); }
+  .faq-item.open .faq-q-chev {
+    transform: rotate(180deg);
+    background: rgba(43,166,255,0.10);
+  }
+  .faq-item.open .faq-q-chev i { color: var(--c-accent); }
+  .faq-a-wrap {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .faq-item.open .faq-a-wrap { max-height: 400px; }
+  .faq-a {
+    padding: 0 14px 14px;
+    font-size: 12.5px;
+    color: var(--c-text-muted);
+    line-height: 1.55;
+    border-top: 1px solid var(--c-divider-soft);
+    padding-top: 12px;
+    margin-top: 0;
+  }
+
+  /* Empty state */
+  .faq-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--c-text-muted);
+    font-size: 13px;
+  }
+  .faq-empty i { font-size: 36px; color: var(--c-text-tertiary); margin-bottom: 8px; display: block; }
+
+  /* Help footer card */
+  .help-footer-card {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #173559 0%, #2a4a73 100%);
+    border-radius: 16px;
+    padding: 16px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(23,53,89,0.25);
+  }
+  .help-footer-title {
+    font-size: 14px; font-weight: 700; margin-bottom: 4px;
+  }
+  .help-footer-sub {
+    font-size: 11.5px; color: rgba(255,255,255,0.75);
+    margin-bottom: 12px;
+    line-height: 1.45;
+  }
+  .help-footer-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px;
+    background: #fff; color: var(--c-primary);
+    border: none; border-radius: 999px;
+    font-size: 12px; font-weight: 700;
+    text-decoration: none;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .help-footer-btn:active { transform: scale(0.96); }
+  .help-footer-btn i { font-size: 14px; }
+
+  /* Bottom Nav */
+  .bottom-nav {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 76px; background: #fff;
+    border-top: 0.5px solid var(--c-divider);
+    display: flex; justify-content: space-around;
+    align-items: flex-start; padding: 10px 0 0;
+    z-index: 40;
+  }
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-start;
+    gap: 4px; cursor: pointer;
+    background: none; border: none;
+    font-family: inherit; padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-icon {
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-icon svg { width: 24px; height: 24px; display: block; overflow: visible; }
+  .nav-label {
+    font-size: 10px; font-weight: 500;
+    color: #a0a0ab; letter-spacing: 0.01em; line-height: 1;
+  }
+  .nav-item.active .nav-label { color: var(--c-primary); font-weight: 700; }
+  .nav-item.active .nav-icon svg { color: var(--c-primary); }
+  .nav-icon .icon-outline { display: block; color: #a0a0ab; }
+  .nav-icon .icon-filled  { display: none;  color: var(--c-primary); }
+  .nav-item.active .nav-icon .icon-outline { display: none; }
+  .nav-item.active .nav-icon .icon-filled  { display: block; }
+</style>
+</head>
+<body>
+
+<div class="device">
+  <div class="screen-wrapper">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <span class="status-icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 18.5h3v3h-3zM6.5 14h3v7.5h-3zM11.5 9.5h3v12h-3zM16.5 5h3v16.5h-3z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18l.01 0"/><path d="M9.172 15.172a4 4 0 0 1 5.656 0"/><path d="M6.343 12.343a8 8 0 0 1 11.314 0"/><path d="M3.515 9.515c4.686-4.687 12.284-4.687 16.97 0"/></svg>
+        <svg viewBox="0 0 26 14" fill="none"><rect x="0.5" y="0.5" width="22" height="13" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="10" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="6" rx="1" fill="currentColor"/></svg>
+      </span>
+    </div>
+
+    <!-- Header -->
+    <div class="cv-nav">
+      <button class="cv-back-btn" onclick="window.location.href='more.html'">
+        <i class="ti ti-chevron-left"></i>
+      </button>
+      <div class="cv-nav-title">FAQ's</div>
+      <span class="cv-nav-spacer"></span>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="page-scroll">
+
+      <!-- Hero -->
+      <div class="hero-badge">
+        <i class="ti ti-sparkles"></i>
+        Quick Answers
+      </div>
+      <div class="hero-title">Frequently <em>Asked</em></div>
+      <p class="hero-sub">
+        Common questions about your shipments, payments, and account.
+      </p>
+
+      <!-- Search -->
+      <div class="faq-search-wrap">
+        <i class="ti ti-search"></i>
+        <input type="text" id="faq-search" placeholder="Search questions…" oninput="filterFaqs(this.value)">
+      </div>
+
+      <!-- FAQ list -->
+      <div class="faq-list" id="faq-list">
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">How do I track my vehicle shipment?</span>
+            <span class="faq-q-chev"><i class="ti ti-chevron-down"></i></span>
+          </button>
+          <div class="faq-a-wrap">
+            <div class="faq-a">You can track your vehicle's progress directly from the Dashboard. Each vehicle shows its current stage from purchase through to delivery. Click on any vehicle row to see the full stage timeline.</div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">How do I add a payment to my wallet?</span>
+            <span class="faq-q-chev"><i class="ti ti-chevron-down"></i></span>
+          </button>
+          <div class="faq-a-wrap">
+            <div class="faq-a">Navigate to the Wallet tab and click "Add Payment". Upload your bank receipt, enter the transaction ID, select currency and amount, then submit. Our team will verify and confirm within 24 hours.</div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">What is a Bill of Lading and how does it work?</span>
+            <span class="faq-q-chev"><i class="ti ti-chevron-down"></i></span>
+          </button>
+          <div class="faq-a-wrap">
+            <div class="faq-a">A Bill of Lading (BL) is a legal shipping document. You can choose either Surrender (buyer collects from origin) or Dispatch (courier to buyer's address). Select your preferred method in Stage 6 of the vehicle timeline.</div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">How do I request a consignee change?</span>
+            <span class="faq-q-chev"><i class="ti ti-chevron-down"></i></span>
+          </button>
+          <div class="faq-a-wrap">
+            <div class="faq-a">From the Dashboard, click the "C" badge in the consignee column for any vehicle. Then click "Request Consignee Change". Fill in the new details and submit — our sales team will review and approve before the BL is amended.</div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">Why is my payment showing as Rejected?</span>
+            <span class="faq-q-chev"><i class="ti ti-chevron-down"></i></span>
+          </button>
+          <div class="faq-a-wrap">
+            <div class="faq-a">Payments may be rejected if the bank receipt is unclear, the amount doesn't match, or the transaction ID is incorrect. Check the rejection reason in your Wallet, correct the issue, and submit a new payment request.</div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">How long does shipping typically take?</span>
+            <span class="faq-q-chev"><i class="ti ti-chevron-down"></i></span>
+          </button>
+          <div class="faq-a-wrap">
+            <div class="faq-a">Shipping timelines vary by destination. Typically Japan to Middle East takes 3–4 weeks, to Africa 5–7 weeks. Your vehicle's stage timeline on the Dashboard will show estimated milestones for your specific shipment.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Empty state -->
+      <div class="faq-empty" id="faq-empty" style="display:none;">
+        <i class="ti ti-mood-empty"></i>
+        No questions found matching your search.
+      </div>
+
+      <!-- Help footer -->
+      <div class="help-footer-card">
+        <div class="help-footer-title">Still need help?</div>
+        <div class="help-footer-sub">Our support team is available 24/7 to assist you with any questions.</div>
+        <a class="help-footer-btn" href="contact-us.html">
+          <i class="ti ti-headset"></i>
+          Contact Support
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+
+      <button class="nav-item" onclick="window.location.href='home.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5L3 9.8V20a1 1 0 0 0 1 1h5.5v-5h5v5H20a1 1 0 0 0 1-1V9.8L12 2.5z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.8L12 2.5l9 7.3V20a1 1 0 0 1-1 1h-5.5v-5h-5v5H4a1 1 0 0 1-1-1V9.8z"/></svg>
+        </div>
+        <span class="nav-label">Home</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='payment.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="5" width="20" height="14" rx="2.5"/><rect x="2" y="9" width="20" height="3.5" fill="rgba(255,255,255,0.25)"/><rect x="5" y="14.5" width="3.5" height="2" rx="0.8" fill="white"/><rect x="10.5" y="14.5" width="5.5" height="2" rx="0.8" fill="white"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="5" y1="15" x2="8.5" y2="15"/><line x1="11" y1="15" x2="16" y2="15"/></svg>
+        </div>
+        <span class="nav-label">Payment</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='allocation-history.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-4-5zm-1 5.5V3.5L17.5 7.5H14zM9 12h6v1H9zm0 2.5h4v1H9zm0-5h1.5v1H9z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><polyline points="15 2 15 7 19 7"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="15" x2="13" y2="15"/></svg>
+        </div>
+        <span class="nav-label">History</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='more.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7v3.59l-1.7 1.7A1 1 0 0 0 4 16h16a1 1 0 0 0 .7-1.71L19 12.59V9a7 7 0 0 0-7-7zm0 20a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0v4l-2 2v1h16v-1l-2-2V8"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+        </div>
+        <span class="nav-label">Notifications</span>
+      </button>
+
+      <button class="nav-item active" onclick="window.location.href='more.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><line x1="17.25" y1="13.5" x2="17.25" y2="21"/><line x1="13.5" y1="17.25" x2="21" y2="17.25"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><line x1="17.25" y1="13.5" x2="17.25" y2="21"/><line x1="13.5" y1="17.25" x2="21" y2="17.25"/></svg>
+        </div>
+        <span class="nav-label">More</span>
+      </button>
+
+    </nav>
+
+  </div>
+  <div class="home-indicator"></div>
+</div>
+
+<script>
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    // Open clicked if it was closed
+    if (!isOpen) item.classList.add('open');
+  }
+
+  function filterFaqs(q) {
+    const query = q.trim().toLowerCase();
+    const items = document.querySelectorAll('.faq-item');
+    let visibleCount = 0;
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      const match = !query || text.includes(query);
+      item.style.display = match ? '' : 'none';
+      if (match) visibleCount++;
+    });
+    document.getElementById('faq-empty').style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+</script>
+
+</body>
+</html>
