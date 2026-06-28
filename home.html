@@ -568,6 +568,108 @@
   .action-icon-btn.invoice i { color: var(--c-success); }
   .action-icon-btn.info i { color: var(--c-text-muted); }
 
+  /* CAP tag button */
+  .cap-tag-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px;
+    background: linear-gradient(135deg, #173559 0%, #1e4a7a 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .cap-tag-btn:hover { opacity: 0.88; transform: scale(0.97); }
+  .cap-tag-btn i { font-size: 12px; }
+
+  /* CAP bottom sheet */
+  .cap-sheet-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 900;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+    border-radius: 43px;
+  }
+  .cap-sheet-backdrop.visible { opacity: 1; pointer-events: all; }
+
+  .cap-sheet {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    background: #fff;
+    border-radius: 22px 22px 0 0;
+    z-index: 901;
+    padding: 0 0 32px;
+    transform: translateY(100%);
+    transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .cap-sheet.open { transform: translateY(0); }
+
+  .cap-sheet-handle {
+    width: 38px; height: 4px;
+    background: #d1d1d6;
+    border-radius: 2px;
+    margin: 12px auto 0;
+  }
+  .cap-sheet-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 16px 20px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--c-text-muted);
+    letter-spacing: 0.01em;
+    border-bottom: 1px solid var(--c-divider);
+    margin-bottom: 4px;
+  }
+  .cap-sheet-title span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: linear-gradient(135deg, #173559 0%, #1e4a7a 100%);
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+  .cap-sheet-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: background 0.12s ease;
+    border-bottom: 1px solid var(--c-divider-soft);
+  }
+  .cap-sheet-option:last-child { border-bottom: none; }
+  .cap-sheet-option:hover { background: var(--c-bg-soft); }
+  .cap-sheet-option:active { background: var(--c-divider-soft); }
+  .cap-opt-icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 19px;
+  }
+  .cap-opt-icon.copy { background: #eef3ff; color: #173559; }
+  .cap-opt-icon.whatsapp { background: #e8f8ef; color: #25d366; }
+  .cap-opt-icon.open { background: #e8f1ff; color: #2BA6FF; }
+  .cap-opt-text { flex: 1; }
+  .cap-opt-label { font-size: 14px; font-weight: 600; color: var(--c-text); margin-bottom: 2px; }
+  .cap-opt-sub { font-size: 12px; color: var(--c-text-muted); }
+  .cap-opt-arrow { color: var(--c-text-tertiary); font-size: 16px; }
+
   /* Card body — image + info */
   .card-body {
     padding: 12px 14px 14px;
@@ -4976,6 +5078,43 @@
 
     <div class="home-indicator"></div>
 
+    <!-- ===== CAP Sheet ===== -->
+    <div class="cap-sheet-backdrop" id="cap-backdrop" onclick="closeCapSheet()"></div>
+    <div class="cap-sheet" id="cap-sheet">
+      <div class="cap-sheet-handle"></div>
+      <div class="cap-sheet-title">
+        <span><i class="ti ti-link"></i> CAP</span>
+        Customer Access Portal
+      </div>
+      <div class="cap-sheet-option" onclick="capCopyLink()">
+        <div class="cap-opt-icon copy"><i class="ti ti-copy"></i></div>
+        <div class="cap-opt-text">
+          <div class="cap-opt-label">Copy CAP Link</div>
+          <div class="cap-opt-sub">Copy link to clipboard</div>
+        </div>
+        <i class="ti ti-chevron-right cap-opt-arrow"></i>
+      </div>
+      <div class="cap-sheet-option" onclick="capShareWhatsapp()">
+        <div class="cap-opt-icon whatsapp">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </div>
+        <div class="cap-opt-text">
+          <div class="cap-opt-label">Share on WhatsApp</div>
+          <div class="cap-opt-sub">Open WhatsApp to share link</div>
+        </div>
+        <i class="ti ti-chevron-right cap-opt-arrow"></i>
+      </div>
+      <div class="cap-sheet-option" onclick="capOpenLink()">
+        <div class="cap-opt-icon open"><i class="ti ti-external-link"></i></div>
+        <div class="cap-opt-text">
+          <div class="cap-opt-label">Open CAP Link</div>
+          <div class="cap-opt-sub">Open in browser</div>
+        </div>
+        <i class="ti ti-chevron-right cap-opt-arrow"></i>
+      </div>
+    </div>
+    <!-- ===== /CAP Sheet ===== -->
+
   </div>
 </div>
 
@@ -5102,6 +5241,7 @@
           <div class="card-header-left">
             <span class="stage-pill ${stage.class}" onclick="openVehicleStage(${v.id})" style="cursor:pointer;"><span class="num">${stage.num}</span> ${stage.name}</span>
             ${v.updated ? '' : v.updated ? '<span class="updated-dot" title="Recently updated"></span>' : ''}
+            <button class="cap-tag-btn" onclick="event.stopPropagation(); openCapSheet(${v.id})" title="CAP Link"><i class="ti ti-link"></i> CAP</button>
           </div>
           <div class="card-actions">
             <button class="action-icon-btn invoice" onclick="event.stopPropagation(); openInvoiceScreen(${v.id})" title="Invoice">
@@ -6054,6 +6194,50 @@
     document.getElementById('result-count').textContent = list.length;
     document.getElementById('total-count').textContent = vehicles.length;
   }
+
+
+  // ===== CAP Sheet Functions =====
+  const CAP_LINK = 'https://stageconnect.otoz.ai/cap/eyJpdiI6IkwrSHkyRHZXK1lKZURUc0VJVHF1R1E9PSIsInZhbHVlIjoiVmsrTmsvbStDV0ZsbklJajhwNFpkZz09IiwibWFjIjoiZDM4OWVkNTBiNThiNjc1NzQ0MjcyNmM1MjMwMWFjNTZiYjYzYmMwNGYwZWRmY2ExNmIwOTMwZDM1MzExMzgyNCIsInRhZyI6IiJ9';
+  let _capVehicleId = null;
+
+  function openCapSheet(id) {
+    _capVehicleId = id;
+    document.getElementById('cap-backdrop').classList.add('visible');
+    document.getElementById('cap-sheet').classList.add('open');
+  }
+
+  function closeCapSheet() {
+    document.getElementById('cap-backdrop').classList.remove('visible');
+    document.getElementById('cap-sheet').classList.remove('open');
+  }
+
+  function capCopyLink() {
+    navigator.clipboard.writeText(CAP_LINK).then(() => {
+      closeCapSheet();
+      showToast('CAP Link copied!');
+    }).catch(() => {
+      const el = document.createElement('textarea');
+      el.value = CAP_LINK;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      closeCapSheet();
+      showToast('CAP Link copied!');
+    });
+  }
+
+  function capShareWhatsapp() {
+    const msg = encodeURIComponent('Customer Access Portal Link: ' + CAP_LINK);
+    window.open('https://wa.me/?text=' + msg, '_blank');
+    closeCapSheet();
+  }
+
+  function capOpenLink() {
+    window.open(CAP_LINK, '_blank');
+    closeCapSheet();
+  }
+  // ===== /CAP Sheet Functions =====
 
   function showToast(message) {
     const toast = document.getElementById('toast');
