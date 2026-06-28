@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otoz Connect · Privacy Policy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+  :root {
+    --c-primary:       #173559;
+    --c-primary-dark:  #0f2540;
+    --c-accent:        #2BA6FF;
+    --c-text:          #1d1d1f;
+    --c-text-muted:    #6e6e73;
+    --c-text-subtle:   #86868b;
+    --c-bg-app:        #f5f5f7;
+    --c-divider:       #e8e8ed;
+    --c-divider-soft:  #f1f5f9;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: #e8e8ed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Device shell ── */
+  .device {
+    width: 380px;
+    height: 800px;
+    background: #1d1d1f;
+    border-radius: 54px;
+    padding: 11px;
+    position: relative;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.08);
+  }
+  .home-indicator {
+    position: absolute;
+    bottom: 9px; left: 50%;
+    transform: translateX(-50%);
+    width: 140px; height: 5px;
+    background: #1d1d1f; border-radius: 3px;
+    opacity: 0.9; z-index: 100; pointer-events: none;
+  }
+  .screen-wrapper {
+    width: 100%; height: 100%;
+    background: var(--c-bg-app);
+    border-radius: 43px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Status bar ── */
+  .status-bar {
+    height: 64px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding: 0 32px 8px;
+    font-size: 16px; font-weight: 600; color: var(--c-text);
+    letter-spacing: -0.02em; flex-shrink: 0;
+    background: #fff;
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; }
+
+  /* ── Nav header ── */
+  .cv-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 16px 10px;
+    flex-shrink: 0;
+    border-bottom: 0.5px solid var(--c-divider-soft);
+    background: #fff;
+  }
+  .cv-back-btn {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: var(--c-bg-app);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .cv-back-btn i { font-size: 19px; color: var(--c-text); }
+  .cv-nav-title { font-size: 16px; font-weight: 700; color: var(--c-text); letter-spacing: -0.015em; }
+  .cv-nav-spacer { width: 32px; flex-shrink: 0; }
+
+  /* ── Scroll area ── */
+  .page-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 0 100px;
+  }
+  .page-scroll::-webkit-scrollbar { display: none; }
+
+  /* ── Hero card ── */
+  .hero-card {
+    margin: 14px 14px 18px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #173559 0%, #1d4276 50%, #2BA6FF 130%);
+    padding: 22px 20px 22px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 30px -10px rgba(23,53,89,0.45);
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -30px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(43,166,255,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.16);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 999px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    position: relative; z-index: 2;
+  }
+  .hero-eyebrow i { font-size: 11px; }
+  .hero-title {
+    font-size: 22px; font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 8px;
+    position: relative; z-index: 2;
+  }
+  .hero-title em {
+    font-style: normal;
+    background: linear-gradient(135deg, #4adf86 0%, #2BA6FF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.78);
+    line-height: 1.5;
+    position: relative; z-index: 2;
+  }
+
+  /* ── Section label ── */
+  .section-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10.5px; font-weight: 700;
+    color: var(--c-text-subtle);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 4px 18px 10px;
+  }
+  .accent-line {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--c-divider) 0%, transparent 100%);
+  }
+
+  /* ── Content cards ── */
+  .policy-card {
+    margin: 0 14px 12px;
+    background: #fff;
+    border-radius: 18px;
+    padding: 18px 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.045);
+  }
+
+  .policy-card-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .policy-card-icon {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #e8f4ff 0%, #d0eaff 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .policy-card-icon i {
+    font-size: 17px;
+    color: var(--c-accent);
+  }
+  .policy-card-icon-num {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #173559 0%, #2BA6FF 130%);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+  .policy-card-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--c-text);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  .policy-body {
+    font-size: 12px;
+    color: var(--c-text-muted);
+    line-height: 1.65;
+  }
+
+  /* numbered list inside card */
+  .policy-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .policy-list li {
+    display: flex;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--c-text-muted);
+    line-height: 1.6;
+  }
+  .policy-list-num {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #173559 0%, #2BA6FF 130%);
+    color: #fff;
+    font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px;
+  }
+
+  /* ── Bottom nav ── */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 82px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(20px);
+    border-top: 0.5px solid var(--c-divider);
+    display: flex; align-items: flex-start;
+    padding: 10px 4px 0;
+    border-radius: 0 0 43px 43px;
+    z-index: 50;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    background: none; border: none; cursor: pointer;
+    padding: 4px 0;
+    color: var(--c-text-subtle);
+    transition: color 0.15s;
+  }
+  .nav-item.active { color: var(--c-primary); }
+  .nav-icon { width: 24px; height: 24px; position: relative; }
+  .nav-icon svg { width: 24px; height: 24px; position: absolute; inset: 0; transition: opacity 0.15s; }
+  .icon-filled  { opacity: 0; }
+  .icon-outline { opacity: 1; }
+  .nav-item.active .icon-filled  { opacity: 1; }
+  .nav-item.active .icon-outline { opacity: 0; }
+  .nav-label {
+    font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.01em;
+    color: inherit;
+  }
+</style>
+</head>
+<body>
+
+<div class="device">
+  <div class="screen-wrapper">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 8.5a13 13 0 0 1 21 0l-2 2a10 10 0 0 0-17 0l-2-2z"/><path d="M5.5 12.5a8 8 0 0 1 13 0l-2 2a5 5 0 0 0-9 0l-2-2z"/><circle cx="12" cy="18" r="2"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="15" height="10" rx="2"/><path d="M19 10.5v3a1.5 1.5 0 0 0 0-3z"/></svg>
+      </div>
+    </div>
+
+    <!-- Nav Header -->
+    <div class="cv-nav">
+      <button class="cv-back-btn" onclick="history.back()">
+        <i class="ti ti-chevron-left"></i>
+      </button>
+      <span class="cv-nav-title">Privacy Policy</span>
+      <div class="cv-nav-spacer"></div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="page-scroll">
+
+      <!-- Hero Card -->
+      <div class="hero-card">
+        <div class="hero-eyebrow">
+          <i class="ti ti-shield-lock"></i>
+          Otoz Connect
+        </div>
+        <div class="hero-title">Your Privacy,<br>Our <em>Commitment</em></div>
+        <div class="hero-sub">We handle your personal information with care, transparency, and the highest standards of data protection.</div>
+      </div>
+
+      <!-- Intro Card 1 — Our Commitment -->
+      <div class="policy-card">
+        <div class="policy-card-header">
+          <div class="policy-card-icon"><i class="ti ti-info-circle"></i></div>
+          <div class="policy-card-title">Our Commitment</div>
+        </div>
+        <p class="policy-body">
+          Otoz.Ai recognizes the importance of social responsibility that it truthfully works to meet the needs of its customers and to contribute to society. The Personal Information obtained from its customers in the course of business activities are an important asset of the customers and of Otoz.Ai as it leads to creation of new value. Otoz.Ai protects Personal Information from information security threats with the following Basic Policy and meets its customers' expectations on its reliability. As a company, Otoz.Ai is committed to the responsible handling of Personal Information.
+        </p>
+      </div>
+
+      <!-- Intro Card 2 — Protection Policy -->
+      <div class="policy-card">
+        <div class="policy-card-header">
+          <div class="policy-card-icon"><i class="ti ti-lock"></i></div>
+          <div class="policy-card-title">Personal Information Protection Policy</div>
+        </div>
+        <ol class="policy-list">
+          <li><span class="policy-list-num">1</span><span>Otoz.Ai observes the Act on the Protection of Personal Information, Act on the Use of Social Security and Tax Number System in the Administrative Procedure and other relevant laws, rules, and guidelines established by the government and other regulations.</span></li>
+          <li><span class="policy-list-num">2</span><span>Otoz.Ai has established a management framework to protect Personal Information, and assigned a person to "Personal Information Protection Administrator" position and implemented the appropriate protection of it.</span></li>
+          <li><span class="policy-list-num">3</span><span>Otoz.Ai utilizes Personal Information within the scope of the intended use that is clearly communicated to customers, and takes measures not to be used beyond the scope. Otoz.Ai does not disclose or provide Personal Information provided by customers to third parties except with the consent of the customer or when there is a legitimate reason.</span></li>
+          <li><span class="policy-list-num">4</span><span>Otoz.Ai strives to prevent unauthorized access to Personal Information or the leakage, loss, or damage of Personal Information and continually enhances, re-mediates and manages information security.</span></li>
+          <li><span class="policy-list-num">5</span><span>Otoz.Ai responds to inquiries concerning Personal Information or requests from customers for disclosure of their Personal Information sincerely and without delay.</span></li>
+        </ol>
+      </div>
+
+      <!-- Numbered Cards 1–10 -->
+
+      <!-- Card 1 -->
+      <div class="policy-card">
+        <div class="policy-card-header">
+          <div class="policy-card-icon-num">1</div>
+          <div class="policy-card-title">Personal Information</div>
+        </div>
+        <p class="policy-body">
+          Otoz.Ai recognizes the importance of social responsibility that it truthfully works to meet the needs of its customers and to contribute to society. The Personal Information obtained from its customers in the course of business activities are an important asset of the customers and of Otoz.Ai as it leads to creation of new value. Otoz.Ai protects Personal Information from information security threats with the following Basic Policy and meets its customers' expectations on its reliability. As a company, Otoz.Ai is committed to the responsible handling of Personal Information.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="policy-card">
+        <div class="policy-card-header">
+          <div class="policy-card-icon-num">2</div>
+          <div class="policy-card-title">Purpose of Use of Personal Information</div>
+        </div>
+        <p class="policy-body" style="margin-bottom:12px;">
+          Otoz.Ai will use Personal Information within the scope of the purposes provided in the Purpose of Use. The Purpose of Use is specifically defined and made clear to our customers, and is announced on our website as shown below. Otoz.Ai will make an effort to limit the Purpose of Use according to the situation in which the information is obtained.
+        </p>
+        <ol class="policy-list">
+          <li><span class="policy-list-num">1</span><span>Achieving the Purpose of Use of our service and business.</span></li>
+          <li><span class="policy-list-num">2</span><span>Notices of service, etc. to its customers.</span></li>
+          <li><span class="policy-list-num">3</span><span>Giving notice to shareholders, provision of various types of information and shareholder management.</span></li>
+          <li><span class="policy-list-num">4</span><span>Exercise of rights or performance of obligations based on Act of Japan and other relevant laws and ordinances.</span></li>
+          <li><span class="policy-list-num">5</span><span>Responding to inquiries, requests, etc. from its customers.</span></li>
+          <li><span class="policy-list-num">6</span><span>Carrying out operations incidental to (1) through (5) above and operations to properly and smoothly manage the business of Otoz.Ai.</span></li>
+        </ol>
+        <p class="policy-body" style="margin-top:12px;">
+          When handling Personal Information beyond the scope necessary for achieving the Purpose of Use, Otoz.Ai will seek customer's consent except for cases prescribed under items in Paragraph 3 of Article 16 of the Privacy Act.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="policy-card">
+        <div class="policy-card-header">
+          <div class="policy-card-icon-num">3</div>
+          <div class="policy-card-title">Provision of Personal Data to Third Parties</div>
+        </div>
+        <p class="policy-body" style="margin-bottom:12px;">
+          Otoz.Ai will not provide Personal Information to a third party without the customer's consent, unless where any of the following applies:
+        </p>
+        <ol class="policy-list">
+          <li><span class="policy-list-num">1</span><span>Required under laws or ordinances.</span></li>
+          <li><span class="policy-list-num">2</span><span>Required to protect human life, body or asset (including that of legal entities) and difficult to obtain the approval by the customer him/herself.</span></li>
+          <li><span class="policy-list-num">3</span><span>Made to a consignee within the scope necessary for carrying out our business.</span></li>
+          <li><span class="policy-list-num">4</span><span>To use Personal Information jointly with a group company or a business partner of Otoz.Ai within the scope of the intended use.</span></li>
+          <li><span class="policy-list-num">5</span><span>To provide, in an unrecoverable format, Personal Information in a format that does not allow easy identification or recognition of the corresponding individual.</span></li>
+        </ol>
+        <p class="policy-body" style="margin-top:12px;">
+          When handling Personal Information beyond the scope necessary for achieving the Purpose of Use, Otoz.Ai will seek customer's consent except for cases prescribed under items in Paragraph 3 of Article 16 of the Privacy Act.
+        </p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="policy-card">
+        <div class="policy-card-header">
+          <div class="policy-card-icon-num">4</div>
+          <div class="policy-card-title">Disclaimer Concerning Provision to Third Parties</div>
+        </div>
+        <p class="policy-body" style="margin-bottom:12px;">
+          Otoz.Ai will not be responsible for the acquisition of Personal Information by a third party where any of the following applies:
+        </p>
+        <ol class="policy-list">
+          <li><span class="policy-list-num">1</span><span>A User indicates his/her own Personal Information to a specific company, using any function under the Services or by other means.</span></li>
+          <li><span class="policy-list-num">2</span><span>A User is unexpectedly identified by information entered by the User under the Services.</span></li>
+          <li><span class="policy-list-num">3</span><span>A User provides Personal Information to, and the User's Personal Information is used at, an external site linked by the Services.</span></li>
+          <li><span class="policy-list-num">4</span><span>Anyone other than a User obtains the User's information (ID, password, etc.) which can identify the User as an individual.</span></li>
+          <li><span class="policy-list-num">5</span><span>Additionally to above, Personal Information is leaked by computer viruses or similar causes.</span></li>
+        </ol>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="policy-card">
+        <div class="policy-card-header">
+          <div class="policy-card-icon-num">5</div>
+          <div class="policy-card-title">Supervision of Contractors</div>
+        </div>
+        <p class="policy-body">
+          Otoz.Ai may consign all or part of our customer's Personal Information handling operation. In such a case, Otoz.Ai elects a contractor who is expected to properly handle Personal Information, appropriately specify matters concerning handling of Personal Information such as Security Management Measures, confidentiality, terms and conditions of reconsignment, return of Personal Information upon expiration or termination of contract agreement, and performs necessary and appropriate supervision.
+        </p>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="policy-card">
+        <div class="policy-card-header">
+          <div class="policy-card-icon-num">6</div>
+          <div class="policy-card-title">Handling of Sensitive Information</div>
+        </div>
+        <p class="policy-body">
+          Otoz.Ai will not collect, use, or provide to a third party Sensitive Information, including but not limited to information regarding your healthcare or case history, except for cases provided by the Privacy Act, other relevant laws, ordinances and guidelines.
+        </p>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="policy-card">
+        <div class="policy-card-header">
+          <div class="policy-card-icon-num">7</div>
+          <div class="policy-card-title">Handling of Specific Personal Information, etc.</div>
+        </div>
+        <p class="policy-body">
+          The Purpose of Use of Specific Personal Information, etc. is limited under the "My Number" Act, and Otoz.Ai will not collect or use Specific Personal Information, etc. beyond the prescribed Purpose of Use. We will not provide Specific Personal Information, etc. to a third party except in cases permitted under the "My Number" Act.
+        </p>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="policy-card">
+        <div class="policy-card-header">
+          <div class="policy-card-icon-num">8</div>
+          <div class="policy-card-title">Notice, Disclosure, Amendment or Suspension of Use</div>
+        </div>
+        <p class="policy-body">
+          Customer requests for any notice of matters, disclosure, amendment, or suspension of use of Personal Information and Specific Personal Information, etc. held by Otoz.Ai under the Privacy Act shall be directed to the Contact Office indicated in Clause 11 below. After confirming the customer as the requesting party, the customer is requested to complete a form designated by us. Otoz.Ai will then follow the procedures and, in principle, provide a written response in a proper, timely manner. Otoz.Ai will charge the prescribed fees for responding to a request for any disclosure.
+        </p>
+      </div>
+
+      <!-- Card 9 -->
+      <div class="policy-card">
+        <div class="policy-card-header">
+          <div class="policy-card-icon-num">9</div>
+          <div class="policy-card-title">Use of Cookies, etc.</div>
+        </div>
+        <p class="policy-body">
+          Otoz.Ai uses cookies, etc. to provide better services on its websites.
+        </p>
+      </div>
+
+      <!-- Card 10 -->
+      <div class="policy-card">
+        <div class="policy-card-header">
+          <div class="policy-card-icon-num">10</div>
+          <div class="policy-card-title">Management of Personal Data and Specific Personal Information, etc.</div>
+        </div>
+        <p class="policy-body">
+          Otoz.Ai will take rational security measures to manage Personal Information and Specific Personal Information, etc. securely and to prevent divulgence, loss or damage to Personal Information and Specific Personal Information, etc. handled by Otoz.Ai, and will ensure the accuracy and prompt updating of Personal Information and Specific Personal Information, etc. which are necessary to achieve the Purpose of Use.
+        </p>
+      </div>
+
+    </div><!-- /page-scroll -->
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+
+      <button class="nav-item" onclick="window.location.href='home.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5L3 9.8V20a1 1 0 0 0 1 1h5.5v-5h5v5H20a1 1 0 0 0 1-1V9.8L12 2.5z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.8L12 2.5l9 7.3V20a1 1 0 0 1-1 1h-5.5v-5h-5v5H4a1 1 0 0 1-1-1V9.8z"/></svg>
+        </div>
+        <span class="nav-label">Home</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='payment.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="5" width="20" height="14" rx="2.5"/><rect x="2" y="9" width="20" height="3.5" fill="rgba(255,255,255,0.25)"/><rect x="5" y="14.5" width="3.5" height="2" rx="0.8" fill="white"/><rect x="10.5" y="14.5" width="5.5" height="2" rx="0.8" fill="white"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="5" y1="15" x2="8.5" y2="15"/><line x1="11" y1="15" x2="16" y2="15"/></svg>
+        </div>
+        <span class="nav-label">Payment</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='allocation-history.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-4-5zm-1 5.5V3.5L17.5 7.5H14zM9 12h6v1H9zm0 2.5h4v1H9zm0-5h1.5v1H9z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><polyline points="15 2 15 7 19 7"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="15" x2="13" y2="15"/></svg>
+        </div>
+        <span class="nav-label">History</span>
+      </button>
+
+      <button class="nav-item" onclick="window.location.href='more.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7v3.59l-1.7 1.7A1 1 0 0 0 4 16h16a1 1 0 0 0 .7-1.71L19 12.59V9a7 7 0 0 0-7-7zm0 20a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2z"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0v4l-2 2v1h16v-1l-2-2V8"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+        </div>
+        <span class="nav-label">Notifications</span>
+      </button>
+
+      <button class="nav-item active" onclick="window.location.href='more.html'">
+        <div class="nav-icon">
+          <svg class="icon-filled" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8" fill="currentColor" stroke="none"/><line x1="17.25" y1="13.5" x2="17.25" y2="21"/><line x1="13.5" y1="17.25" x2="21" y2="17.25"/></svg>
+          <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><line x1="17.25" y1="13.5" x2="17.25" y2="21"/><line x1="13.5" y1="17.25" x2="21" y2="17.25"/></svg>
+        </div>
+        <span class="nav-label">More</span>
+      </button>
+
+    </nav>
+
+  </div>
+  <div class="home-indicator"></div>
+</div>
+
+</body>
+</html>
