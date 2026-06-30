@@ -873,7 +873,7 @@
               </button>
               <input type="hidden" id="f-type" value="">
             </div>
-            <div class="con-field">
+            <div class="con-field" id="f-chassis-wrap" style="display:none;">
               <label>Chassis No. <span style="color:var(--c-text-tertiary);font-weight:400;">(Commercial only)</span></label>
               <input type="text" class="con-input" id="f-chassis" placeholder="e.g. JN1BNE8E2HM345678">
             </div>
@@ -1294,6 +1294,13 @@
     const lbl = document.getElementById('inv-type-label');
     lbl.textContent = label;
     lbl.classList.remove('placeholder');
+    const chassisWrap = document.getElementById('f-chassis-wrap');
+    if (value === 'Commercial') {
+      chassisWrap.style.display = '';
+    } else {
+      chassisWrap.style.display = 'none';
+      document.getElementById('f-chassis').value = '';
+    }
     setTimeout(() => closeInvTypeSheet(), 180);
   }
   function clearInvType() {
@@ -1301,6 +1308,8 @@
     const lbl = document.getElementById('inv-type-label');
     lbl.textContent = 'Select Type';
     lbl.classList.add('placeholder');
+    document.getElementById('f-chassis-wrap').style.display = 'none';
+    document.getElementById('f-chassis').value = '';
     openInvTypeSheet();
   }
 
@@ -1368,6 +1377,8 @@
       const el = document.getElementById(id); if (el) el.value = '';
     });
     document.getElementById('f-type').value = '';
+    const chassisWrapReset = document.getElementById('f-chassis-wrap');
+    if (chassisWrapReset) chassisWrapReset.style.display = 'none';
     const typeLbl = document.getElementById('inv-type-label');
     if (typeLbl) { typeLbl.textContent = 'Select Type'; typeLbl.classList.add('placeholder'); }
     selectedCurr = 'USD';
